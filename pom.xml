@@ -75,7 +75,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-            <version>5.0.0.M5</version>
+            <version>${spring.version}</version>
         </dependency>
 
         <!--validation-api-->
