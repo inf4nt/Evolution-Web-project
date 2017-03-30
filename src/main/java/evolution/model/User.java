@@ -25,6 +25,10 @@ public class User {
     public User() {
     }
 
+    public User(Long id){
+        this.id = id;
+    }
+
     public User(Long id, Date registrationDate, SecretQuestionType secretQuestionType, Long roleId, String login, String password, String secretQuestion, String firstName, String lastName) {
         this.registrationDate = registrationDate;
         this.secretQuestionType = secretQuestionType;

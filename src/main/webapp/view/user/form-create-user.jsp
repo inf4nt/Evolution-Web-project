@@ -9,14 +9,12 @@
 <body>
 
 <%@include file="../index/header.jsp" %>
-
-
 <sec:authorize access="isAuthenticated()">
     <br/>
     <div class="col-md-9">
         <div class="row">
             <div class="col-lg-4 col-lg-offset-4">
-
+                <p class="text-center text-danger">${info}</p>
                 <form:form method="POST" action="/create-user" commandName="form" cssClass="text-center">
                     <div class="form-group">
                         <input type="text" placeholder="email" name="login" class="form-control text-center"/>
@@ -65,6 +63,7 @@
 </sec:authorize>
 <sec:authorize access="!isAuthenticated()">
     <h1 class="text-center">Registration</h1>
+    <p class="text-center text-danger">${info}</p>
     <div class="row">
         <div class="col-lg-4 col-lg-offset-4">
 

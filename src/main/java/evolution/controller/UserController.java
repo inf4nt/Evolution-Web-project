@@ -2,7 +2,7 @@ package evolution.controller;
 
 
 
-import evolution.common.RestStatus;
+
 import evolution.dao.FriendsDao;
 import evolution.dao.SecretQuestionTypeDao;
 
@@ -12,22 +12,16 @@ import evolution.model.User;
 import evolution.model.form.UserForm;
 import evolution.service.PaginationService;
 import evolution.service.UserBuilderService;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -35,43 +29,15 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping ("/user")
-@SessionAttributes(value = {"servletName", "role", "productList", "sqt", "user"})
+@SessionAttributes(value = {"role", "productList", "sqt", "user"})
 public class UserController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String home (Authentication authentication, SessionStatus sessionStatus, Model model) {
+    public String home (Authentication authentication, SessionStatus sessionStatus) {
         if (authentication == null)
             return "redirect:/";
         sessionStatus.setComplete();
         return "user/home";
-    }
-
-
-    @RequestMapping (value = {"/form-all/{role}/{action}"}, method = RequestMethod.GET)
-    public String formAllUser (
-            @PathVariable String role,
-            @PathVariable String action,
-            Model model,
-            HttpServletRequest request) {
-
-        PagedListHolder pagedListHolder = null;
-
-        if (action.equals("start")) {
-            if (role.equals("user"))
-                pagedListHolder = paginationService.pagedListHolder(userDao.findAllUser());
-            if (role.equals("admin"))
-                pagedListHolder = paginationService.pagedListHolder(userDao.findAllAdmin());
-            model.addAttribute("productList", pagedListHolder);
-        }
-
-        else {
-            pagedListHolder = (PagedListHolder) request.getSession().getAttribute("productList");
-            paginationService.getPage(action, pagedListHolder);
-        }
-        model.addAttribute("servletName", "form-all");
-        model.addAttribute("role", role);
-        model.addAttribute("page_url", "/user/form-all/" + role);
-        return "user/form-search";
     }
 
     @RequestMapping (value = "/edit/{id}", method = RequestMethod.GET)
@@ -178,22 +144,6 @@ public class UserController {
         return "user/form-reset";
     }
 
-    @Autowired
-    private UserDao userDao;
-    @Autowired
-    private SecretQuestionTypeDao sqtDao;
-    @Autowired
-    private UserBuilderService userBuilderService;
-    @Autowired
-    private PaginationService paginationService;
-    @Autowired
-    private FriendsDao friendsDao;
-
-
-
-
-
-
     @RequestMapping(value = "/friend/{friendStatus}/{action}", method = RequestMethod.GET)
     public String friends (
             @PathVariable String action,
@@ -234,5 +184,15 @@ public class UserController {
         return "redirect:/user/friend/Friend/start";
     }
 
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private SecretQuestionTypeDao sqtDao;
+    @Autowired
+    private UserBuilderService userBuilderService;
+    @Autowired
+    private PaginationService paginationService;
+    @Autowired
+    private FriendsDao friendsDao;
 
 }

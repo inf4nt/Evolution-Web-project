@@ -68,8 +68,8 @@
 	<div class="col-sm-3 col-md-12 col-lg-12 sidebar">
 			<ul class="nav nav-sidebar">
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
-				<li><a href="/user/form-all/user/start" methods="get">Show users</a></li>
-				<li><a href="/user/form-all/admin/start" methods="get">Show admin</a></li>
+				<li><a href="/admin/form-all/user/start" methods="get">Show users</a></li>
+				<li><a href="/admin/form-all/admin/start" methods="get">Show admin</a></li>
 				<li><a href="/form-create-user" methods="get">Registration</a></li>
 				<li><a href="/admin/form-create-sqt" methods="get">Create secret question type</a></li>
 				</sec:authorize>
