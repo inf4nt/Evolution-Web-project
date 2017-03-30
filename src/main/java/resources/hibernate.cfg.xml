@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+
+
+
+
+    <!--<property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>-->
+    <!--<property name="hibernate.connection.url">jdbc:oracle:thin:@//localhost:1521/XE</property>-->
+    <!--<property name="hibernate.connection.username">db_test</property>-->
+    <!--<property name="hibernate.connection.password">db_test</property>-->
+    <!--<property name="dialect">org.hibernate.dialect.Oracle10gDialect</property>-->
+    <!--<property name="show_sql">true</property>-->
+    <!--<property name="connection.autocommit">false</property>-->
+    <!--<property name="hibernate.current_session_context_class">thread</property>-->
+
+    <!--<mapping class="evolution.model.SecretQuestionType"/>-->
+    <!--<mapping class="evolution.model.User"/>-->
+    <!--<mapping class="evolution.model.UserRole"/>-->
+
+
+
+
+
+
+    <!--&lt;!&ndash;HEROKU POSTGRES_SQL&ndash;&gt;-->
+    <!--&lt;!&ndash;HEROKU POSTGRES_SQL&ndash;&gt;-->
+    <!--&lt;!&ndash;HEROKU POSTGRES_SQL&ndash;&gt;-->
+    <property name="hibernate.connection.url">
+      jdbc:postgresql://ec2-54-75-226-64.eu-west-1.compute.amazonaws.com:5432/d60cr56j8414gg?
+      &amp;ssl=true
+      &amp;sslfactory=org.postgresql.ssl.NonValidatingFactory
+    </property>
+
+    <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+    <property name="hibernate.current_session_context_class">thread</property>
+    <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
+    <!-- <property name="hibernate.hbm2ddl.auto">create</property> -->
+    <property name="hibernate.connection.charSet">UTF-8</property>
+    <property name="show_sql">true</property>
+    <property name="format_sql">true</property>
+    <property name="use_sql_comments">false</property>
+    <property name="hibernate.connection.username">rpetbvmerkgrja</property>
+    <property name="hibernate.connection.password">2e1954c2346b841eb71cebc90f66f7a209a3b62d8980e9424b6aeba00e0cbda2</property>
+
+
+
+
+  </session-factory>
+</hibernate-configuration>

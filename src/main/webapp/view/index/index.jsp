@@ -4,27 +4,27 @@
 <head>
   <title>Login</title>
 
-  <%--&lt;%&ndash;<link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">&ndash;%&gt;--%>
-  <%--&lt;%&ndash;<script src="<c:url value="/resources/js/bootstrap.js" />"></script>&ndash;%&gt;--%>
+  <%--<link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">--%>
+  <%--<script src="<c:url value="/resources/js/bootstrap.js" />"></script>--%>
 
-  <%--<script src="<c:url value="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js" />"></script>--%>
-  <%--<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>--%>
-  <%--<link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">--%>
+  <script src="<c:url value="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js" />"></script>
+  <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+  <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
 
-  <%--&lt;%&ndash;<style>&ndash;%&gt;--%>
-  <%--&lt;%&ndash;body {&ndash;%&gt;--%>
-  <%--&lt;%&ndash;background: linear-gradient(to bottom, #ced1c4, #d5cccc);&ndash;%&gt;--%>
-  <%--&lt;%&ndash;}&ndash;%&gt;--%>
-  <%--&lt;%&ndash;</style>&ndash;%&gt;--%>
   <%--<style>--%>
-    <%--html { height: 100%; }--%>
-    <%--body {--%>
-      <%--margin: 0;--%>
-      <%--height: 100%;--%>
-      <%--background: url(http://daleki-zori.com.ua/wp-content/uploads/2016/05/maxresdefault.jpg);--%>
-      <%--background-size: cover;--%>
-    <%--}--%>
+  <%--body {--%>
+  <%--background: linear-gradient(to bottom, #ced1c4, #d5cccc);--%>
+  <%--}--%>
   <%--</style>--%>
+  <style>
+    html { height: 100%; }
+    body {
+      margin: 0;
+      height: 100%;
+      background: url(http://daleki-zori.com.ua/wp-content/uploads/2016/05/maxresdefault.jpg);
+      background-size: cover;
+    }
+  </style>
 
 </head>
 <body>
@@ -63,12 +63,12 @@
               <%--<label>Remember Me:</label> <input type="checkbox" name="remember-me"/>--%>
               <%--</div>--%>
 
-              <%--<div class="form-group text-center">--%>
-                <%--<td><a href="/user/form-reset-password">Forgot password</a></td>--%>
-              <%--</div>--%>
-              <%--<div class="form-group text-center">--%>
-                <%--<td><a href="/form-create-user">Registration</a></td>--%>
-              <%--</div>--%>
+              <div class="form-group text-center">
+                <td><a href="/user/form-reset-password">Forgot password</a></td>
+              </div>
+              <div class="form-group text-center">
+                <td><a href="/form-create-user">Registration</a></td>
+              </div>
               <div class="text-center">
                 <input class="btn btn-info" name="submit" type="submit" value="Log in" style="width: 100%">
               </div>

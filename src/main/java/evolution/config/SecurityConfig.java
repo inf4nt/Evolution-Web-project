@@ -24,9 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(myUserDetailsService);
-        auth.userDetailsService(userDetailsService);
-
+        auth.userDetailsService(myUserDetailsService);
     }
 
     @Override
@@ -52,21 +50,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.authorizeRequests().and().formLogin()//
                 .loginProcessingUrl("/j_spring_security_check")
                 .loginPage("/login")
-                .successHandler(authenticationSuccessHandler)
+                .successHandler(myAuthenticationSuccessHandler)
                 .failureUrl("/login?error=true")//
                 .usernameParameter("username")//
                 .passwordParameter("password")
-//                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/welcome").deleteCookies("JSESSIONID")
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/").deleteCookies("JSESSIONID")
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/welcome").deleteCookies("JSESSIONID")
                 .and().rememberMe().tokenValiditySeconds(172800);
     }
 
+    @Autowired
+    private UserDetailsService myUserDetailsService;
 
     @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private AuthenticationSuccessHandler authenticationSuccessHandler;
-
+    private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
 }
 

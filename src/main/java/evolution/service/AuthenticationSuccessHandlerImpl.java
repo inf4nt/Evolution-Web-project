@@ -1,7 +1,7 @@
 package evolution.service;
 
 
-
+import evolution.dao.UserDao;
 import evolution.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -46,7 +46,8 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         //since we have created our custom success handler, its up to us to where
         //we will redirect the user after successfully login
 
-        httpServletResponse.sendRedirect("home");
+        httpServletResponse.sendRedirect("/user/home/");
     }
-
+    @Autowired
+    private UserDao userDao;
 }
