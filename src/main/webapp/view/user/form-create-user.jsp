@@ -27,6 +27,14 @@
                         <form:errors path="password" cssStyle="color: #ff0000;" />
                     </div>
                     <div class="form-group">
+                        <input type="text" placeholder="first name" name="firstName" class="form-control text-center"/>
+                        <form:errors path="firstName" cssStyle="color: #ff0000;" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="last name" name="lastName" class="form-control text-center"/>
+                        <form:errors path="lastName" cssStyle="color: #ff0000;" />
+                    </div>
+                    <div class="form-group">
                         <h4 class="text-center">Role</h4>
                         <select name="role" class="form-control">
                             <sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -68,6 +76,14 @@
                 <div class="form-group">
                     <input type="password" placeholder="password" name="password" class="form-control text-center"/>
                     <form:errors path="password" cssStyle="color: #ff0000;" />
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="first name" name="firstName" class="form-control text-center"/>
+                    <form:errors path="firstName" cssStyle="color: #ff0000;" />
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="last name" name="lastName" class="form-control text-center"/>
+                    <form:errors path="lastName" cssStyle="color: #ff0000;" />
                 </div>
                 <div class="form-group">
                     <h4 class="text-center">Role</h4>

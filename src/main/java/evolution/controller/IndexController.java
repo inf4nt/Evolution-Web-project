@@ -30,7 +30,6 @@ public class IndexController {
 
     @RequestMapping (value = "/", method = RequestMethod.GET)
     public String index () {
-//        userBuilderService.createDefault();
         return "redirect:/welcome";
     }
 
@@ -47,7 +46,7 @@ public class IndexController {
 
 
     @RequestMapping (value = "/login", method = RequestMethod.GET)
-    public String login (HttpServletRequest request, Model model) {
+    public String login (HttpServletRequest request) {
         if (request == null || request.getParameter("error") == null) {
             return "index/index";
         }
@@ -56,7 +55,7 @@ public class IndexController {
     }
 
     @RequestMapping (value = "/form-create-user", method = RequestMethod.GET)
-    public String createUserForm (Model model, HttpServletRequest request, SessionStatus sessionStatus) {
+    public String createUserForm (Model model) {
         model.addAttribute("sqt", sqtDao.findAll());
         model.addAttribute("form", new UserForm());
         return "user/form-create-user";

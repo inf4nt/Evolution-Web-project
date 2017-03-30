@@ -6,9 +6,6 @@
 
 <html>
 <head>
-
-
-
 	<script src="<c:url value="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js" />"></script>
 	<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 	<script>
@@ -17,15 +14,6 @@
         });
 	</script>
 	<link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
-	<%--<style>--%>
-		<%--html { height: 100%; }--%>
-		<%--body {--%>
-			<%--margin: 0;--%>
-			<%--height: 100%;--%>
-			<%--background: url(http://sebulfin.com/wp-content/uploads/2014/04/Saturn-2.jpg);--%>
-			<%--background-size: cover;--%>
-		<%--}--%>
-	<%--</style>--%>
 </head>
 <body>
 
@@ -38,12 +26,13 @@
 
 					<ul class="nav navbar-nav">
 						<li><a href="/user/home", methods="get">Home</a></li>
-						<li><a href="/user/form-my-profile/${userid}" methods="get">Profile</a></li>
+						<c:if test="${userid > 0}">
+							<li><a href="/user/form-my-profile/${userid}" methods="get">Profile</a></li>
+						</c:if>
 					</ul>
 
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
-							<%--<a href="#" class="dropdown-toggle" data-toggle="dropdown">${username}<b class="caret"></b></a>--%>
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">${username}<b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li><a href="/logout", methods="get">Exit</a></li>
@@ -55,7 +44,6 @@
 						<div class="input-group">
 							<input type="text" class="form-control input-xs" name="like">
 							<div class="input-group-btn">
-								<%--<button type="submit" formaction="/user/search" class="btn btn-search btn-info">--%>
 									<button type="submit" formaction="/user/search/start" class="btn btn-search btn-info">
 									<span class="glyphicon glyphicon-search"></span>
 									<span class="label-icon">Search</span>
@@ -87,7 +75,6 @@
 				</sec:authorize>
 				<li><a href="/user/friend/Friend/start" methods="get">Friends</a></li>
 				<li><a href="/user/friend/Follower/start" methods="get">Follower</a></li>
-				<%--<li><a href="/user/friend/Friend Request/start" methods="get">Friend Request</a></li>--%>
 			</ul>
 	</div>
 </div>

@@ -2,6 +2,7 @@ package evolution.service;
 
 
 import evolution.dao.UserDao;
+import evolution.model.SecretQuestionType;
 import evolution.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import javax.persistence.NoResultException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,13 +31,22 @@ public class UserDetailsServiceImpl
     @Transactional
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user;
-        try {
-            user = userDao.findByLogin(s);
-        } catch (NoResultException e) {
-            throw new UsernameNotFoundException("user " + s + " not found");
+
+        if (s.equals("default_user") )
+            user = userBuilderService.getDefaultUser();
+        else if (s.equals("default_admin"))
+            user = userBuilderService.getDefaultAdmin();
+        else {
+            try {
+                user = userDao.findByLogin(s);
+            } catch (NoResultException e) {
+                throw new UsernameNotFoundException("user " + s + " not found");
+            }
         }
+
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName()));
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + userRoleService.getRole(user.getRoleId())));
+
         CustomUser customUser = new CustomUser(
                 user.getLogin(),
                 user.getPassword(),
@@ -70,4 +81,8 @@ public class UserDetailsServiceImpl
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private UserRoleService userRoleService;
+    @Autowired
+    private UserBuilderService userBuilderService;
 }

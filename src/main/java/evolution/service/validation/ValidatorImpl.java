@@ -43,9 +43,9 @@ public class ValidatorImpl {
                 return false;
             if (user.getSecretQuestionType().getName() == null)
                 return false;
-            String role = user.getRole().getName();
-            if (!role.equals("USER") && !role.equals("ADMIN"))
-                return false;
+//            String role = user.getRole().getName();
+//            if (!role.equals("USER") && !role.equals("ADMIN"))
+//                return false;
         } catch (Exception e) {
             return false;
         }

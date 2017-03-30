@@ -93,7 +93,7 @@ public class UserDaoImpl
         Query query = hibernateSession.createQuery(
                 "select new User(id, login, firstName, lastName) " +
                         "from User " +
-                        "where role = " + UserRoleEnum.USER.getId());
+                        "where roleId = " + UserRoleEnum.USER.getId());
         List result = query.list();
         return result;
     }
@@ -104,7 +104,7 @@ public class UserDaoImpl
         Query query = hibernateSession.createQuery(
                 "select new User(id, login, firstName, lastName) " +
                         "from User " +
-                        "where role = " + UserRoleEnum.ADMIN.getId());
+                        "where roleId = " + UserRoleEnum.ADMIN.getId());
         List result = query.list();
         return result;
     }
@@ -116,7 +116,7 @@ public class UserDaoImpl
                 "select new User (id, login, firstName, lastName) " +
                         "from User " +
                         "where login like:l " +
-                        "and role = " + UserRoleEnum.ADMIN.getId());
+                        "and roleId = " + UserRoleEnum.ADMIN.getId());
         query.setParameter("l", like);
         List result = query.list();
         return result;
@@ -129,7 +129,7 @@ public class UserDaoImpl
                 "select new User(id, firstName, lastName) " +
                         "from User " +
                         "where login like:l " +
-                        "and role = " + UserRoleEnum.USER.getId());
+                        "and roleId = " + UserRoleEnum.USER.getId());
         query.setParameter("l", like);
         List result = query.list();
         return result;

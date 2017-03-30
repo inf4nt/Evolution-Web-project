@@ -39,7 +39,7 @@ public class SecretQuestionType {
 
     @Id
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "sqt")
-    @SequenceGenerator(name = "sqt", sequenceName = "seq_sqt_id", allocationSize = 1)
+    @SequenceGenerator(name = "sqt", sequenceName = "seq_secret_question_type_id", allocationSize = 1)
     private Long id;
     @Column(unique = true, nullable = false)
     private String name;

@@ -6,10 +6,8 @@ import evolution.dao.SecretQuestionTypeDao;
 import evolution.dao.UserDao;
 import evolution.model.SecretQuestionType;
 import evolution.model.User;
-import evolution.model.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,14 +23,11 @@ public class UserBuilderService {
         User user = new User();
         SecretQuestionType sqt = sqtDao.findById(Long.parseLong(request.getParameter("sqtId")));
         long roleId = UserRoleEnum.valueOf(request.getParameter("role")).getId();
-        UserRole role = new UserRole();
-        role.setName(request.getParameter("role"));
-        role.setId(roleId);
         if (id != null)
             user.setId(id);
         user.setLogin(request.getParameter("login"));
         user.setPassword(request.getParameter("password"));
-        user.setRole(role);
+        user.setRoleId(roleId);
         user.setSecretQuestionType(sqt);
         user.setSecretQuestion(request.getParameter("secretQuestion"));
         user.setRegistrationDate(new Date(new java.util.Date().getTime()));
@@ -41,36 +36,24 @@ public class UserBuilderService {
         return user;
     }
 
-    public void createDefault() {
-        try {
-            userDao.findByLogin("default_user");
-        } catch (NoResultException e) {
-            User defaultUser = new User();
-            UserRole role = new UserRole();
-            role.setId(UserRoleEnum.valueOf("USER").getId());
-            role.setName("USER");
-            defaultUser.setLogin("default_user");
-            defaultUser.setPassword("default_user");
-            defaultUser.setRole(role);
-            userDao.save(defaultUser);
-        }
+    public User getDefaultUser() {
+        User user = new User();
+        user.setRoleId(UserRoleEnum.USER.getId());
+        user.setLogin("default_user");
+        user.setPassword("default_user");
+        user.setId(0l);
+        return user;
+    }
 
-        try {
-            userDao.findByLogin("default_admin");
-        } catch (NoResultException e) {
-            User defaultAdmin = new User();
-            UserRole role = new UserRole();
-            role.setId(UserRoleEnum.valueOf("ADMIN").getId());
-            role.setName("ADMIN");
-            defaultAdmin.setLogin("default_admin");
-            defaultAdmin.setPassword("default_admin");
-            defaultAdmin.setRole(role);
-            userDao.save(defaultAdmin);
-        }
+    public User getDefaultAdmin() {
+        User user = new User();
+        user.setRoleId(UserRoleEnum.ADMIN.getId());
+        user.setLogin("default_admin");
+        user.setPassword("default_admin");
+        user.setId(0l);
+        return user;
     }
 
     @Autowired
     private SecretQuestionTypeDao sqtDao;
-    @Autowired
-    private UserDao userDao;
 }

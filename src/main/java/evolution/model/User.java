@@ -14,6 +14,10 @@ import java.util.List;
  * Created by Admin on 09.03.2017.
  */
 
+
+
+
+
 @Entity
 @Table (name = "user_data")
 public class User {
@@ -21,10 +25,10 @@ public class User {
     public User() {
     }
 
-    public User(Long id, Date registrationDate, SecretQuestionType secretQuestionType, UserRole role, String login, String password, String secretQuestion, String firstName, String lastName) {
+    public User(Long id, Date registrationDate, SecretQuestionType secretQuestionType, Long roleId, String login, String password, String secretQuestion, String firstName, String lastName) {
         this.registrationDate = registrationDate;
         this.secretQuestionType = secretQuestionType;
-        this.role = role;
+        this.roleId = roleId;
         this.login = login;
         this.password = password;
         this.secretQuestion = secretQuestion;
@@ -94,12 +98,12 @@ public class User {
         this.secretQuestion = secretQuestion;
     }
 
-    public UserRole getRole() {
-        return role;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setRole(UserRole role) {
-        this.role = role;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
     public String getFirstName() {
@@ -127,8 +131,8 @@ public class User {
             sb.append(", registrationDate=").append(registrationDate);
         if (secretQuestionType != null)
             sb.append(", secretQuestionType=").append(secretQuestionType);
-        if (role != null)
-            sb.append(", role=").append(role);
+        if (roleId != null)
+            sb.append(", role=").append(roleId);
         if (login != null)
             sb.append(", login='").append(login).append('\'');
         if (password != null)
@@ -160,7 +164,7 @@ public class User {
 
     @Id
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "seq_user")
-    @SequenceGenerator(name = "seq_user", sequenceName = "seq_uv_id", allocationSize = 1)
+    @SequenceGenerator(name = "seq_user", sequenceName = "seq_user_data_id", allocationSize = 1)
     private Long id;
     @Column(name = "registration_date")
     @Type(type = "date")
@@ -168,9 +172,8 @@ public class User {
     @ManyToOne(targetEntity = SecretQuestionType.class)
     @JoinColumn(name = "secret_question_type_id")
     private SecretQuestionType secretQuestionType;
-    @ManyToOne(targetEntity = UserRole.class)
-    @JoinColumn(name = "role_id")
-    private UserRole role;
+    @Column(name = "role_id")
+    private Long roleId;
     @Column(unique = true, nullable = false)
     private String login;
     @Column (nullable = false)
@@ -181,30 +184,4 @@ public class User {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-
-//    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-//    @JoinTable(name = "friends",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "friend_id"))
-//    @WhereJoinTable(clause = "status = 'follower'")
-//    private List<User> follower;
-//
-//    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-//    @JoinTable(name = "friends",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "friend_id"))
-//    @WhereJoinTable(clause = "status = 'progress'")
-//    private List<User> friends;
 }
-
-//@FilterDef(name = "filter_status", parameters = {
-//        @ParamDef(name = "param_status", type = "string")
-//})
-//
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "friends",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "friend_id"))
-////    @FilterJoinTable(name = "filter_status", condition = "status = :param_status")
-//    @WhereJoinTable(clause = "status = 'follower'")
-//    private Set<User> friends;

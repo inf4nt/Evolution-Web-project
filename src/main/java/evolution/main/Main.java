@@ -123,13 +123,15 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String parse = "Name Last";
+//       Session session = getSessionFactory().getCurrentSession();
+//       session.beginTransaction();
+//       System.out.println("transaction");
+//
+//
+//
+//       session.getSessionFactory().close();
 
-//        String regexp[] = parse.split("[A-z]/s[A-z]");
-//        for (Object e:regexp)
-//            System.out.println(e);
 
-//        System.out.println(parse.matches("^[A-z]+ //s [A-z]+$"));
 
     }
 
