@@ -10,6 +10,7 @@ import evolution.common.UserRoleEnum;
 import evolution.dao.FriendsDao;
 import evolution.dao.impl.FriendsDaoImpl;
 import evolution.dao.impl.UserDaoImpl;
+import evolution.model.Friend;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -123,18 +124,24 @@ public class Main {
 
     public static void main(String[] args) {
 
-//       Session session = getSessionFactory().getCurrentSession();
-//       session.beginTransaction();
-//       System.out.println("transaction");
-//
-//
-//
-//       session.getSessionFactory().close();
+        Session session = getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        System.out.println("transaction");
+        FriendsDao friendsDao = new FriendsDaoImpl(session);
 
 
+//        friendsDao.friendRequest(4, 7);
+
+
+        Friend friend = FriendsDaoImpl.FriendsMapper.mapper(session.createSQLQuery("select * from friends where user_id = 4 and friend_id = 7").getSingleResult());
+        System.out.println(friend);
+
+
+
+//        session.getTransaction().commit();
+        session.getSessionFactory().close();
 
     }
-
 
     public static SessionFactory getSessionFactory(){
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();

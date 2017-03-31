@@ -13,11 +13,15 @@ public interface FriendsDao {
 
     List<User> findMyFollower (long id);
 
-    void removeMyFriend (long myId, long remove);
+    void removeMyFriend (long id1, long id2);
 
-    void acceptFriend (long myId, long friendId);
+    void acceptFriend (long id1, long id2);
 
-    void friendRequest (long myId, long friendId);
+    void friendRequest (long id1, long id2);
 
     List<User> findNewFriend();
+
+    boolean checkIsFriend(long id1, long id2);
+
+    void removeFollower (long id1, long id2);
 }

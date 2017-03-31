@@ -19,7 +19,6 @@
 </head>
 <body>
 
-
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center" style="margin-top: 15%">
@@ -33,7 +32,7 @@
           </div>
         </div>
       </div>
-      <!-- Login error -->
+
       <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-3 col-xs-2"></div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-8">
@@ -41,13 +40,11 @@
           <div class="col-lg-8">
             <form action="${pageContext.request.contextPath}/j_spring_security_check" method='POST'>
               <div class="form-group text-center">
-                <input type="text" placeholder="email" name="username" class="form-control">
+                <input type="text" placeholder="email" name="username" class="form-control" value="com.infant@gmail.com ">
               </div>
               <div class="form-group text-center">
-                <%--<legend>Password</legend>--%>
-                <input type="password" placeholder="password" name="password" class="form-control">
+                <input type="password" placeholder="password" name="password" class="form-control" value="77788877">
               </div>
-
               <div class="form-group text-center">
                 <td><a href="/user/form-reset-password">Forgot password</a></td>
               </div>

@@ -47,7 +47,8 @@
     <property name="use_sql_comments">false</property>
     <property name="hibernate.connection.username">blnjznffbkytsy</property>
     <property name="hibernate.connection.password">c119924e3525cce4b65884b042b6b83a6256f09e464b4767338d429d5adc6462</property>
-
+    <mapping class="evolution.model.User"/>
+    <mapping class="evolution.model.SecretQuestionType"/>
 
 
 
