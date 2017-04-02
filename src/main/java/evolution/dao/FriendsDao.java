@@ -9,19 +9,17 @@ import java.util.List;
  */
 public interface FriendsDao {
 
-    List<User> findMyFriend(long id);
+    List<User> findMyFriend(long authUserId);
 
-    List<User> findMyFollower (long id);
+    List<User> findMyFollower (long authUserId);
 
-    void removeMyFriend (long id1, long id2);
+    List<User> findMyRequest (long authUserId);
 
-    void acceptFriend (long id1, long id2);
+    void acceptFriend (long authUserId, long id2);
 
-    void friendRequest (long id1, long id2);
+    void friendRequest (long authUserId, long id2);
 
-    List<User> findNewFriend();
+    void deleteFriend(long authUserId, long id2);
 
-    boolean checkIsFriend(long id1, long id2);
-
-    void removeFollower (long id1, long id2);
+    void deleteRequest(long authUserId, long id2);
 }

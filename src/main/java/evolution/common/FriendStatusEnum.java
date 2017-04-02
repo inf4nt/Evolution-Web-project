@@ -6,7 +6,9 @@ package evolution.common;
 public enum FriendStatusEnum {
 
     PROGRESS(1),
-    FOLLOWER(2);
+    FOLLOWER(2),
+    REQUEST(3),
+    NO_MATCHES(4);
 
     FriendStatusEnum(long i) {
         this.id = i;

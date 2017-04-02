@@ -42,7 +42,7 @@
 
 					<form role="form" action="/user/search" class="navbar-form navbar-right">
 						<div class="input-group">
-							<input type="text" class="form-control input-xs" name="like">
+							<input type="text" placeholder="" class="form-control input-xs" name="like">
 							<div class="input-group-btn">
 									<button type="submit" formaction="/user/search/start" class="btn btn-search btn-info">
 									<span class="glyphicon glyphicon-search"></span>
@@ -68,13 +68,14 @@
 	<div class="col-sm-3 col-md-12 col-lg-12 sidebar">
 			<ul class="nav nav-sidebar">
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
-				<li><a href="/admin/form-all/user/start" methods="get">Show users</a></li>
-				<li><a href="/admin/form-all/admin/start" methods="get">Show admin</a></li>
-				<li><a href="/form-create-user" methods="get">Registration</a></li>
-				<li><a href="/admin/form-create-sqt" methods="get">Create secret question type</a></li>
+					<li><a href="/admin/form-all/user/start" methods="get">Show users</a></li>
+					<li><a href="/admin/form-all/admin/start" methods="get">Show admin</a></li>
+					<li><a href="/form-create-user" methods="get">Registration</a></li>
+					<li><a href="/admin/form-create-sqt" methods="get">Create secret question type</a></li>
 				</sec:authorize>
 				<li><a href="/user/friend/Friend/start" methods="get">Friends</a></li>
 				<li><a href="/user/friend/Follower/start" methods="get">Follower</a></li>
+				<li><a href="/user/friend/Request/start" methods="get">Request</a></li>
 			</ul>
 	</div>
 </div>

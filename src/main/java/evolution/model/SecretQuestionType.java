@@ -1,12 +1,20 @@
 package evolution.model;
 
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Admin on 09.03.2017.
  */
 @Entity
 @Table(name = "secret_question_type")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "SecretQuestionType")
 public class SecretQuestionType {
 
     public SecretQuestionType() {

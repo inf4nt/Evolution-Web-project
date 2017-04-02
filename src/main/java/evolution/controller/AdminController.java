@@ -1,12 +1,13 @@
 package evolution.controller;
 
+import evolution.dao.AdminDao;
 import evolution.dao.SecretQuestionTypeDao;
 import evolution.dao.UserDao;
 import evolution.model.SecretQuestionType;
 import evolution.model.User;
 import evolution.model.form.SecretQuestionTypeForm;
-import evolution.service.PaginationService;
-import evolution.service.SecretQuestionTypeBuilderService;
+import evolution.service.builder.PaginationService;
+import evolution.service.builder.SecretQuestionTypeBuilderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -46,7 +47,6 @@ public class AdminController {
         return "redirect:/welcome";
     }
 
-
     @RequestMapping (value = {"/form-all/{role}/{action}"}, method = RequestMethod.GET)
     public String formAllUser (
             @PathVariable String role,
@@ -58,9 +58,9 @@ public class AdminController {
 
         if (action.equals("start")) {
             if (role.equals("user"))
-                pagedListHolder = paginationService.pagedListHolder(userDao.findAllUser());
+                pagedListHolder = paginationService.pagedListHolder(adminDao.findAllUser());
             if (role.equals("admin"))
-                pagedListHolder = paginationService.pagedListHolder(userDao.findAllAdmin());
+                pagedListHolder = paginationService.pagedListHolder(adminDao.findAllAdmin());
             model.addAttribute("productList", pagedListHolder);
         }
 
@@ -71,15 +71,7 @@ public class AdminController {
         model.addAttribute("servletName", "form-all");
         model.addAttribute("role", role);
         model.addAttribute("page_url", "/admin/form-all/" + role);
-        return "user/form-search";
-    }
-
-
-    @RequestMapping (value = "/form-all-role-admin", method = RequestMethod.GET)
-    public String formAllRoleAdmin (Model model, HttpServletRequest request) {
-        List<User> listAdmin = userDao.findAllAdmin();
-        model.addAttribute("listAdmin", listAdmin);
-        return "old/form-all-user";
+        return "admin/admin-form-search";
     }
 
     @RequestMapping (value = "/form-create-sqt", method = RequestMethod.GET)
@@ -113,6 +105,8 @@ public class AdminController {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private AdminDao adminDao;
     @Autowired
     private SecretQuestionTypeDao sqtDao;
     @Autowired

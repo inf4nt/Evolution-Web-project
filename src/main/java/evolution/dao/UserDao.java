@@ -14,8 +14,6 @@ public interface UserDao {
 
     void update (User user);
 
-    List<User> findAll ();
-
     User findById (long id);
 
     User findByLogin (String login);
@@ -24,15 +22,5 @@ public interface UserDao {
 
     void delete (User user);
 
-    List<User> findLikeLogin (String like);
-
-    List<User> findAllUser();
-
-    List<User> findAllAdmin();
-
-    List<User> findAdminLikeLogin(String like);
-
-    List<User> findUserLikeLogin(String like);
-
-    List<User> findUserLikeFirstNameLastName (String parameter1, String parameter2);
+    List<User> searchByFistNameLastName(String like, long authUserId);
 }

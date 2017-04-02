@@ -10,8 +10,9 @@ import evolution.dao.SecretQuestionTypeDao;
 import evolution.dao.UserDao;
 import evolution.model.User;
 import evolution.model.form.UserForm;
-import evolution.service.PaginationService;
-import evolution.service.UserBuilderService;
+import evolution.service.HibernateCache;
+import evolution.service.builder.PaginationService;
+import evolution.service.builder.UserBuilderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.core.Authentication;
@@ -37,10 +38,11 @@ public class UserController {
         if (authentication == null)
             return "redirect:/";
         sessionStatus.setComplete();
+        hibernateCache.reset();
         return "user/home";
     }
 
-    @RequestMapping (value = "/edit/{id}", method = RequestMethod.GET)
+    @RequestMapping (value = "/edit/{id}", method = RequestMethod.POST)
     public String edit (@PathVariable long id,
                         @Valid @ModelAttribute("form") UserForm form,
                         BindingResult bindingResult,
@@ -61,19 +63,14 @@ public class UserController {
 
         String like = request.getParameter("like");
 
-        String role = request.getSession().getAttribute("authorities").toString();
         PagedListHolder pagedListHolder;
-
         if (action.equals("start")) {
             if (like.length() > 32 || like.isEmpty()) {
                 sessionStatus.setComplete();
-                return "user/form-search";
+                return "user/search";
             }
-
-            if (role.equals("[ROLE_ADMIN]"))
-                pagedListHolder = paginationService.pagedListHolder(userDao.findLikeLogin("%" + like + "%"));
-            else
-                pagedListHolder = paginationService.pagedListHolder(userDao.findUserLikeLogin("%" + like + "%"));
+            pagedListHolder = paginationService
+                    .pagedListHolder(userDao.searchByFistNameLastName(like, (Long) request.getSession().getAttribute("userid")));
             model.addAttribute("productList", pagedListHolder);
         }
 
@@ -82,7 +79,7 @@ public class UserController {
             paginationService.getPage(action, pagedListHolder);
         }
         model.addAttribute("page_url", "/user/search");
-        return "user/form-search";
+        return "user/search";
     }
 
 
@@ -154,11 +151,16 @@ public class UserController {
         PagedListHolder pagedListHolder = null;
 
         if (action.equals("start")) {
+            long userid = (Long) request.getSession().getAttribute("userid");
             if (friendStatus.equals("Friend"))
-                pagedListHolder = paginationService.pagedListHolder(friendsDao.findMyFriend((Long) request.getSession().getAttribute("userid")));
+                pagedListHolder = paginationService
+                        .pagedListHolder(friendsDao.findMyFriend(userid));
             if (friendStatus.equals("Follower"))
-                pagedListHolder = paginationService.pagedListHolder(friendsDao.findMyFollower((Long) request.getSession().getAttribute("userid")));
-
+                pagedListHolder = paginationService
+                        .pagedListHolder(friendsDao.findMyFollower(userid));
+            if (friendStatus.equals("Request"))
+                pagedListHolder = paginationService
+                        .pagedListHolder(friendsDao.findMyRequest(userid));
             model.addAttribute("productList", pagedListHolder);
         }
 
@@ -168,7 +170,7 @@ public class UserController {
         }
         model.addAttribute("friendStatus", friendStatus);
         model.addAttribute("page_url", "/user/friend/" + friendStatus);
-        return "user/form-friends";
+        return "user/search-friend";
     }
 
     @RequestMapping(value = "/friend-action/{action}/{userId}/{friendId}", method = RequestMethod.GET)
@@ -179,9 +181,26 @@ public class UserController {
 
         if (action.equals("accept-friend")){
             friendsDao.acceptFriend(userId, friendId);
+            return "redirect:/user/friend/Friend/start";
         }
 
-        return "redirect:/user/friend/Friend/start";
+        if (action.equals("delete-friend")){
+            friendsDao.deleteFriend(userId, friendId);
+            return "redirect:/user/friend/Follower/start";
+        }
+
+        if (action.equals("delete-request")){
+            friendsDao.deleteRequest(userId, friendId);
+            return "redirect:/user/friend/Request/start";
+        }
+
+
+        if (action.equals("request-friend")){
+            friendsDao.friendRequest(userId, friendId);
+            return "redirect:/user/friend/Request/start";
+        }
+
+        return "redirect:/user/home";
     }
 
     @Autowired
@@ -194,5 +213,6 @@ public class UserController {
     private PaginationService paginationService;
     @Autowired
     private FriendsDao friendsDao;
-
+    @Autowired
+    private HibernateCache hibernateCache;
 }

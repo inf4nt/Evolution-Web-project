@@ -5,21 +5,14 @@ package evolution.main;
 
 
 import evolution.common.FriendStatusEnum;
-import evolution.common.RestStatus;
-import evolution.common.UserRoleEnum;
-import evolution.dao.FriendsDao;
-import evolution.dao.impl.FriendsDaoImpl;
-import evolution.dao.impl.UserDaoImpl;
-import evolution.model.Friend;
+import evolution.dao.MyQuery;
+import evolution.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -123,24 +116,29 @@ public class Main {
 
 
     public static void main(String[] args) {
+        try {
 
-        Session session = getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        System.out.println("transaction");
-        FriendsDao friendsDao = new FriendsDaoImpl(session);
+            SessionFactory sessionFactory = getSessionFactory();
+            Session session = sessionFactory.getCurrentSession();
 
+            session.beginTransaction();
 
-//        friendsDao.friendRequest(4, 7);
-
-
-        Friend friend = FriendsDaoImpl.FriendsMapper.mapper(session.createSQLQuery("select * from friends where user_id = 4 and friend_id = 7").getSingleResult());
-        System.out.println(friend);
-
+            List list = session.createQuery(
+                    "select new User (id, login, firstName, lastName) " +
+                            "from User " +
+                            "where login like '%user%'").list();
 
 
-//        session.getTransaction().commit();
-        session.getSessionFactory().close();
 
+
+            for (Object e: list)
+                System.out.println(e);
+
+
+            sessionFactory.close();
+
+
+        } catch (Exception e){e.printStackTrace();}
     }
 
     public static SessionFactory getSessionFactory(){

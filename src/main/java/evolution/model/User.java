@@ -1,13 +1,17 @@
 package evolution.model;
 
+import evolution.common.FriendStatusEnum;
 import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
 
 
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.Table;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,24 +24,13 @@ import java.util.List;
 
 @Entity
 @Table (name = "user_data")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "User")
 public class User {
 
     public User() {
     }
 
     public User(Long id){
-        this.id = id;
-    }
-
-    public User(Long id, Date registrationDate, SecretQuestionType secretQuestionType, Long roleId, String login, String password, String secretQuestion, String firstName, String lastName) {
-        this.registrationDate = registrationDate;
-        this.secretQuestionType = secretQuestionType;
-        this.roleId = roleId;
-        this.login = login;
-        this.password = password;
-        this.secretQuestion = secretQuestion;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.id = id;
     }
 
@@ -102,6 +95,7 @@ public class User {
         this.secretQuestion = secretQuestion;
     }
 
+
     public Long getRoleId() {
         return roleId;
     }
@@ -126,6 +120,14 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getFriendStatus() {
+        return friendStatus;
+    }
+
+    public void setFriendStatus(String friendStatus) {
+        this.friendStatus = friendStatus;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");
@@ -136,11 +138,13 @@ public class User {
         if (secretQuestionType != null)
             sb.append(", secretQuestionType=").append(secretQuestionType);
         if (roleId != null)
-            sb.append(", role=").append(roleId);
+            sb.append(", roleId=").append(roleId);
         if (login != null)
             sb.append(", login='").append(login).append('\'');
         if (password != null)
             sb.append(", password='").append(password).append('\'');
+        if (friendStatus != null)
+            sb.append(", status='").append(friendStatus).append('\'');
         if (secretQuestion != null)
             sb.append(", secretQuestion='").append(secretQuestion).append('\'');
         if (firstName != null)
@@ -173,7 +177,7 @@ public class User {
     @Column(name = "registration_date")
     @Type(type = "date")
     private Date registrationDate;
-    @ManyToOne(targetEntity = SecretQuestionType.class)
+    @ManyToOne
     @JoinColumn(name = "secret_question_type_id")
     private SecretQuestionType secretQuestionType;
     @Column(name = "role_id")
@@ -188,4 +192,7 @@ public class User {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
+
+    @Transient
+    private String friendStatus;
 }

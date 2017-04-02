@@ -46,10 +46,10 @@
                 <input type="password" placeholder="password" name="password" class="form-control" value="77788877">
               </div>
               <div class="form-group text-center">
-                <td><a href="/user/form-reset-password">Forgot password</a></td>
+                <td><a style="color: #fbfff9" href="/user/form-reset-password">Forgot password</a></td>
               </div>
               <div class="form-group text-center">
-                <td><a href="/form-create-user">Registration</a></td>
+                <td><a style="color: #fbfff9" href="/form-create-user">Registration</a></td>
               </div>
               <div class="text-center">
                 <input class="btn btn-info" name="submit" type="submit" value="Log in" style="width: 100%">

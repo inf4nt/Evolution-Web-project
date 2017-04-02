@@ -1,9 +1,10 @@
-package evolution.service;
+package evolution.service.security;
 
 
 import evolution.dao.UserDao;
-import evolution.model.SecretQuestionType;
 import evolution.model.User;
+import evolution.service.builder.UserBuilderService;
+import evolution.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import javax.persistence.NoResultException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

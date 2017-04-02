@@ -28,8 +28,12 @@
                     <h4><strong><ins>Password</ins></strong></h4><h4>${user.getPassword()}</h4>
                     <h4><strong><ins>First name</ins></strong></h4><h4>${user.getFirstName()}</h4>
                     <h4><strong><ins>Last name</ins></strong></h4><h4>${user.getLastName()}</h4>
-                    <%--<h4><strong><ins>Role</ins></strong></h4><h4>${user.getRole().getName()}</h4>--%>
-                    <h4><strong><ins>Role</ins></strong></h4><h4>${user.getRoleId()}</h4>
+                    <c:if test="${user.getRoleId() == 1}">
+                        <h4><strong><ins>Role</ins></strong></h4><h4>User</h4>
+                    </c:if>
+                    <c:if test="${user.getRoleId() == 2}">
+                        <h4><strong><ins>Role</ins></strong></h4><h4>Admin</h4>
+                    </c:if>
                     <h4><strong><ins>Registration date</ins></strong></h4><h4>${user.getRegistrationDate()}</h4>
                     <h4><strong><ins>Secret question type</ins></strong></h4><h4>${user.getSecretQuestionType().getName()}</h4>
                     <h4><strong><ins>Secret question</ins></strong></h4><h4>${user.getSecretQuestion()}</h4>
@@ -97,8 +101,12 @@
                         <h4><strong><ins>Secret question type</ins></strong></h4><h4>${user.getSecretQuestionType().getName()}</h4>
                         <h4><strong><ins>Secret question</ins></strong></h4><h4>${user.getSecretQuestion()}</h4>
                     </c:if>
-                    <%--<h4><strong><ins>Role</ins></strong></h4><h4>${user.getRole().getName()}</h4>--%>
-                    <h4><strong><ins>Role</ins></strong></h4><h4>${user.getRoleId()}</h4>
+                    <c:if test="${user.getRoleId() == 1}">
+                        <h4><strong><ins>Role</ins></strong></h4><h4>User</h4>
+                    </c:if>
+                    <c:if test="${user.getRoleId() == 2}">
+                        <h4><strong><ins>Role</ins></strong></h4><h4>Admin</h4>
+                    </c:if>
                     <h4><strong><ins>Registration date</ins></strong></h4><h4>${user.getRegistrationDate()}</h4>
                 </div>
             </div>

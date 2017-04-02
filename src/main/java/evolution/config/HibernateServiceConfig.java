@@ -55,6 +55,7 @@ public class HibernateServiceConfig
                 .setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory")
                 .setProperty("hibernate.cache.use_query_cache", "true")
                 .setProperty("hibernate.cache.use_second_level_cache", "true")
+                .setProperty("net.sf.ehcache.configurationResourceName", "/myehcache.xml")
                 .setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect")
                 .setProperty("hibernate.enable_lazy_load_no_trans", "true")
                 .buildSessionFactory();
