@@ -10,7 +10,6 @@ import evolution.dao.SecretQuestionTypeDao;
 import evolution.dao.UserDao;
 import evolution.model.User;
 import evolution.model.form.UserForm;
-import evolution.service.HibernateCache;
 import evolution.service.builder.PaginationService;
 import evolution.service.builder.UserBuilderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,6 @@ public class UserController {
         if (authentication == null)
             return "redirect:/";
         sessionStatus.setComplete();
-        hibernateCache.reset();
         return "user/home";
     }
 
@@ -213,6 +211,4 @@ public class UserController {
     private PaginationService paginationService;
     @Autowired
     private FriendsDao friendsDao;
-    @Autowired
-    private HibernateCache hibernateCache;
 }

@@ -4,7 +4,6 @@ import evolution.dao.SecretQuestionTypeDao;
 import evolution.dao.UserDao;
 import evolution.model.User;
 import evolution.model.form.UserForm;
-import evolution.service.HibernateCache;
 import evolution.service.builder.UserBuilderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -42,7 +41,6 @@ public class IndexController {
             }
         sessionStatus.setComplete();
         request.getSession().invalidate();
-        hibernateCache.reset();
         return "index/index";
     }
 
@@ -100,6 +98,4 @@ public class IndexController {
     private SecretQuestionTypeDao sqtDao;
     @Autowired
     private UserBuilderService userBuilderService;
-    @Autowired
-    private HibernateCache hibernateCache;
 }
