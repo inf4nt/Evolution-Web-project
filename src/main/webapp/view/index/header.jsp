@@ -27,13 +27,13 @@
 				<sec:authorize access="isAuthenticated()">
 
 					<ul class="nav navbar-nav">
-							<li class="active">
+							<li>
 								<a href="/user/id/${authUser.getId()}" methods="get">
 									<span class="glyphicon glyphicon-home"> Home</span>
 								</a>
 							</li>
 						<c:if test="${authUser.getId() > 0}">
-							<li class="active">
+							<li>
 								<a href="/user/form-my-profile/${authUser.getId()}" methods="get">
 									<span class="glyphicon glyphicon-edit"> Profile</span>
 								</a>
