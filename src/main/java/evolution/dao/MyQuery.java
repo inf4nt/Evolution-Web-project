@@ -8,6 +8,19 @@ import evolution.common.UserRoleEnum;
  */
 public interface MyQuery {
 
+//    String USER_JOIN_FRIEND = "select\n" +
+//            "  u.id,\n" +
+//            "  u.first_name,\n" +
+//            "  u.last_name,\n" +
+//            "  case\n" +
+//            "  WHEN f.status = " + FriendStatusEnum.PROGRESS.getId() + " THEN '" + FriendStatusEnum.PROGRESS.toString() +"' \n" +
+//            "  WHEN f.status = " + FriendStatusEnum.FOLLOWER.getId() + " THEN '" + FriendStatusEnum.FOLLOWER.toString() +"' \n" +
+//            "  WHEN f.status = " + FriendStatusEnum.REQUEST.getId() + " THEN '" + FriendStatusEnum.REQUEST.toString() +"' \n" +
+//            "  WHEN f.status = " + FriendStatusEnum.NO_MATCHES.getId() + " THEN '" + FriendStatusEnum.NO_MATCHES.toString() +"' \n" +
+//            "  end as status\n" +
+//            "from user_data u\n" +
+//            "join friends f on u.id = f.friend_id";
+
     String USER_JOIN_FRIEND = "select\n" +
             "  u.id,\n" +
             "  u.first_name,\n" +
@@ -16,7 +29,6 @@ public interface MyQuery {
             "  WHEN f.status = " + FriendStatusEnum.PROGRESS.getId() + " THEN '" + FriendStatusEnum.PROGRESS.toString() +"' \n" +
             "  WHEN f.status = " + FriendStatusEnum.FOLLOWER.getId() + " THEN '" + FriendStatusEnum.FOLLOWER.toString() +"' \n" +
             "  WHEN f.status = " + FriendStatusEnum.REQUEST.getId() + " THEN '" + FriendStatusEnum.REQUEST.toString() +"' \n" +
-            "  WHEN f.status = " + FriendStatusEnum.NO_MATCHES.getId() + " THEN '" + FriendStatusEnum.NO_MATCHES.toString() +"' \n" +
             "  end as status\n" +
             "from user_data u\n" +
             "join friends f on u.id = f.friend_id";

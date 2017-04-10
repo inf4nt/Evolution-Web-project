@@ -32,9 +32,9 @@ public class UserDetailsServiceImpl
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user;
 
-        if (s.equals("default_user") )
+        if (s.equals("defaultUser@evolution.com") )
             user = userBuilderService.getDefaultUser();
-        else if (s.equals("default_admin"))
+        else if (s.equals("defaultAdmin@evolution.com"))
             user = userBuilderService.getDefaultAdmin();
         else {
             try {
@@ -50,6 +50,8 @@ public class UserDetailsServiceImpl
         CustomUser customUser = new CustomUser(
                 user.getLogin(),
                 user.getPassword(),
+//                user.getFirstName(),
+//                user.getLastName(),
                 true,
                 true,
                 true,
@@ -64,19 +66,32 @@ public class UserDetailsServiceImpl
 
         public CustomUser(
                 String username, String password,
+//                String firstName, String lastName,
                 boolean enabled, boolean accountNonExpired,
                 boolean credentialsNonExpired, boolean accountNonLocked,
                 Collection<? extends GrantedAuthority> authorities,
                 long id) {
             super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
             this.id = id;
+//            this.firstName = firstName;
+//            this.lastName = lastName;
         }
 
         public long getId() {
             return id;
         }
 
+//        public String getFirstName() {
+//            return firstName;
+//        }
+//
+//        public String getLastName() {
+//            return lastName;
+//        }
+
         private final long id;
+//        private final String firstName;
+//        private final String lastName;
     }
 
     @Autowired

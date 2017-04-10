@@ -19,21 +19,34 @@
 
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<a class="navbar-brand">EvolutionMVC</a>
+			<a class="navbar-brand">EvolutionMVC
+				<span class="glyphicon glyphicon-globe"></span>
+			</a>
 			<div class="callapse navbar-collapse">
 
 				<sec:authorize access="isAuthenticated()">
 
 					<ul class="nav navbar-nav">
-						<li><a href="/user/home", methods="get">Home</a></li>
-						<c:if test="${userid > 0}">
-							<li><a href="/user/form-my-profile/${userid}" methods="get">Profile</a></li>
+							<li class="active">
+								<a href="/user/id/${authUser.getId()}" methods="get">
+									<span class="glyphicon glyphicon-home"> Home</span>
+								</a>
+							</li>
+						<c:if test="${authUser.getId() > 0}">
+							<li class="active">
+								<a href="/user/form-my-profile/${authUser.getId()}" methods="get">
+									<span class="glyphicon glyphicon-edit"> Profile</span>
+								</a>
+							</li>
 						</c:if>
 					</ul>
 
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">${username}<b class="caret"></b></a>
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+											${authUser.getLogin()}
+										<span class="glyphicon glyphicon-log-out"></span>
+									</a>
 							<ul class="dropdown-menu">
 								<li><a href="/logout", methods="get">Exit</a></li>
 							</ul>
@@ -42,7 +55,7 @@
 
 					<form role="form" action="/user/search" class="navbar-form navbar-right">
 						<div class="input-group">
-							<input type="text" placeholder="" class="form-control input-xs" name="like">
+							<input type="text" placeholder="Victor Golovin" class="form-control input-xs" name="like">
 							<div class="input-group-btn">
 									<button type="submit" formaction="/user/search/start" class="btn btn-search btn-info">
 									<span class="glyphicon glyphicon-search"></span>
@@ -56,7 +69,12 @@
 
 				<sec:authorize access="!isAuthenticated()">
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="/welcome">Log in</a></li>
+						<li>
+							<a href="/welcome">Log in
+								<span class="glyphicon glyphicon-log-in"></span>
+							</a>
+						</li>
+
 					</ul>
 				</sec:authorize>
 			</div>
@@ -68,14 +86,18 @@
 	<div class="col-sm-3 col-md-12 col-lg-12 sidebar">
 			<ul class="nav nav-sidebar">
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<hr/>
 					<li><a href="/admin/form-all/user/start" methods="get">Show users</a></li>
 					<li><a href="/admin/form-all/admin/start" methods="get">Show admin</a></li>
 					<li><a href="/form-create-user" methods="get">Registration</a></li>
 					<li><a href="/admin/form-create-sqt" methods="get">Create secret question type</a></li>
+					<hr/>
 				</sec:authorize>
-				<li><a href="/user/friend/Friend/start" methods="get">Friends</a></li>
-				<li><a href="/user/friend/Follower/start" methods="get">Follower</a></li>
-				<li><a href="/user/friend/Request/start" methods="get">Request</a></li>
+				<li><a href="/user/${authUser.getId()}/friend/start" methods="get">Friends</a></li>
+				<li><a href="/user/${authUser.getId()}/follower/start" methods="get">Follower</a></li>
+				<li><a href="/user/${authUser.getId()}/request/start" methods="get">My offer</a></li>
+
+				<%--<li><a href="/user/friends/${authUser.getId()}/all/start" methods="get">Friend</a></li>--%>
 			</ul>
 	</div>
 </div>

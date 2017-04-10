@@ -5,6 +5,7 @@ import evolution.dao.UserDao;
 import evolution.model.User;
 import evolution.model.form.UserForm;
 import evolution.service.builder.UserBuilderService;
+import evolution.service.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,49 +38,55 @@ public class IndexController {
     public String welcome (Authentication authentication, HttpServletRequest request, SessionStatus sessionStatus) {
         if (authentication != null)
             if (authentication.isAuthenticated()) {
-                return "redirect:/user/home";
+//                return "redirect:/user/home";
+                return "redirect:/user/id/" + ((User)request.getSession().getAttribute("authUser")).getId();
             }
         sessionStatus.setComplete();
-        request.getSession().invalidate();
-        return "index/index";
+        return "index/login-page";
     }
 
 
     @RequestMapping (value = "/login", method = RequestMethod.GET)
     public String login (HttpServletRequest request) {
         if (request == null || request.getParameter("error") == null) {
-            return "index/index";
+            return "index/login-page";
         }
 
-        return "index/index";
+        return "index/login-page";
     }
 
     @RequestMapping (value = "/form-create-user", method = RequestMethod.GET)
     public String createUserForm (Model model) {
         model.addAttribute("sqt", sqtDao.findAll());
-        model.addAttribute("form", new UserForm());
         return "user/form-create-user";
     }
 
     @RequestMapping (value = "/create-user", method = RequestMethod.POST)
     public String createUser(
-            @Valid @ModelAttribute("form") UserForm form,
-            BindingResult bindingResult, HttpServletRequest request,
+            HttpServletRequest request,
             Model model, SessionStatus sessionStatus) {
-        if (bindingResult.hasErrors()) {
-            return "user/form-create-user";
-        }
 
         User result = null;
         try {
-            result = userDao.findByLogin(request.getParameter("login"));
+            userDao.findByLogin(request.getParameter("login"));
         } catch (NoResultException e) {}
         if (result != null) {
             model.addAttribute("info", "User " + result.getLogin() + " is exist. Try again");
             return "user/form-create-user";
         }
-        User user = userBuilderService.build(null, request);
-        userDao.save(user);
+
+        try {
+            result = userBuilderService.build(null, request);
+            if (!validator.userValidator(result)) {
+                model.addAttribute("info", "Sorry, I can not create such a user");
+                return "user/form-create-user";
+            }
+        } catch (Exception e){
+            model.addAttribute("info", "Sorry, I can not create such a user");
+            return "user/form-create-user";
+        }
+
+        userDao.save(result);
         sessionStatus.setComplete();
         return "redirect:/welcome";
     }
@@ -98,4 +105,6 @@ public class IndexController {
     private SecretQuestionTypeDao sqtDao;
     @Autowired
     private UserBuilderService userBuilderService;
+    @Autowired
+    private Validator validator;
 }

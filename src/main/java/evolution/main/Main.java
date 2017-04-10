@@ -6,12 +6,15 @@ package evolution.main;
 
 import evolution.common.FriendStatusEnum;
 import evolution.dao.MyQuery;
+import evolution.model.SecretQuestionType;
 import evolution.model.User;
+import evolution.service.validation.Validator;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
+import java.sql.Date;
 import java.util.List;
 
 
@@ -116,29 +119,27 @@ public class Main {
 
 
     public static void main(String[] args) {
-        try {
-
-            SessionFactory sessionFactory = getSessionFactory();
-            Session session = sessionFactory.getCurrentSession();
-
-            session.beginTransaction();
-
-            List list = session.createQuery(
-                    "select new User (id, login, firstName, lastName) " +
-                            "from User " +
-                            "where login like '%user%'").list();
+//        String st = "user@@mail.ru";
+//        String regex = "^[a-zA-Z0-9._-]{1,40}@[a-zA-Z0-9.-]{1,40}\\.[a-zA-Z]{2,6}";
+//        System.out.println(st.matches(regex));
 
 
+        User user = new User();
+        user.setLogin("user@mail.ru");
+        user.setPassword("1111");
+        user.setRoleId(1l);
+        user.setSecretQuestionType(new SecretQuestionType());
+        user.setRegistrationDate(new Date(new java.util.Date().getTime()));
+        user.setFirstName("Maksim");
+        user.setLastName("Lukaretskiy");
+        user.setSecretQuestion("51a");
 
 
-            for (Object e: list)
-                System.out.println(e);
+        Validator validator = new Validator();
+        System.out.println(validator.userValidator(user));
 
 
-            sessionFactory.close();
 
-
-        } catch (Exception e){e.printStackTrace();}
     }
 
     public static SessionFactory getSessionFactory(){

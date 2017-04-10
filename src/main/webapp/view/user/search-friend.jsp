@@ -78,17 +78,17 @@
                             <td style="width: 4%">${a.getFirstName()}</td>
                             <td style="width: 4%">${a.getLastName()}</td>
                             <td class="col-xs-1"><a href="/user/form-my-profile/${a.getId()}" class="btn btn-info pull-right">Profile</a></td>
-                            <c:if test="${friendStatus == 'Friend'}">
+                            <c:if test="${friendStatus == 'friend'}">
                                 <td style="width: 1%" class="col-xs-1">
                                     <a href="/user/friend-action/delete-friend/${userid}/${a.getId()}" class="btn btn-danger pull-right">Delete friend</a>
                                 </td>
                             </c:if>
-                            <c:if test="${friendStatus == 'Request'}">
+                            <c:if test="${friendStatus == 'request'}">
                                 <td style="width: 1%" class="col-xs-1">
                                     <a href="/user/friend-action/delete-request/${userid}/${a.getId()}" class="btn btn-danger pull-right">Delete request</a>
                                 </td>
                             </c:if>
-                            <c:if test="${friendStatus == 'Follower'}">
+                            <c:if test="${friendStatus == 'follower'}">
                                 <td style="width: 1%" class="col-xs-1">
                                     <a href="/user/friend-action/accept-friend/${userid}/${a.getId()}" class="btn btn-success pull-right">Accept friend</a>
                                 </td>

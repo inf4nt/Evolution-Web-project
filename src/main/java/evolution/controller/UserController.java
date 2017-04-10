@@ -9,19 +9,17 @@ import evolution.dao.SecretQuestionTypeDao;
 
 import evolution.dao.UserDao;
 import evolution.model.User;
-import evolution.model.form.UserForm;
 import evolution.service.builder.PaginationService;
 import evolution.service.builder.UserBuilderService;
+import evolution.service.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 
 /**
@@ -32,26 +30,22 @@ import javax.validation.Valid;
 @SessionAttributes(value = {"role", "productList", "sqt", "user"})
 public class UserController {
 
-    @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String home (Authentication authentication, SessionStatus sessionStatus) {
+
+    @RequestMapping (value = "/id/{id}", method = RequestMethod.GET)
+    public String home (
+            @PathVariable long id, HttpServletRequest request,
+            Model model, Authentication authentication, SessionStatus sessionStatus) {
+
         if (authentication == null)
-            return "redirect:/";
+            return "redirect:/welcome";
         sessionStatus.setComplete();
-        return "user/home";
-    }
+        long authUserId = ((User) request.getSession().getAttribute("authUser")).getId();
+        if (authUserId != id)
+            model.addAttribute("user", userDao.findById(id));
+        else
+            model.addAttribute("user", request.getSession().getAttribute("authUser"));
 
-    @RequestMapping (value = "/edit/{id}", method = RequestMethod.POST)
-    public String edit (@PathVariable long id,
-                        @Valid @ModelAttribute("form") UserForm form,
-                        BindingResult bindingResult,
-                        HttpServletRequest request) {
-
-        if (bindingResult.hasErrors()) {
-            return "user/form-my-profile";
-        }
-        User user = userBuilderService.build(id, request);
-        userDao.update(user);
-        return "redirect:/user/form-my-profile/" + id;
+        return "user/my-home";
     }
 
     @RequestMapping (value = {"/search/{action}"}, method = RequestMethod.GET)
@@ -68,7 +62,7 @@ public class UserController {
                 return "user/search";
             }
             pagedListHolder = paginationService
-                    .pagedListHolder(userDao.searchByFistNameLastName(like, (Long) request.getSession().getAttribute("userid")));
+                    .pagedListHolder(userDao.searchByFistNameLastName(like, ((User) request.getSession().getAttribute("authUser")).getId()));
             model.addAttribute("productList", pagedListHolder);
         }
 
@@ -80,15 +74,126 @@ public class UserController {
         return "user/search";
     }
 
-
     @RequestMapping (value = "/form-my-profile/{id}", method = RequestMethod.GET)
-    public String myProfile (@PathVariable long id, Model model) {
-        User user = userDao.findById(id);
-        model.addAttribute("user", user);
+    public String profile (@PathVariable long id, Model model, HttpServletRequest request) {
+        long authUserId = ((User) request.getSession().getAttribute("authUser")).getId();
+        if (authUserId != id)
+            model.addAttribute("user", userDao.findById(id));
+        else
+            model.addAttribute("user", request.getSession().getAttribute("authUser"));
         model.addAttribute("sqt", sqtDao.findAll());
-        model.addAttribute("form", new UserForm());
         return "user/form-my-profile";
     }
+
+    @RequestMapping (value = "/edit/{id}", method = RequestMethod.POST)
+    public String edit (@PathVariable long id, HttpServletRequest request) {
+        User user = userBuilderService.build(id, request);
+        if (!validator.userValidator(user)) {
+            return "redirect:/form-my-profile/" + id;
+        }
+
+        userDao.update(user);
+        return "redirect:/user/form-my-profile/" + id;
+    }
+
+    @RequestMapping(value = "/friend-action/{action}/{userId}/{friendId}", method = RequestMethod.GET)
+    public String servletFriend(
+            @PathVariable Long userId,
+            @PathVariable Long friendId,
+            @PathVariable String action) {
+
+        if (action.equals("accept-friend")){
+            friendsDao.acceptFriend(userId, friendId);
+            return "redirect:/user/" + userId + "/friend/start";
+        }
+
+        if (action.equals("delete-friend")){
+            friendsDao.deleteFriend(userId, friendId);
+            return "redirect:/user/" + userId + "/follower/start";
+        }
+
+        if (action.equals("delete-request")){
+            friendsDao.deleteRequest(userId, friendId);
+            return "redirect:/user/" + userId + "/request/start";
+        }
+
+        if (action.equals("request-friend")){
+            friendsDao.friendRequest(userId, friendId);
+            return "redirect:/user/" + userId + "/request/start";
+        }
+
+        return "redirect:/user/id/" + userId;
+    }
+
+    @RequestMapping(value = "/{id}/{status}/{action}", method = RequestMethod.GET)
+    public String friends (
+            @PathVariable long id,
+            @PathVariable String action,
+            @PathVariable String status,
+            Model model,
+            HttpServletRequest request) {
+
+        PagedListHolder pagedListHolder = null;
+
+        if (action.equals("start")) {
+            if (status.equals("friend"))
+                pagedListHolder = paginationService
+                        .pagedListHolder(friendsDao.findMyFriend(id));
+            if (status.equals("follower"))
+                pagedListHolder = paginationService
+                        .pagedListHolder(friendsDao.findMyFollower(id));
+            if (status.equals("request"))
+                pagedListHolder = paginationService
+                        .pagedListHolder(friendsDao.findMyRequest(id));
+            model.addAttribute("productList", pagedListHolder);
+        }
+
+        else {
+            pagedListHolder = (PagedListHolder) request.getSession().getAttribute("productList");
+            paginationService.getPage(action, pagedListHolder);
+        }
+        model.addAttribute("friendStatus", status);
+        model.addAttribute("page_url", "/user/" + id + "/" + status);
+        return "user/search-friend";
+    }
+
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private SecretQuestionTypeDao sqtDao;
+    @Autowired
+    private UserBuilderService userBuilderService;
+    @Autowired
+    private PaginationService paginationService;
+    @Autowired
+    private FriendsDao friendsDao;
+    @Autowired
+    private Validator validator;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @RequestMapping (value = "/reset-password", method = RequestMethod.GET)
     public String reset (Model model, HttpServletRequest request) {
@@ -139,76 +244,4 @@ public class UserController {
         return "user/form-reset";
     }
 
-    @RequestMapping(value = "/friend/{friendStatus}/{action}", method = RequestMethod.GET)
-    public String friends (
-            @PathVariable String action,
-            @PathVariable String friendStatus,
-            Model model,
-            HttpServletRequest request) {
-
-        PagedListHolder pagedListHolder = null;
-
-        if (action.equals("start")) {
-            long userid = (Long) request.getSession().getAttribute("userid");
-            if (friendStatus.equals("Friend"))
-                pagedListHolder = paginationService
-                        .pagedListHolder(friendsDao.findMyFriend(userid));
-            if (friendStatus.equals("Follower"))
-                pagedListHolder = paginationService
-                        .pagedListHolder(friendsDao.findMyFollower(userid));
-            if (friendStatus.equals("Request"))
-                pagedListHolder = paginationService
-                        .pagedListHolder(friendsDao.findMyRequest(userid));
-            model.addAttribute("productList", pagedListHolder);
-        }
-
-        else {
-            pagedListHolder = (PagedListHolder) request.getSession().getAttribute("productList");
-            paginationService.getPage(action, pagedListHolder);
-        }
-        model.addAttribute("friendStatus", friendStatus);
-        model.addAttribute("page_url", "/user/friend/" + friendStatus);
-        return "user/search-friend";
-    }
-
-    @RequestMapping(value = "/friend-action/{action}/{userId}/{friendId}", method = RequestMethod.GET)
-    public String servletFriend(
-            @PathVariable Long userId,
-            @PathVariable Long friendId,
-            @PathVariable String action) {
-
-        if (action.equals("accept-friend")){
-            friendsDao.acceptFriend(userId, friendId);
-            return "redirect:/user/friend/Friend/start";
-        }
-
-        if (action.equals("delete-friend")){
-            friendsDao.deleteFriend(userId, friendId);
-            return "redirect:/user/friend/Follower/start";
-        }
-
-        if (action.equals("delete-request")){
-            friendsDao.deleteRequest(userId, friendId);
-            return "redirect:/user/friend/Request/start";
-        }
-
-
-        if (action.equals("request-friend")){
-            friendsDao.friendRequest(userId, friendId);
-            return "redirect:/user/friend/Request/start";
-        }
-
-        return "redirect:/user/home";
-    }
-
-    @Autowired
-    private UserDao userDao;
-    @Autowired
-    private SecretQuestionTypeDao sqtDao;
-    @Autowired
-    private UserBuilderService userBuilderService;
-    @Autowired
-    private PaginationService paginationService;
-    @Autowired
-    private FriendsDao friendsDao;
 }

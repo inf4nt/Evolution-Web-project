@@ -1,13 +1,13 @@
 package evolution.service.security;
 
 
+
 import evolution.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +18,8 @@ import java.io.IOException;
  * Created by Admin on 02.03.2017.
  */
 @Service
-public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
+public class AuthenticationSuccessHandlerImpl
+            implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(
@@ -37,6 +38,8 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         httpSession.setAttribute("userid", authUser.getId());
         httpSession.setAttribute("authorities", authentication.getAuthorities());
 
+        httpSession.setAttribute("authUser", userDao.findById(authUser.getId()));
+
 
 
         //set our response to OK status
@@ -45,8 +48,10 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         //since we have created our custom success handler, its up to us to where
         //we will redirect the user after successfully login
 
-        httpServletResponse.sendRedirect("/user/home/");
+
+        httpServletResponse.sendRedirect("/user/id/" + authUser.getId());
     }
+
     @Autowired
     private UserDao userDao;
 }

@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Admin on 26.03.2017.
@@ -21,30 +23,6 @@ import java.util.List;
 @Transactional
 public class FriendsDaoImpl
             implements FriendsDao {
-
-    @Override
-    public List<User> findMyFriend(long id) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createSQLQuery(MyQuery.FIND_MY_FRIEND);
-        query.setParameter("par_f_user_id", id);
-        return customMapper.listUserForFriends(query.list());
-    }
-
-    @Override
-    public List<User> findMyFollower(long id) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createSQLQuery(MyQuery.FIND_MY_FOLLOWER);
-        query.setParameter("par_f_user_id", id);
-        return customMapper.listUserForFriends(query.list());
-    }
-
-    @Override
-    public List<User> findMyRequest(long id) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createSQLQuery(MyQuery.FIND_MY_REQUEST);
-        query.setParameter("par_f_user_id", id);
-        return customMapper.listUserForFriends(query.list());
-    }
 
     @Override
     public void friendRequest(long authUserId, long id2) {
@@ -109,6 +87,30 @@ public class FriendsDaoImpl
         query.setParameter("par_f_user_id", id2);
         query.setParameter("par_f_friend_id", authUserId);
         query.executeUpdate();
+    }
+
+    @Override
+    public List<User> findMyFriend(long id) {
+        hibernateSession = sessionFactory.getCurrentSession();
+        Query query = hibernateSession.createSQLQuery(MyQuery.FIND_MY_FRIEND);
+        query.setParameter("par_f_user_id", id);
+        return customMapper.listUserForFriends(query.list());
+    }
+
+    @Override
+    public List<User> findMyFollower(long id) {
+        hibernateSession = sessionFactory.getCurrentSession();
+        Query query = hibernateSession.createSQLQuery(MyQuery.FIND_MY_FOLLOWER);
+        query.setParameter("par_f_user_id", id);
+        return customMapper.listUserForFriends(query.list());
+    }
+
+    @Override
+    public List<User> findMyRequest(long id) {
+        hibernateSession = sessionFactory.getCurrentSession();
+        Query query = hibernateSession.createSQLQuery(MyQuery.FIND_MY_REQUEST);
+        query.setParameter("par_f_user_id", id);
+        return customMapper.listUserForFriends(query.list());
     }
 
     private Session hibernateSession;

@@ -39,8 +39,8 @@ public class UserBuilderService {
     public User getDefaultUser() {
         User user = new User();
         user.setRoleId(UserRoleEnum.USER.getId());
-        user.setLogin("default_user");
-        user.setPassword("default_user");
+        user.setLogin("defaultUser@evolution.com");
+        user.setPassword("defaultUser");
         user.setId(0l);
         return user;
     }
@@ -48,8 +48,8 @@ public class UserBuilderService {
     public User getDefaultAdmin() {
         User user = new User();
         user.setRoleId(UserRoleEnum.ADMIN.getId());
-        user.setLogin("default_admin");
-        user.setPassword("default_admin");
+        user.setLogin("defaultAdmin@evolution.com");
+        user.setPassword("defaultAdmin");
         user.setId(0l);
         return user;
     }
