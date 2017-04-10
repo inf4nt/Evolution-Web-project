@@ -49,7 +49,7 @@
                             <span id="span_email_error" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="display: none"></span>
                         </div>
 
-                        <p id="password_error" class="text text-danger">Password</p>
+                        <p id="password_error" class="text text-danger"></p>
                         <div id="div_password"  class="form-group has-feedback">
                             <input onblur="passwordValid()" id="password" type="password" value="${user.getPassword()}" name="password" class="form-control text-center"/>
                             <span id="span_password_ok" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" style="display: none"></span>
@@ -80,8 +80,8 @@
                         <div class="form-group">
                             <h4 class="text-center">Secret question type</h4>
                             <select name="sqtId" class="form-control">
-                                <c:forEach var = "sqtA" items = "${sqt}">
-                                    <option value = ${sqtA.getId()}> ${a.getName()}</option>
+                                <c:forEach var = "a" items = "${sqt}">
+                                    <option value = ${a.getId()}> ${a.getName()}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -200,7 +200,7 @@
     }
 
     function sqtValid() {
-        var pattern = /^[a-zA-Z0-9]{1,32}$/;
+        var pattern = /^[a-zA-Z0-9-/]{1,32}$/;
         var result = false;
         var sqt = document.getElementById("secretQuestion").value;
         if (pattern.test(sqt) == false)  {

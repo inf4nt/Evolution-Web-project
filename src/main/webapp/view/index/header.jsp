@@ -2,7 +2,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <html>
 <head>
@@ -94,10 +94,8 @@
 					<hr/>
 				</sec:authorize>
 				<li><a href="/user/${authUser.getId()}/friend/start" methods="get">Friends</a></li>
-				<li><a href="/user/${authUser.getId()}/follower/start" methods="get">Follower</a></li>
-				<li><a href="/user/${authUser.getId()}/request/start" methods="get">My offer</a></li>
-
-				<%--<li><a href="/user/friends/${authUser.getId()}/all/start" methods="get">Friend</a></li>--%>
+				<li><a href="/user/${authUser.getId()}/follower/start" methods="get">Followers</a></li>
+				<li><a href="/user/${authUser.getId()}/request/start" methods="get">Friend requests</a></li>
 			</ul>
 	</div>
 </div>

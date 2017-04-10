@@ -80,17 +80,17 @@
                             <td class="col-xs-1"><a href="/user/form-my-profile/${a.getId()}" class="btn btn-info pull-right">Profile</a></td>
                             <c:if test="${friendStatus == 'friend'}">
                                 <td style="width: 1%" class="col-xs-1">
-                                    <a href="/user/friend-action/delete-friend/${userid}/${a.getId()}" class="btn btn-danger pull-right">Delete friend</a>
+                                    <a href="/user/friend-action/delete-friend/${authUser.getId()}/${a.getId()}" class="btn btn-danger pull-right">Delete friend</a>
                                 </td>
                             </c:if>
                             <c:if test="${friendStatus == 'request'}">
                                 <td style="width: 1%" class="col-xs-1">
-                                    <a href="/user/friend-action/delete-request/${userid}/${a.getId()}" class="btn btn-danger pull-right">Delete request</a>
+                                    <a href="/user/friend-action/delete-request/${authUser.getId()}/${a.getId()}" class="btn btn-danger pull-right">Delete request</a>
                                 </td>
                             </c:if>
                             <c:if test="${friendStatus == 'follower'}">
                                 <td style="width: 1%" class="col-xs-1">
-                                    <a href="/user/friend-action/accept-friend/${userid}/${a.getId()}" class="btn btn-success pull-right">Accept friend</a>
+                                    <a href="/user/friend-action/accept-friend/${authUser.getId()}/${a.getId()}" class="btn btn-success pull-right">Accept request</a>
                                 </td>
                             </c:if>
                         </tr>

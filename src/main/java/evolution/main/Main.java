@@ -119,27 +119,21 @@ public class Main {
 
 
     public static void main(String[] args) {
-//        String st = "user@@mail.ru";
-//        String regex = "^[a-zA-Z0-9._-]{1,40}@[a-zA-Z0-9.-]{1,40}\\.[a-zA-Z]{2,6}";
-//        System.out.println(st.matches(regex));
 
+        try {
+            SessionFactory sessionFactory = getSessionFactory();
+            Session session = sessionFactory.getCurrentSession();
+            session.beginTransaction();
+            Query query = session.createQuery("from User u order by u.registrationDate desc");
+            List list = query.list();
 
-        User user = new User();
-        user.setLogin("user@mail.ru");
-        user.setPassword("1111");
-        user.setRoleId(1l);
-        user.setSecretQuestionType(new SecretQuestionType());
-        user.setRegistrationDate(new Date(new java.util.Date().getTime()));
-        user.setFirstName("Maksim");
-        user.setLastName("Lukaretskiy");
-        user.setSecretQuestion("51a");
+            for (Object e: list)
+                System.out.println(e);
 
-
-        Validator validator = new Validator();
-        System.out.println(validator.userValidator(user));
-
-
-
+            sessionFactory.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static SessionFactory getSessionFactory(){

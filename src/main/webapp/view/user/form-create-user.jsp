@@ -200,7 +200,7 @@
     }
 
     function sqtValid() {
-        var pattern = /^[a-zA-Z0-9]{1,32}$/;
+        var pattern = /^[a-zA-Z0-9-/]{1,32}$/;
         var result = false;
         var sqt = document.getElementById("secretQuestion").value;
         if (pattern.test(sqt) == false)  {

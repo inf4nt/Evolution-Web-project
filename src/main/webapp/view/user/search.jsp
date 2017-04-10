@@ -6,7 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 <head>
     <title>Search</title>
@@ -77,21 +80,21 @@
                             <td style="width: 4%">${a.getLastName()}</td>
                             <td class="col-xs-1"><a href="/user/form-my-profile/${a.getId()}" class="btn btn-info pull-right">Profile</a></td>
                             <c:if test="${a.getFriendStatus() == 'NO_MATCHES'}">
-                                <td style="width: 1%" class="col-xs-1"><a href="/user/friend-action/request-friend/${userid}/${a.getId()}" class="btn btn-info pull-right">Request</a></td>
+                                <td style="width: 1%" class="col-xs-1"><a href="/user/friend-action/request-friend/${authUser.getId()}/${a.getId()}" class="btn btn-info pull-right">Add friend</a></td>
                             </c:if>
                             <c:if test="${a.getFriendStatus() == 'PROGRESS'}">
                                 <td style="width: 1%" class="col-xs-1">
-                                    <a href="/user/friend-action/delete-friend/${userid}/${a.getId()}" class="btn btn-danger pull-right">Delete friend</a>
+                                    <a href="/user/friend-action/delete-friend/${authUser.getId()}/${a.getId()}" class="btn btn-danger pull-right">Delete friend</a>
                                 </td>
                             </c:if>
                             <c:if test="${a.getFriendStatus() == 'FOLLOWER'}">
                                 <td style="width: 1%" class="col-xs-1">
-                                    <a href="/user/friend-action/accept-friend/${userid}/${a.getId()}" class="btn btn-success pull-right">Accept friend</a>
+                                    <a href="/user/friend-action/accept-friend/${authUser.getId()}/${a.getId()}" class="btn btn-success pull-right">Accept request</a>
                                 </td>
                             </c:if>
                             <c:if test="${a.getFriendStatus() == 'REQUEST'}">
                                 <td style="width: 1%" class="col-xs-1">
-                                    <a href="/user/friend-action/delete-request/${userid}/${a.getId()}" class="btn btn-danger pull-right">Delete request</a>
+                                    <a href="/user/friend-action/delete-request/${authUser.getId()}/${a.getId()}" class="btn btn-danger pull-right">Delete request</a>
                                 </td>
                             </c:if>
 

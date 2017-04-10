@@ -14,7 +14,7 @@ public class Validator {
         String emailPattern = "^[a-zA-Z0-9._-]{1,40}@[a-zA-Z0-9.-]{1,40}\\.[a-zA-Z]{2,6}";
         String onlyCharacter = "^[a-zA-Z0-9]{4,32}";
         String namePattern = "^[a-zA-Z]{4,32}";
-        String sqtPattern = "^[a-zA-Z0-9]{1,32}";
+        String sqtPattern = "^[a-zA-Z0-9-/]{1,32}";
 
         try {
             if (!user.getLogin().matches(emailPattern) ||

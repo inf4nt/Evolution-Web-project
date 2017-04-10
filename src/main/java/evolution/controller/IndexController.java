@@ -38,7 +38,6 @@ public class IndexController {
     public String welcome (Authentication authentication, HttpServletRequest request, SessionStatus sessionStatus) {
         if (authentication != null)
             if (authentication.isAuthenticated()) {
-//                return "redirect:/user/home";
                 return "redirect:/user/id/" + ((User)request.getSession().getAttribute("authUser")).getId();
             }
         sessionStatus.setComplete();

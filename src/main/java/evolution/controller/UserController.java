@@ -30,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 @SessionAttributes(value = {"role", "productList", "sqt", "user"})
 public class UserController {
 
-
     @RequestMapping (value = "/id/{id}", method = RequestMethod.GET)
     public String home (
             @PathVariable long id, HttpServletRequest request,

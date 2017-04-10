@@ -34,8 +34,8 @@ public class AuthenticationSuccessHandlerImpl
                 .getAuthentication()
                 .getPrincipal();
 
-        httpSession.setAttribute("username", authUser.getUsername());
-        httpSession.setAttribute("userid", authUser.getId());
+//        httpSession.setAttribute("username", authUser.getUsername());
+//        httpSession.setAttribute("userid", authUser.getId());
         httpSession.setAttribute("authorities", authentication.getAuthorities());
 
         httpSession.setAttribute("authUser", userDao.findById(authUser.getId()));
