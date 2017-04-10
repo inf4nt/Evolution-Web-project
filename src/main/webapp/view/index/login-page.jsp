@@ -46,14 +46,14 @@
 
           <p id="username_error" style="color: #ffffff"></p>
           <div id="div_username"  class="form-group has-feedback">
-            <input onblur="loginValid()" id="username" type="text" placeholder="email" name="username" class="form-control"/>
+            <input onblur="loginValid()" id="username" type="text" placeholder="email" value="com.infant@gmail.com" name="username" class="form-control"/>
             <span id="span_username_ok" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" style="display: none"></span>
             <span id="span_username_error" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="display: none"></span>
           </div>
 
           <p id="password_error" style="color: #ffffff"></p>
           <div id="div_password"  class="form-group has-feedback">
-            <input onblur="passwordValid()" id="password" type="password" placeholder="password" name="password" class="form-control">
+            <input onblur="passwordValid()" id="password" type="password" placeholder="password" value="77788877" name="password" class="form-control">
             <span id="span_password_ok" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" style="display: none"></span>
             <span id="span_password_error" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="display: none"></span>
           </div>
