@@ -55,7 +55,7 @@
 
 					<form role="form" action="/user/search" class="navbar-form navbar-right">
 						<div class="input-group">
-							<input type="text" placeholder="Victor Golovin" class="form-control input-xs" name="like">
+							<input type="text" placeholder="Yuriy Golovin" class="form-control input-xs" name="like">
 							<div class="input-group-btn">
 									<button type="submit" formaction="/user/search/start" class="btn btn-search btn-info">
 									<span class="glyphicon glyphicon-search"></span>
