@@ -67,41 +67,105 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <td>Id: </td>
-                        <td>First name: </td>
-                        <td>Last name: </td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     </thead>
                     <tbody>
                     <c:forEach var="a" items="${pageListHolder.pageList}">
                         <tr>
-                            <td style="width: 2%">${a.getId()}</td>
-                            <td style="width: 4%">${a.getFirstName()}</td>
-                            <td style="width: 4%">${a.getLastName()}</td>
-                            <td class="col-xs-1"><a href="/user/form-my-profile/${a.getId()}" class="btn btn-info pull-right">Profile</a></td>
-                            <c:if test="${a.getFriendStatus() == 'NO_MATCHES'}">
-                                <td style="width: 1%" class="col-xs-1"><a href="/user/friend-action/request-friend/${authUser.getId()}/${a.getId()}" class="btn btn-info pull-right">Add friend</a></td>
-                            </c:if>
-                            <c:if test="${a.getFriendStatus() == 'PROGRESS'}">
-                                <td style="width: 1%" class="col-xs-1">
-                                    <a href="/user/friend-action/delete-friend/${authUser.getId()}/${a.getId()}" class="btn btn-danger pull-right">Delete friend</a>
-                                </td>
-                            </c:if>
-                            <c:if test="${a.getFriendStatus() == 'FOLLOWER'}">
-                                <td style="width: 1%" class="col-xs-1">
-                                    <a href="/user/friend-action/accept-friend/${authUser.getId()}/${a.getId()}" class="btn btn-success pull-right">Accept request</a>
-                                </td>
-                            </c:if>
-                            <c:if test="${a.getFriendStatus() == 'REQUEST'}">
-                                <td style="width: 1%" class="col-xs-1">
-                                    <a href="/user/friend-action/delete-request/${authUser.getId()}/${a.getId()}" class="btn btn-danger pull-right">Delete request</a>
-                                </td>
-                            </c:if>
-
+                            <td style="width: 2%">
+                                <img data-src="holder.js/140x140" class="img-circle center-block" style="width: 100px; height: 100px;"
+                                     src="http://www.isu.edu.tw/upload/276e/9/coming-soon.jpg" data-holder-rendered="true">
+                            </td>
+                            <td style="width: 10%">
+                                <a href="/user/id/${a.getId()}">${a.getFirstName()} ${a.getLastName()}</a>
+                            </td>
+                            <td style="width: 2%">
+                                <ul class="menu">
+                                    <li class="menu-item">
+                                        <a href="#">
+                                            <span class="glyphicon glyphicon-option-horizontal"/>
+                                        </a>
+                                        <ul class="submenu">
+                                            <li class="submenu-item big-submenu-item">
+                                                <c:if test="${a.getFriendStatus() == 'NO_MATCHES'}">
+                                                    <a href="/user/friend-action/request-friend/${authUser.getId()}/${a.getId()}">
+                                                        <span class="glyphicon glyphicon-plus text-success"></span> Add friend
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${a.getFriendStatus() == 'PROGRESS'}">
+                                                    <a href="/user/friend-action/delete-friend/${authUser.getId()}/${a.getId()}">
+                                                        <span class="glyphicon glyphicon-remove text-danger"></span> Delete friend
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${a.getFriendStatus() == 'FOLLOWER'}">
+                                                    <a href="/user/friend-action/accept-friend/${authUser.getId()}/${a.getId()}" >
+                                                        <span class="glyphicon glyphicon-plus text-success"></span> Accept request
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${a.getFriendStatus() == 'REQUEST'}">
+                                                    <a href="/user/friend-action/delete-request/${authUser.getId()}/${a.getId()}" >
+                                                        <span class="glyphicon glyphicon-remove text-danger"></span> Delete request
+                                                    </a>
+                                                </c:if>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
+
+
+
+
+
+
+
+
+
+
+                <%--<table class="table table-hover">--%>
+                    <%--<thead>--%>
+                    <%--<tr>--%>
+                        <%--<td>Id: </td>--%>
+                        <%--<td>First name: </td>--%>
+                        <%--<td>Last name: </td>--%>
+                    <%--</tr>--%>
+                    <%--</thead>--%>
+                    <%--<tbody>--%>
+                    <%--<c:forEach var="a" items="${pageListHolder.pageList}">--%>
+                        <%--<tr>--%>
+                            <%--<td style="width: 2%">${a.getId()}</td>--%>
+                            <%--<td style="width: 4%">${a.getFirstName()}</td>--%>
+                            <%--<td style="width: 4%">${a.getLastName()}</td>--%>
+                            <%--<td class="col-xs-1"><a href="/user/form-my-profile/${a.getId()}" class="btn btn-info pull-right">Profile</a></td>--%>
+                            <%--<c:if test="${a.getFriendStatus() == 'NO_MATCHES'}">--%>
+                                <%--<td style="width: 1%" class="col-xs-1"><a href="/user/friend-action/request-friend/${authUser.getId()}/${a.getId()}" class="btn btn-info pull-right">Add friend</a></td>--%>
+                            <%--</c:if>--%>
+                            <%--<c:if test="${a.getFriendStatus() == 'PROGRESS'}">--%>
+                                <%--<td style="width: 1%" class="col-xs-1">--%>
+                                    <%--<a href="/user/friend-action/delete-friend/${authUser.getId()}/${a.getId()}" class="btn btn-danger pull-right">Delete friend</a>--%>
+                                <%--</td>--%>
+                            <%--</c:if>--%>
+                            <%--<c:if test="${a.getFriendStatus() == 'FOLLOWER'}">--%>
+                                <%--<td style="width: 1%" class="col-xs-1">--%>
+                                    <%--<a href="/user/friend-action/accept-friend/${authUser.getId()}/${a.getId()}" class="btn btn-success pull-right">Accept request</a>--%>
+                                <%--</td>--%>
+                            <%--</c:if>--%>
+                            <%--<c:if test="${a.getFriendStatus() == 'REQUEST'}">--%>
+                                <%--<td style="width: 1%" class="col-xs-1">--%>
+                                    <%--<a href="/user/friend-action/delete-request/${authUser.getId()}/${a.getId()}" class="btn btn-danger pull-right">Delete request</a>--%>
+                                <%--</td>--%>
+                            <%--</c:if>--%>
+
+                        <%--</tr>--%>
+                    <%--</c:forEach>--%>
+                    <%--</tbody>--%>
+                <%--</table>--%>
             </div>
         </div>
     </div>

@@ -1,0 +1,41 @@
+.menu {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.menu .menu-item {
+    margin: 0 1px 0 0;
+    padding: 0;
+}
+.menu .menu-item a {
+    display: block;
+    padding: 5px 10px;
+}
+.menu .submenu {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .15);
+
+    opacity: 0;
+    visibility: hidden;
+    transition: all .3s ease .15s;
+
+}
+.menu .menu-item:hover .submenu {
+    opacity: 1;
+    visibility: visible;
+}
+.menu .submenu-item {
+    padding: 5px 10px;
+
+}
+.menu .big-submenu-item {
+    width: 180px;
+}

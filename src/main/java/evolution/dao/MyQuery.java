@@ -63,12 +63,12 @@ public interface MyQuery {
 
     String FIND_USER_BY_LOGIN = FIND_ALL_USER + "\n where login = :l";
 
-    String FIND_ALL_USER_ID_FIRST_ = "select new User(id, login, firstName, lastName) \n from User";
+    String FIND_ALL_USER_ID_FIRST_LAST = "select new User(id, login, firstName, lastName) \n from User";
 
-    String FIND_USER_BY_ROLE_ADMIN = FIND_ALL_USER_ID_FIRST_ + "\n where role_id = " + UserRoleEnum.ADMIN.getId() + " order by registrationDate desc";
+    String FIND_USER_BY_ROLE_ADMIN = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.ADMIN.getId() + " order by registrationDate desc";
 
-    String FIND_USER_BY_ROLE_USER = FIND_ALL_USER_ID_FIRST_ + "\n where role_id = " + UserRoleEnum.USER.getId() + " order by registrationDate desc";
+    String FIND_USER_BY_ROLE_USER = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.USER.getId() + " order by registrationDate desc";
 
-    String FIND_USER_LIKE_LOGIN = FIND_ALL_USER_ID_FIRST_ + " \n where login like '%'||:like||'%'";
+    String FIND_USER_LIKE_LOGIN = FIND_ALL_USER_ID_FIRST_LAST + " \n where login like '%'||:like||'%'";
 
 }

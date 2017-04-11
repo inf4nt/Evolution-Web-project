@@ -124,6 +124,7 @@ public class UserController {
         return "redirect:/user/id/" + userId;
     }
 
+    // FRIENDS
     @RequestMapping(value = "/{id}/{status}/{action}", method = RequestMethod.GET)
     public String friends (
             @PathVariable long id,
@@ -153,7 +154,7 @@ public class UserController {
         }
         model.addAttribute("friendStatus", status);
         model.addAttribute("page_url", "/user/" + id + "/" + status);
-        return "user/search-friend";
+        return "user/form-my-friend";
     }
 
     @Autowired

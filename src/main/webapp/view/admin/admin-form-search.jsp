@@ -66,27 +66,39 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <td>Id: </td>
-                        <sec:authorize access="hasRole('ROLE_ADMIN')">
-                            <td>Email: </td>
-                        </sec:authorize>
-                        <td>First name: </td>
-                        <td>Last name: </td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     </thead>
                     <tbody>
                     <c:forEach var="a" items="${pageListHolder.pageList}">
                         <tr>
-                            <td style="width: 2%">${a.getId()}</td>
-                            <sec:authorize access="hasRole('ROLE_ADMIN')">
-                                <td style="width: 10%">${a.getLogin()}</td>
-                            </sec:authorize>
-                            <td style="width: 4%">${a.getFirstName()}</td>
-                            <td style="width: 4%">${a.getLastName()}</td>
-                            <td class="col-xs-1"><a href="/user/form-my-profile/${a.getId()}" class="btn btn-info pull-right">Profile</a></td>
-                            <sec:authorize access="hasRole('ROLE_ADMIN')">
-                                <td style="width: 1%"><a href="/admin/remove-user/${a.getId()}" class="btn btn-danger pull-right">Remove</a></td>
-                            </sec:authorize>
+                            <td style="width: 2%">
+                                <img data-src="holder.js/140x140" class="img-circle center-block" style="width: 100px; height: 100px;"
+                                     src="http://www.isu.edu.tw/upload/276e/9/coming-soon.jpg" data-holder-rendered="true">
+                            </td>
+                            <td style="width: 10%">
+                                <a href="/user/id/${a.getId()}">${a.getFirstName()} ${a.getLastName()}</a>
+                            </td>
+                            <td style="width: 2%">
+                                <ul class="menu">
+                                    <li class="menu-item">
+                                        <a href="#">
+                                            <span class="glyphicon glyphicon-option-horizontal"/>
+                                        </a>
+                                        <ul class="submenu">
+                                            <li class="submenu-item">
+                                                <a href="/user/form-my-profile/${a.getId()}" >
+                                                    <span class="glyphicon glyphicon-edit text-muted"></span> Edit
+                                                </a>
+                                                <a href="/admin/remove-user/${a.getId()}" >
+                                                    <span class="glyphicon glyphicon-remove text-danger"></span> Remove
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
