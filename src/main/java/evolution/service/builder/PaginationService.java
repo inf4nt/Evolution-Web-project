@@ -19,7 +19,7 @@ public class PaginationService {
     public PagedListHolder pagedListHolder (List source) {
         PagedListHolder pagedListHolder = new PagedListHolder();
         pagedListHolder.setSource(source);
-        pagedListHolder.setPageSize(10);
+        pagedListHolder.setPageSize(6);
         return pagedListHolder;
     }
 
