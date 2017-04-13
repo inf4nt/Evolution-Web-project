@@ -47,14 +47,14 @@
 
             <label id="email_error" class="control-label" style="color: #ffffff" for="login">Email</label>
             <div id="div_email"  class="form-group has-feedback">
-              <input id="login" type="text" onblur="loginValid('login')" name="username" class="form-control text-center"/>
+              <input id="login" type="text" onblur="loginValid('login')" name="username" value="com.infant@gmail.com" class="form-control text-center"/>
               <span id="span_email_ok" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" style="display: none"></span>
               <span id="span_email_error" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="display: none"></span>
             </div>
 
             <label id="password_error" class="control-label" style="color: #ffffff" for="password">Password</label>
             <div id="div_password"  class="form-group has-feedback">
-              <input onblur="firstPasswordValid('password')" id="password" type="password"  name="password" class="form-control text-center"/>
+              <input onblur="firstPasswordValid('password')" id="password" type="password" value="77788877"  name="password" class="form-control text-center"/>
               <span id="span_password_ok" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" style="display: none"></span>
               <span id="span_password_error" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="display: none"></span>
             </div>
