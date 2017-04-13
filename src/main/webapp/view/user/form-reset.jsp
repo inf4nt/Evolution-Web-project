@@ -92,7 +92,7 @@
 
             <hr/>
              <button type="submit" form="form" class="btn btn-info center-block" 
-                     onclick="passwordValid('password', 'confirmPassword')">
+                     onclick="return passwordValid('password', 'confirmPassword')">
                 Confirm <span class="glyphicon glyphicon-ok"></span>
             </button>
 
