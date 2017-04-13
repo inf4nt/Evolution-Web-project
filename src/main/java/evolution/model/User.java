@@ -10,16 +10,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.Table;
-import java.sql.Date;
+import java.util.Date;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Admin on 09.03.2017.
  */
-
-
-
 
 
 @Entity
@@ -71,6 +69,10 @@ public class User {
         this.password = password;
     }
 
+    public String getDateFormatRegistrationDate() {
+        return DateFormat.getInstance().format(registrationDate);
+    }
+
     public Date getRegistrationDate() {
         return registrationDate;
     }
@@ -94,7 +96,6 @@ public class User {
     public void setSecretQuestion(String secretQuestion) {
         this.secretQuestion = secretQuestion;
     }
-
 
     public Long getRoleId() {
         return roleId;
@@ -175,7 +176,7 @@ public class User {
     @SequenceGenerator(name = "seq_user", sequenceName = "seq_user_data_id", allocationSize = 1)
     private Long id;
     @Column(name = "registration_date")
-    @Type(type = "date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date registrationDate;
     @ManyToOne
     @JoinColumn(name = "secret_question_type_id")

@@ -8,11 +8,13 @@
 <head>
 	<script src="<c:url value="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js" />"></script>
 	<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+	<script src="/resources/my_js/my_js.js"/>
 	<script>
         $(document).ready(function () {
             $('.dropdown-toggle').dropdown();
         });
 	</script>
+
 	<link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
 	<link href="<c:url value="/resources/my_css/my_css.css" />" rel="stylesheet">
 </head>
@@ -83,8 +85,8 @@
 </div>
 
 <sec:authorize access="isAuthenticated()">
-<div class="col-md-2 col-lg-2">
-	<div class="col-sm-3 col-md-12 col-lg-12 sidebar">
+<div class="col-md-3 col-lg-2 col-sm-3 col-xs-3">
+	<div class="col-sm-10 col-md-9 col-lg-12 col-xs-12 sidebar">
 			<ul class="nav nav-sidebar">
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
 					<hr/>

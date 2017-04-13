@@ -15,6 +15,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
 import java.sql.Date;
+import java.text.DateFormat;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 
@@ -121,16 +123,23 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            SessionFactory sessionFactory = getSessionFactory();
-            Session session = sessionFactory.getCurrentSession();
-            session.beginTransaction();
-            Query query = session.createQuery("from User u order by u.registrationDate desc");
-            List list = query.list();
+//            SessionFactory sessionFactory = getSessionFactory();
+//            Session session = sessionFactory.getCurrentSession();
+//            session.beginTransaction();
+//            Query query = session.createQuery("from User u order by u.registrationDate desc");
+//            List list = query.list();
+//
+//            for (Object e: list)
+//                System.out.println(e);
+//
+//            sessionFactory.close();
 
-            for (Object e: list)
-                System.out.println(e);
+//            System.out.println(new Date(new java.util.Date().getTime()));
+//            System.out.println(new java.util.Date());
 
-            sessionFactory.close();
+
+            System.out.println(DateFormat.getInstance().format(new java.util.Date()));
+
         } catch (Exception e){
             e.printStackTrace();
         }

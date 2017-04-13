@@ -71,4 +71,8 @@ public interface MyQuery {
 
     String FIND_USER_LIKE_LOGIN = FIND_ALL_USER_ID_FIRST_LAST + " \n where login like '%'||:like||'%'";
 
+    String FIND_USER_BY_SQ_AND_SQT_AND_ID = "select *\n" +
+            "from user_data\n" +
+            "where secret_question = :sq and secret_question_type_id = :sqtId and id = :id";
+
 }

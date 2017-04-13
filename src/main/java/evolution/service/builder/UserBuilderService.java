@@ -3,15 +3,12 @@ package evolution.service.builder;
 
 import evolution.common.UserRoleEnum;
 import evolution.dao.SecretQuestionTypeDao;
-import evolution.dao.UserDao;
 import evolution.model.SecretQuestionType;
 import evolution.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by Admin on 11.03.2017.
@@ -23,14 +20,17 @@ public class UserBuilderService {
         User user = new User();
         SecretQuestionType sqt = sqtDao.findById(Long.parseLong(request.getParameter("sqtId")));
         long roleId = UserRoleEnum.valueOf(request.getParameter("role")).getId();
-        if (id != null)
+        if (id != null) {
             user.setId(id);
+            user.setRegistrationDate(new Date(Long.parseLong(request.getParameter("registrationDate"))));
+        } else {
+            user.setRegistrationDate(new Date());
+        }
         user.setLogin(request.getParameter("login"));
         user.setPassword(request.getParameter("password"));
         user.setRoleId(roleId);
         user.setSecretQuestionType(sqt);
         user.setSecretQuestion(request.getParameter("secretQuestion"));
-        user.setRegistrationDate(new Date(new java.util.Date().getTime()));
         user.setFirstName(request.getParameter("firstName"));
         user.setLastName(request.getParameter("lastName"));
         return user;

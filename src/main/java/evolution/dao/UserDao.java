@@ -1,5 +1,6 @@
 package evolution.dao;
 
+import evolution.model.SecretQuestionType;
 import evolution.model.User;
 
 
@@ -23,4 +24,6 @@ public interface UserDao {
     void delete (User user);
 
     List<User> searchByFistNameLastName(String like, long authUserId);
+
+    User findBySecretQuestionAndSecretQuestionType (long id, String secretQuestion, long sqtId);
 }

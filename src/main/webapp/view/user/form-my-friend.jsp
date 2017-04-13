@@ -63,6 +63,7 @@
         </div>
         <div class="row">
             <div class="col-md-14">
+                <h3 class="text-primary text-center">${user.getFirstName()} ${user.getLastName()} ${friendStatus}</h3>
                 <table class="table table-hover">
                     <thead>
                     <tr>

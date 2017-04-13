@@ -2,6 +2,7 @@ package evolution.dao.impl;
 
 import evolution.dao.MyQuery;
 import evolution.dao.UserDao;
+import evolution.model.SecretQuestionType;
 import evolution.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -65,20 +66,6 @@ public class UserDaoImpl
     public List<User> searchByFistNameLastName(String like, long authUserId) {
         String regex[] = like.split(" ");
         hibernateSession = sessionFactory.getCurrentSession();
-//        Query query = hibernateSession.createSQLQuery("select\n" +
-//                "  u.id,\n" +
-//                "  u.first_name,\n" +
-//                "  u.last_name,\n" +
-//                "  case\n" +
-//                "    WHEN f.status = " + FriendStatusEnum.PROGRESS.getId() + " THEN 'progress'\n" +
-//                "    WHEN f.status = "+ FriendStatusEnum.FOLLOWER.getId() +" THEN 'follower'\n" +
-//                "    WHEN f.status is null THEN 'no matches' "+
-//                "    WHEN f.status = " + FriendStatusEnum.REQUEST.getId()+ " then 'request' " +
-//                "  end as status\n" +
-//                "from user_data u\n" +
-//                "left join friends f on u.id = f.friend_id and f.user_id = :auth_user_id \n" +
-//                "WHERE (  u.first_name LIKE '%'||:p1||'%' and u.last_name LIKE '%'||:p2||'%' and u.id != :auth_user_id)\n" +
-//                "or (u.first_name LIKE '%'||:p2||'%' and u.last_name LIKE '%'||:p1||'%' and u.id != :auth_user_id)");
         Query query = hibernateSession.createSQLQuery(MyQuery.SEARCH_BY_FIRST_LAST_NAME);
         query.setParameter("auth_user_id", authUserId);
         query.setParameter("p1", regex[0]);
@@ -86,6 +73,16 @@ public class UserDaoImpl
         return new UserMapperForFriends().listUser(query.list());
     }
 
+    @Override
+    public User findBySecretQuestionAndSecretQuestionType(long id, String secretQuestion, long sqtId) {
+        hibernateSession = sessionFactory.getCurrentSession();
+        Query query = hibernateSession.createSQLQuery(MyQuery.FIND_USER_BY_SQ_AND_SQT_AND_ID)
+                .addEntity(User.class)
+                .setParameter("sq", secretQuestion)
+                .setParameter("sqtId", sqtId)
+                .setParameter("id", id);
+        return (User) query.getSingleResult();
+    }
 
     public static class UserMapperForFriends {
 

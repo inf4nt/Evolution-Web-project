@@ -19,7 +19,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 
 /**
@@ -34,16 +37,11 @@ public class UserController {
     public String home (
             @PathVariable long id, HttpServletRequest request,
             Model model, Authentication authentication, SessionStatus sessionStatus) {
-
         if (authentication == null)
             return "redirect:/welcome";
-        sessionStatus.setComplete();
-        long authUserId = ((User) request.getSession().getAttribute("authUser")).getId();
-        if (authUserId != id)
-            model.addAttribute("user", userDao.findById(id));
-        else
-            model.addAttribute("user", request.getSession().getAttribute("authUser"));
 
+        sessionStatus.setComplete();
+        model.addAttribute("user", userDao.findById(id));
         return "user/my-home";
     }
 
@@ -52,45 +50,49 @@ public class UserController {
             @PathVariable  String action,
             Model model, HttpServletRequest request, SessionStatus sessionStatus){
 
-        String like = request.getParameter("like");
+        try {
 
-        PagedListHolder pagedListHolder;
-        if (action.equals("start")) {
-            if (like.length() > 32 || like.isEmpty()) {
-                sessionStatus.setComplete();
-                return "user/search";
+            String like = request.getParameter("like");
+            PagedListHolder pagedListHolder;
+            if (action.equals("start")) {
+                if (like.length() > 32 || like.isEmpty()) {
+                    sessionStatus.setComplete();
+                    return "user/search";
+                }
+                pagedListHolder = paginationService
+                        .pagedListHolder(userDao.searchByFistNameLastName(like, ((User) request.getSession().getAttribute("authUser")).getId()));
+                model.addAttribute("productList", pagedListHolder);
             }
-            pagedListHolder = paginationService
-                    .pagedListHolder(userDao.searchByFistNameLastName(like, ((User) request.getSession().getAttribute("authUser")).getId()));
-            model.addAttribute("productList", pagedListHolder);
-        }
 
-        else {
-            pagedListHolder = (PagedListHolder) request.getSession().getAttribute("productList");
-            paginationService.getPage(action, pagedListHolder);
+            else {
+                pagedListHolder = (PagedListHolder) request.getSession().getAttribute("productList");
+                paginationService.getPage(action, pagedListHolder);
+            }
+            model.addAttribute("page_url", "/user/search");
+            return "user/search";
+
+        } catch (Exception e){
+            return "redirect:/welcome";
         }
-        model.addAttribute("page_url", "/user/search");
-        return "user/search";
     }
 
     @RequestMapping (value = "/form-my-profile/{id}", method = RequestMethod.GET)
     public String profile (@PathVariable long id, Model model, HttpServletRequest request) {
-        long authUserId = ((User) request.getSession().getAttribute("authUser")).getId();
-        if (authUserId != id)
-            model.addAttribute("user", userDao.findById(id));
-        else
-            model.addAttribute("user", request.getSession().getAttribute("authUser"));
-        model.addAttribute("sqt", sqtDao.findAll());
-        return "user/form-my-profile";
+            User user;
+            user = userDao.findById(id);
+            if (user == null)
+                return "redirect:/welcome";
+            model.addAttribute("user", user);
+            model.addAttribute("sqt", sqtDao.findAll());
+            return "user/form-my-profile";
     }
 
     @RequestMapping (value = "/edit/{id}", method = RequestMethod.POST)
-    public String edit (@PathVariable long id, HttpServletRequest request) {
+    public String edit (@PathVariable long id, HttpServletRequest request, Model model) {
         User user = userBuilderService.build(id, request);
         if (!validator.userValidator(user)) {
-            return "redirect:/form-my-profile/" + id;
+            return "redirect:/logout";
         }
-
         userDao.update(user);
         return "redirect:/user/form-my-profile/" + id;
     }
@@ -152,6 +154,7 @@ public class UserController {
             pagedListHolder = (PagedListHolder) request.getSession().getAttribute("productList");
             paginationService.getPage(action, pagedListHolder);
         }
+        model.addAttribute("user", userDao.findById(id));
         model.addAttribute("friendStatus", status);
         model.addAttribute("page_url", "/user/" + id + "/" + status);
         return "user/form-my-friend";
@@ -169,79 +172,4 @@ public class UserController {
     private FriendsDao friendsDao;
     @Autowired
     private Validator validator;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @RequestMapping (value = "/reset-password", method = RequestMethod.GET)
-    public String reset (Model model, HttpServletRequest request) {
-//        try {
-//            if (request.getSession().getAttribute("step").toString().equals("one")){
-//                if (!frpv.isValidStepOne(request)) {
-//                    model.addAttribute("error", frpv.getErrorList());
-//                    model.addAttribute("step", "one");
-//                    return "user/form-reset";
-//                } else if (frpv.isValidStepTwo(request)) {
-//                    User user = userDao.findByUserName(request.getParameter("username"));
-//                    request.getSession().setAttribute("username", user.getName());
-//                    model.addAttribute("step", "two");
-//                    request.getSession().setAttribute("userid", user.getId());
-//                    request.getSession().setAttribute("step","two");
-//                    return "user/form-reset";
-//                }
-//            }
-//
-//            if (!frpv.isValidStepTwo(request)) {
-//                model.addAttribute("error", frpv.getErrorList());
-//                model.addAttribute("step", "two");
-//                return "user/form-reset";
-//            }
-//            long id;
-////            try {
-////                id = Long.parseLong(request.getSession().getAttribute("userid").toString());
-////            } catch (NullPointerException e) {
-////                request.getSession().setAttribute("step", "one");
-////                return "user/form-reset";
-////            }
-//            id = Long.parseLong(request.getSession().getAttribute("userid").toString());
-//            userDao.reset(request.getParameter("newPassword").toString(), id);
-//            model.addAttribute("step", "three");
-//            request.getSession().setAttribute("userid", null);
-//            request.getSession().setAttribute("username", null);
-//            return "user/form-reset";
-//        } catch (NullPointerException e) {
-//            request.getSession().setAttribute("step", "one");
-//            return "user/form-reset";
-//        }
-        return null;
-    }
-
-    @RequestMapping (value = "/form-reset-password", method = RequestMethod.GET)
-    public String formResetPassword (Model model, HttpServletRequest request) {
-        request.getSession().setAttribute("step", "one");
-        return "user/form-reset";
-    }
-
 }
