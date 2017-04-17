@@ -54,10 +54,10 @@
     <!-- <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>
      -->
 
-    <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>
-    <property name="hibernate.cache.use_second_level_cache">true</property>
-    <property name="hibernate.cache.use_query_cache">true</property>
-    <property name="net.sf.ehcache.configurationResourceName">/myehcache.xml</property>
+    <!--<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>-->
+    <!--<property name="hibernate.cache.use_second_level_cache">true</property>-->
+    <!--<property name="hibernate.cache.use_query_cache">true</property>-->
+    <!--<property name="net.sf.ehcache.configurationResourceName">/myehcache.xml</property>-->
 
 
 
@@ -68,6 +68,9 @@
     <mapping class="evolution.model.User"/>
     <mapping class="evolution.model.SecretQuestionType"/>
 
+
+
+    <mapping class="evolution.model.Friends"/>
 
   </session-factory>
 </hibernate-configuration>

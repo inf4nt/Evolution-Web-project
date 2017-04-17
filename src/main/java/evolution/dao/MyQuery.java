@@ -8,71 +8,57 @@ import evolution.common.UserRoleEnum;
  */
 public interface MyQuery {
 
-    String USER_JOIN_FRIEND = "select\n" +
-            "  u.id,\n" +
-            "  u.first_name,\n" +
-            "  u.last_name,\n" +
-            "  case\n" +
-            "  WHEN f.status = " + FriendStatusEnum.PROGRESS.getId() + " THEN '" + FriendStatusEnum.PROGRESS.toString() +"' \n" +
-            "  WHEN f.status = " + FriendStatusEnum.FOLLOWER.getId() + " THEN '" + FriendStatusEnum.FOLLOWER.toString() +"' \n" +
-            "  WHEN f.status = " + FriendStatusEnum.REQUEST.getId() + " THEN '" + FriendStatusEnum.REQUEST.toString() +"' \n" +
-            "  end as status\n" +
-            "from user_data u\n" +
-            "join friends f on u.id = f.friend_id";
+    String USER_LEFT_FRIEND = "select new User (u.id, u.firstName, u.lastName, f.status) " +
+            "from User u " +
+            "left join Friends f on f.friendId.id = u.id ";
 
-    String USER_LEFT_JOIN_FRIEND = "select\n" +
-            "  u.id,\n" +
-            "  u.first_name,\n" +
-            "  u.last_name,\n" +
-            "  case\n" +
-            "  WHEN f.status = " + FriendStatusEnum.PROGRESS.getId() + " THEN '" + FriendStatusEnum.PROGRESS.toString() +"' \n" +
-            "  WHEN f.status = " + FriendStatusEnum.FOLLOWER.getId() + " THEN '" + FriendStatusEnum.FOLLOWER.toString() +"' \n" +
-            "  WHEN f.status = " + FriendStatusEnum.REQUEST.getId() + " THEN '" + FriendStatusEnum.REQUEST.toString() +"' \n" +
-            "  WHEN f.status is null THEN '" + FriendStatusEnum.NO_MATCHES.toString() +"' \n" +
-            "  end as status\n" +
-            "from user_data u\n" +
-            "left join friends f on u.id = f.friend_id";
+    String SEARCH_BY_FIRST_AND_LAST_NAME = USER_LEFT_FRIEND + " and f.userId.id = :id " +
+            " where (lower(u.firstName) like lower (concat('%', :p1, '%')) and lower(u.lastName) like lower(concat('%', :p2, '%'))) " +
+            " or (lower(u.lastName) like lower (concat('%', :p1, '%')) and lower(u.firstName) like lower(concat('%', :p2, '%')))";
 
-    String SEARCH_BY_FIRST_LAST_NAME = USER_LEFT_JOIN_FRIEND + " and f.user_id = :auth_user_id\n" +
-            "WHERE (  u.first_name LIKE '%'||:p1||'%' and u.last_name LIKE '%'||:p2||'%' and u.id != :auth_user_id)\n" +
-            "or (u.first_name LIKE '%'||:p2||'%' and u.last_name LIKE '%'||:p1||'%' and u.id != :auth_user_id)";
+    String SEARCH_BY_FIRST_OR_LAST_NAME = USER_LEFT_FRIEND +
+            " and f.userId.id = :id " +
+            "where (lower(u.firstName) like lower (concat('%', :p1, '%'))) or (lower(u.lastName) like lower(concat('%', :p1, '%')))";
 
-
-    String FIND_MY_FRIEND = USER_JOIN_FRIEND
-            + "\n and f.user_id = :par_f_user_id and f.status = " + FriendStatusEnum.PROGRESS.getId();
-
-    String FIND_MY_FOLLOWER = USER_JOIN_FRIEND
-            + "\n and f.user_id = :par_f_user_id and f.status = " + FriendStatusEnum.FOLLOWER.getId();
-
-    String FIND_MY_REQUEST = USER_JOIN_FRIEND
-            + "\n and f.user_id = :par_f_user_id and f.status = " + FriendStatusEnum.REQUEST.getId();
-
-    String INSERT_INTO_FRIEND = "insert into friends (user_id, friend_id, status)" +
-            "\n values (:par_f_user_id, :par_f_friend_id, :par_f_status)";
-
-    String SET_STATUS_FRIEND = "update friends set status = :par_set_f_status " +
-            "\n where (user_id = :par_f_user_id and friend_id = :par_f_friend_id and status = :par_where_f_status)";
-
-    String DELETE_REQUEST_FRIEND = "delete FROM friends\n" +
-            "WHERE (user_id = :par_f_user_id and friend_id = :par_f_friend_id and status = " + FriendStatusEnum.FOLLOWER.getId() + ")" +
-            "\n  or (user_id = :par_f_friend_id and friend_id = :par_f_user_id and status = " + FriendStatusEnum.REQUEST.getId() + ")";
+    String FIND_PROFILE_AND_FRIEND_STATUS_BY_ID = " select new User (u.id, u.firstName, u.lastName, u.roleId, u.registrationDate, f.status) " +
+            " from User as u " +
+            " left join Friends as f on f.friendId.id = u.id and f.userId.id = :myId " +
+            " where u.id = :secondId ";
 
     String FIND_ALL_USER = "from User";
 
     String DELETE_USER_BY_ID = "delete from User \n where id = :i";
 
-    String FIND_USER_BY_LOGIN = FIND_ALL_USER + "\n where login = :l";
+    String FIND_USER_BY_LOGIN = "select new User(id, roleId, login, password) " + FIND_ALL_USER + "\n where login = :l";
 
     String FIND_ALL_USER_ID_FIRST_LAST = "select new User(id, login, firstName, lastName) \n from User";
 
-    String FIND_USER_BY_ROLE_ADMIN = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.ADMIN.getId() + " order by registrationDate desc";
+    String FIND_USER_BY_ROLE_ADMIN = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.ADMIN.getId() +
+            " order by registrationDate desc";
 
-    String FIND_USER_BY_ROLE_USER = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.USER.getId() + " order by registrationDate desc";
+    String FIND_USER_BY_ROLE_USER = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.USER.getId() +
+            " order by registrationDate desc";
 
     String FIND_USER_LIKE_LOGIN = FIND_ALL_USER_ID_FIRST_LAST + " \n where login like '%'||:like||'%'";
 
-    String FIND_USER_BY_SQ_AND_SQT_AND_ID = "select *\n" +
-            "from user_data\n" +
-            "where secret_question = :sq and secret_question_type_id = :sqtId and id = :id";
+    String FIND_USER_BY_SQ_AND_SQT_AND_ID = FIND_ALL_USER + " where secretQuestionType.id = :sqtId and secretQuestion = :sq and id = :id";
+
+    String FRIEND_JOIN_USER = "select new User(friend.id, friend.firstName, friend.lastName, user.id, user.firstName, user.lastName, f.status) " +
+            " from Friends f join f.friendId as friend " +
+            " join f.userId as user " +
+            " where f.userId.id = :id ";
+
+    String FIND_MY_FRIENDS = FRIEND_JOIN_USER + " and f.status = " + FriendStatusEnum.PROGRESS.getId();
+
+    String FIND_MY_FOLLOWERS = FRIEND_JOIN_USER + " and f.status = " + FriendStatusEnum.FOLLOWER.getId();
+
+    String FIND_MY_REQUEST_FRIEND = FRIEND_JOIN_USER + " and f.status = " + FriendStatusEnum.REQUEST.getId();
+
+    String SELECT_FIRST_LAST_NAME = "select new User(firstName, lastName) " + FIND_ALL_USER + " where id = :id";
+
+    String SET_STATUS_FRIEND = "update Friends \nset status = :status \nwhere userId.id = :u \nand friendId.id = :f \nand status =:s";
+
+    String DELETE_REQUEST_FRIEND = "delete from Friends where (userId.id = :u and friendId.id = :f) \n" +
+            "or (userId.id = :f and friendId.id = :u)";
 
 }

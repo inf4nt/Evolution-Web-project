@@ -63,51 +63,50 @@ public class UserDaoImpl
     }
 
     @Override
-    public List<User> searchByFistNameLastName(String like, long authUserId) {
-        String regex[] = like.split(" ");
+    public List<User> searchByFistNameLastName(String p1, String p2, long authUserId) {
         hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createSQLQuery(MyQuery.SEARCH_BY_FIRST_LAST_NAME);
-        query.setParameter("auth_user_id", authUserId);
-        query.setParameter("p1", regex[0]);
-        query.setParameter("p2", regex[1]);
-        return new UserMapperForFriends().listUser(query.list());
+        Query query = hibernateSession.createQuery(MyQuery.SEARCH_BY_FIRST_AND_LAST_NAME);
+        query.setParameter("id", authUserId);
+        query.setParameter("p1", p1);
+        query.setParameter("p2", p2);
+        return query.list();
     }
 
     @Override
     public User findBySecretQuestionAndSecretQuestionType(long id, String secretQuestion, long sqtId) {
         hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createSQLQuery(MyQuery.FIND_USER_BY_SQ_AND_SQT_AND_ID)
-                .addEntity(User.class)
-                .setParameter("sq", secretQuestion)
-                .setParameter("sqtId", sqtId)
-                .setParameter("id", id);
+        Query query = hibernateSession.createQuery(MyQuery.FIND_USER_BY_SQ_AND_SQT_AND_ID);
+        query.setParameter("id", id);
+        query.setParameter("sqtId", sqtId);
+        query.setParameter("sq", secretQuestion);
         return (User) query.getSingleResult();
     }
 
-    public static class UserMapperForFriends {
-
-        public User mapper (Object a){
-            User user = new User();
-            Object rows[] = (Object[]) a;
-            user.setId(Long.parseLong(rows[0].toString()));
-            user.setFirstName(rows[1].toString());
-            user.setLastName(rows[2].toString());
-            try {
-                user.setFriendStatus(rows[3].toString());
-            } catch (ArrayIndexOutOfBoundsException e){}
-            return user;
-        }
-
-        public List<User> listUser (List list) {
-            System.out.println(list.size());
-            List result = new ArrayList();
-            for (Object a: list)
-                result.add(mapper(a));
-            return result;
-        }
+    @Override
+    public List<User> searchByFistOrLastName(String like, long authUserId) {
+        hibernateSession = sessionFactory.getCurrentSession();
+        Query query = hibernateSession.createQuery(MyQuery.SEARCH_BY_FIRST_OR_LAST_NAME);
+        query.setParameter("id", authUserId);
+        query.setParameter("p1", like);
+        return query.list();
     }
 
+    @Override
+    public User selectFirstLastName(long id) {
+        hibernateSession = sessionFactory.getCurrentSession();
+        Query query = hibernateSession.createQuery(MyQuery.SELECT_FIRST_LAST_NAME);
+        query.setParameter("id", id);
+        return (User) query.getSingleResult();
+    }
 
+    @Override
+    public User findProfileAndFriendStatusById(long myId, long secondId) {
+        hibernateSession = sessionFactory.getCurrentSession();
+        Query query = hibernateSession.createQuery(MyQuery.FIND_PROFILE_AND_FRIEND_STATUS_BY_ID);
+        query.setParameter("myId", myId);
+        query.setParameter("secondId", secondId);
+        return (User) query.getSingleResult();
+    }
 
     private Session hibernateSession;
     @Autowired

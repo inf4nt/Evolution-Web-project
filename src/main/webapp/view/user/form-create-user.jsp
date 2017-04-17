@@ -59,6 +59,24 @@
                             <span id="span_last_name_error" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="display: none"></span>
                         </div>
 
+                        <sec:authorize access="isAuthenticated()">
+                            <sec:authorize access="hasRole('ROLE_ADMIN')">
+                                <div class="form-group">
+                                    <label class="control-label">Role</label>
+                                    <select name="role" class="form-control">
+                                        <option value="ADMIN">Admin</option>
+                                        <option value="USER">User</option>
+                                    </select>
+                                </div>
+                            </sec:authorize>
+                        </sec:authorize>
+
+                        <sec:authorize access="!isAuthenticated()">
+                            <fieldset hidden>
+                                <input value="USER" name="role" type="hidden"/>
+                            </fieldset>
+                        </sec:authorize>
+
                         <div class="form-group">
                             <label class="control-label">Secret question type</label>
                             <select name="sqtId" class="form-control">
@@ -75,20 +93,14 @@
                             <span id="span_secret_question_error" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="display: none"></span>
                         </div>
 
-                        <fieldset hidden>
-                            <input value="USER" name="role" type="hidden"/>
-                        </fieldset>
-
                         <br/>
                         <div class="text-center">
-                            <input type="submit" name="submit" value="Edit" class="btn btn-success"
-                                   onclick="return validRegistration('login', 'password', 'confirmPassword', 'firstName', 'lastName', 'secretQuestion')"  style="width: 100%">
+                            <button form="form" type="submit" class="btn btn-success"
+                                    onclick="return validRegistration('login', 'password', 'confirmPassword', 'firstName', 'lastName', 'secretQuestion')"
+                                    style="width: 100%">
+                                Registration <span class="glyphicon glyphicon-check"/>
+                            </button>
                         </div>
-
-                        <fieldset hidden>
-                            <input value="USER" name="role" type="hidden"/>
-                        </fieldset>
-
 
                     </form>
 

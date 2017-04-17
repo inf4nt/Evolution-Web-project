@@ -33,21 +33,15 @@ public class AuthenticationSuccessHandlerImpl
                 .getContext()
                 .getAuthentication()
                 .getPrincipal();
-
-//        httpSession.setAttribute("username", authUser.getUsername());
-//        httpSession.setAttribute("userid", authUser.getId());
         httpSession.setAttribute("authorities", authentication.getAuthorities());
 
         httpSession.setAttribute("authUser", userDao.findById(authUser.getId()));
-
-
 
         //set our response to OK status
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 
         //since we have created our custom success handler, its up to us to where
         //we will redirect the user after successfully login
-
 
         httpServletResponse.sendRedirect("/user/id/" + authUser.getId());
     }

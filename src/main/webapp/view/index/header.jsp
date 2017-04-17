@@ -58,7 +58,7 @@
 
 					<form role="form" action="/user/search" class="navbar-form navbar-right">
 						<div class="input-group">
-							<input type="text" placeholder="Yuriy Golovin" class="form-control input-xs" name="like">
+							<input type="text" class="form-control input-xs" name="like">
 							<div class="input-group-btn">
 									<button type="submit" formaction="/user/search/start" class="btn btn-search btn-info">
 									<span class="glyphicon glyphicon-search"></span>
@@ -97,8 +97,6 @@
 					<hr/>
 				</sec:authorize>
 				<li><a href="/user/${authUser.getId()}/friend/start" methods="get">Friends</a></li>
-				<li><a href="/user/${authUser.getId()}/follower/start" methods="get">Followers</a></li>
-				<li><a href="/user/${authUser.getId()}/request/start" methods="get">Friend requests</a></li>
 			</ul>
 	</div>
 </div>

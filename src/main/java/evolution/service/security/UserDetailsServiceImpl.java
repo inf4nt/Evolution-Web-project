@@ -4,7 +4,6 @@ package evolution.service.security;
 import evolution.dao.UserDao;
 import evolution.model.User;
 import evolution.service.builder.UserBuilderService;
-import evolution.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -50,8 +49,7 @@ public class UserDetailsServiceImpl
             throw new UsernameNotFoundException("user " + s + " not found");
         }
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + userRoleService.getRole(user.getRoleId())));
-
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
         CustomUser customUser = new CustomUser(
                 user.getLogin(),
                 user.getPassword(),
@@ -86,8 +84,6 @@ public class UserDetailsServiceImpl
 
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private UserRoleService userRoleService;
     @Autowired
     private UserBuilderService userBuilderService;
 }

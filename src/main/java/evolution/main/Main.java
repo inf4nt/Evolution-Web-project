@@ -6,17 +6,14 @@ package evolution.main;
 
 import evolution.common.FriendStatusEnum;
 import evolution.dao.MyQuery;
-import evolution.model.SecretQuestionType;
+import evolution.model.Friends;
 import evolution.model.User;
-import evolution.service.validation.Validator;
+import evolution.service.SearchService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
-import java.sql.Date;
-import java.text.DateFormat;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 
@@ -25,120 +22,73 @@ import java.util.List;
  */
 public class Main {
 
-//    public static void main(String[] args) throws IOException {
-//
-//        Session session = null;
-//        try {
-//
-//            session = getSessionFactory().getCurrentSession();
-//            session.beginTransaction();
-////            ВАРИАНТ 1
-////            ВАРИАНТ 1
-////            ВАРИАНТ 1
-//
-////            String sql = "select u.* from USER_DATA u\n" +
-////                    "  join friends f on u.id = f.friend_id\n" +
-////                    "  join USER_ROLE ur on u.ROLE_ID = ur.ID\n" +
-////                    "  left join SECRET_QUESTION_TYPE sqt on u.SECRET_QUESTION_TYPE_ID = sqt.ID\n" +
-////                    "where f.status != 'progress'";
-//
-////            Query query = session.createSQLQuery(sql)
-////                    .addEntity(User.class);
-//
-////            List list = query.list();
-////            for (Object e : list)
-////                System.out.println(e);
-//
-//
-//
-//
-//
-//
-//
-////            ВАРИАНТ 2
-////            ВАРИАНТ 2
-////            ВАРИАНТ 2
-////            String sql = "select u.id, u.first_name,u.last_name from USER_DATA u\n" +
-////                    "  join friends f on u.id = f.friend_id\n" +
-////                    "  join USER_ROLE ur on u.ROLE_ID = ur.ID\n" +
-////                    "  left join SECRET_QUESTION_TYPE sqt on u.SECRET_QUESTION_TYPE_ID = sqt.ID\n" +
-////                    "where f.status != 'progress'";
-////            Query query = session.createSQLQuery(sql);
-////
-//////            List list = query.list();
-//////            for (Object a: list){
-//////                Object rows[] = (Object[]) a;
-//////                User user = new User();
-//////                user.setId(Long.parseLong(rows[0].toString()));
-//////                user.setFirstName(rows[1].toString());
-//////                user.setLastName(rows[2].toString());
-//////                System.out.println(user);
-//////            }
-////
-////            List list = new UserDaoImpl.UserMapper().listUser(query.list());
-////
-////            for (Object e : list)
-////                System.out.println(e);
-//
-//
-//
-////            select *
-////                    from  USER_DATA WHERE id in
-////            (
-////                        SELECT f.FRIEND_ID from USER_DATA u join FRIENDS f on u.ID = f.USER_ID and f.USER_ID = 8118
-////                        UNION
-////                        SELECT f.USER_ID  from USER_DATA u join FRIENDS f on u.ID = f.FRIEND_ID and f.FRIEND_ID = 8118
-////            );
-//
-//
-//
-////            FriendsDaoImpl friendsDao = new FriendsDaoImpl(session);
-////
-////            List list = friendsDao.findMyFriend(102l);
-////
-////            for (Object e:list)
-////                System.out.println(e);
-////
-////            list = friendsDao.findMyFollower(8122l);
-////
-////            for (Object e:list)
-////                System.out.println(e);
-//
-//            if (session != null)
-//            session.getTransaction().commit();
-//        }
-//        catch (Exception e){
-//            if (session != null)
-//                session.getTransaction().rollback();
-//            e.printStackTrace();
-//        }
-//
-//        finally {
-//            if (session != null)
-//                session.getSessionFactory().close();
-//        }
-//    }
-
 
     public static void main(String[] args) {
 
         try {
-//            SessionFactory sessionFactory = getSessionFactory();
-//            Session session = sessionFactory.getCurrentSession();
-//            session.beginTransaction();
-//            Query query = session.createQuery("from User u order by u.registrationDate desc");
+            SessionFactory sessionFactory = getSessionFactory();
+            Session session = sessionFactory.getCurrentSession();
+            session.beginTransaction();
+
+
+            System.out.println("===============");
+            System.out.println("===============");
+
+//            Query query = session.createQuery("select new User (u.id, u.firstName, u.lastName, f.status) " +
+//                    "from User u " +
+//                    "left join Friends f on f.friendId.id = u.id and f.userId.id = 226l " +
+//                    "where (lower(u.firstName) like lower (concat('%', :p1, '%')) and lower(u.lastName) like lower(concat('%', :p2, '%'))) " +
+//                    "or (lower(u.lastName) like lower (concat('%', :p1, '%')) and lower(u.firstName) like lower(concat('%', :p2, '%')))");
+//
+//
+//            Query query = session.createQuery("select new User (u.id, u.firstName, u.lastName, f.status) " +
+//                    "from User u " +
+//                    "left join Friends f on f.friendId.id = u.id and f.userId.id = :id " +
+//                    "where (lower(u.firstName) like lower (concat('%', :p1, '%'))) or (lower(u.lastName) like lower(concat('%', :p1, '%')))");
+//
+//            query.setParameter("id", 226l);
+//            query.setParameter("p1", "melnichuk");
+//
+//
 //            List list = query.list();
 //
-//            for (Object e: list)
+//            for (Object e : list)
 //                System.out.println(e);
-//
-//            sessionFactory.close();
-
-//            System.out.println(new Date(new java.util.Date().getTime()));
-//            System.out.println(new java.util.Date());
 
 
-            System.out.println(DateFormat.getInstance().format(new java.util.Date()));
+//            Query query = session.createQuery("select new User (u, sqt, f.status) " +
+//                    "from User as u " +
+//                    " join SecretQuestionType as sqt on sqt.id = u.secretQuestionType.id"  +
+//                    " left join Friends as f on f.friendId.id = u.id and f.userId.id = 226l where u.id = 216l");
+
+
+//            Query query = session.createQuery("select new User (u) from User as u " +
+//                    " where u.id = :id");
+
+
+            Query query = session.createQuery("select new User (u.id, u.firstName, u.lastName, u.roleId, u.registrationDate, f.status) " +
+                    " from User as u " +
+                    " left join Friends as f on f.friendId.id = u.id and f.userId.id = 226l " +
+                    " where u.id = 55555555l");
+
+
+            List list = query.list();
+
+            for (Object e : list)
+                System.out.println(e);
+
+
+
+
+
+
+            session.getTransaction().commit();
+            sessionFactory.close();
+
+
+
+
+
 
         } catch (Exception e){
             e.printStackTrace();

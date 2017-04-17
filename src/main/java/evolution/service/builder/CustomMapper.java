@@ -19,7 +19,7 @@ public class CustomMapper {
         user.setFirstName(rows[1].toString());
         user.setLastName(rows[2].toString());
         try {
-            user.setFriendStatus(rows[3].toString());
+//            user.setFriendStatus(rows[3].toString());
         } catch (ArrayIndexOutOfBoundsException e){}
         return user;
     }
@@ -31,4 +31,8 @@ public class CustomMapper {
             result.add(userForFriends(a));
         return result;
     }
+
+
+
+
 }

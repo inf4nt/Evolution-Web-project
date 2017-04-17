@@ -9,6 +9,7 @@ import evolution.dao.SecretQuestionTypeDao;
 
 import evolution.dao.UserDao;
 import evolution.model.User;
+import evolution.service.SearchService;
 import evolution.service.builder.PaginationService;
 import evolution.service.builder.UserBuilderService;
 import evolution.service.validation.Validator;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -41,7 +43,15 @@ public class UserController {
             return "redirect:/welcome";
 
         sessionStatus.setComplete();
-        model.addAttribute("user", userDao.findById(id));
+
+        Long authUserId = ((User)request.getSession().getAttribute("authUser")).getId();
+        try {
+            User user = userDao.findProfileAndFriendStatusById(authUserId, id);
+            model.addAttribute("user", user);
+        } catch (NoResultException nre) {
+            model.addAttribute("info", "This user does not exist");
+        }
+
         return "user/my-home";
     }
 
@@ -49,31 +59,24 @@ public class UserController {
     public String search (
             @PathVariable  String action,
             Model model, HttpServletRequest request, SessionStatus sessionStatus){
-
-        try {
-
+        PagedListHolder pagedListHolder;
+        if (action.equals("start")) {
+            sessionStatus.setComplete();
             String like = request.getParameter("like");
-            PagedListHolder pagedListHolder;
-            if (action.equals("start")) {
-                if (like.length() > 32 || like.isEmpty()) {
-                    sessionStatus.setComplete();
-                    return "user/search";
-                }
-                pagedListHolder = paginationService
-                        .pagedListHolder(userDao.searchByFistNameLastName(like, ((User) request.getSession().getAttribute("authUser")).getId()));
+            User user = (User) request.getSession().getAttribute("authUser");
+            try {
+                pagedListHolder = paginationService.pagedListHolder(searchService.search(like, user.getId()));
                 model.addAttribute("productList", pagedListHolder);
+            } catch (NoResultException nre) {
+                return "redirect:/welcome";
             }
-
-            else {
-                pagedListHolder = (PagedListHolder) request.getSession().getAttribute("productList");
-                paginationService.getPage(action, pagedListHolder);
-            }
-            model.addAttribute("page_url", "/user/search");
-            return "user/search";
-
-        } catch (Exception e){
-            return "redirect:/welcome";
+        } else {
+            pagedListHolder = (PagedListHolder) request.getSession().getAttribute("productList");
+            paginationService.getPage(action, pagedListHolder);
         }
+
+        model.addAttribute("page_url", "/user/search");
+        return "user/search";
     }
 
     @RequestMapping (value = "/form-my-profile/{id}", method = RequestMethod.GET)
@@ -97,35 +100,6 @@ public class UserController {
         return "redirect:/user/form-my-profile/" + id;
     }
 
-    @RequestMapping(value = "/friend-action/{action}/{userId}/{friendId}", method = RequestMethod.GET)
-    public String servletFriend(
-            @PathVariable Long userId,
-            @PathVariable Long friendId,
-            @PathVariable String action) {
-
-        if (action.equals("accept-friend")){
-            friendsDao.acceptFriend(userId, friendId);
-            return "redirect:/user/" + userId + "/friend/start";
-        }
-
-        if (action.equals("delete-friend")){
-            friendsDao.deleteFriend(userId, friendId);
-            return "redirect:/user/" + userId + "/follower/start";
-        }
-
-        if (action.equals("delete-request")){
-            friendsDao.deleteRequest(userId, friendId);
-            return "redirect:/user/" + userId + "/request/start";
-        }
-
-        if (action.equals("request-friend")){
-            friendsDao.friendRequest(userId, friendId);
-            return "redirect:/user/" + userId + "/request/start";
-        }
-
-        return "redirect:/user/id/" + userId;
-    }
-
     // FRIENDS
     @RequestMapping(value = "/{id}/{status}/{action}", method = RequestMethod.GET)
     public String friends (
@@ -133,14 +107,16 @@ public class UserController {
             @PathVariable String action,
             @PathVariable String status,
             Model model,
-            HttpServletRequest request) {
+            HttpServletRequest request, SessionStatus sessionStatus) {
 
         PagedListHolder pagedListHolder = null;
 
         if (action.equals("start")) {
+            sessionStatus.setComplete();
             if (status.equals("friend"))
                 pagedListHolder = paginationService
                         .pagedListHolder(friendsDao.findMyFriend(id));
+
             if (status.equals("follower"))
                 pagedListHolder = paginationService
                         .pagedListHolder(friendsDao.findMyFollower(id));
@@ -154,11 +130,39 @@ public class UserController {
             pagedListHolder = (PagedListHolder) request.getSession().getAttribute("productList");
             paginationService.getPage(action, pagedListHolder);
         }
-        model.addAttribute("user", userDao.findById(id));
+        if (pagedListHolder.getPageList().size() <= 0) {
+            User user = userDao.selectFirstLastName(id);
+            model.addAttribute("myFirstName", user.getFirstName());
+            model.addAttribute("myLastName", user.getLastName());
+        }
+        model.addAttribute("id", id);
         model.addAttribute("friendStatus", status);
         model.addAttribute("page_url", "/user/" + id + "/" + status);
         return "user/form-my-friend";
     }
+
+    @RequestMapping(value = "/friend-action/{action}/{friendId}", method = RequestMethod.GET)
+    public String servletFriend(
+            @PathVariable Long friendId,
+            @PathVariable String action, HttpServletRequest request) {
+
+        Long authUserId = ((User) request.getSession().getAttribute("authUser")).getId();
+
+        if (action.equals("accept-friend"))
+            friendsDao.acceptFriend(authUserId, friendId);
+
+        if (action.equals("delete-friend"))
+            friendsDao.deleteFriend(authUserId, friendId);
+
+        if (action.equals("delete-request"))
+            friendsDao.deleteRequest(authUserId, friendId);
+
+        if (action.equals("request-friend"))
+            friendsDao.friendRequest(authUserId, friendId);
+
+        return "redirect:/user/id/" + friendId;
+    }
+
 
     @Autowired
     private UserDao userDao;
@@ -172,4 +176,6 @@ public class UserController {
     private FriendsDao friendsDao;
     @Autowired
     private Validator validator;
+    @Autowired
+    private SearchService searchService;
 }

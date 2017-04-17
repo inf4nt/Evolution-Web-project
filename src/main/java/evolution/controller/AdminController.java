@@ -33,7 +33,13 @@ public class AdminController {
     public String remove (@PathVariable long id, HttpServletRequest request) {
         userDao.deleteById(id);
 
-        String servletName = request.getSession().getAttribute("servletName").toString();
+        String servletName;
+        try {
+            servletName = request.getSession().getAttribute("servletName").toString();
+        } catch (NullPointerException ne){
+            return "redirect:/welcome";
+        }
+
         if (servletName.equals("form-all")){
             int numberPage = ((PagedListHolder) request.getSession().getAttribute("productList")).getPage();
             ((PagedListHolder) request.getSession().getAttribute("productList")).getPageList().remove(new User(id));

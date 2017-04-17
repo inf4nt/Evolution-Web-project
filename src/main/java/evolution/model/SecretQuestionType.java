@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "secret_question_type")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "SecretQuestionType")
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "SecretQuestionType")
 public class SecretQuestionType {
 
     public SecretQuestionType() {

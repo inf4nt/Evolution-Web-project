@@ -23,7 +23,13 @@ public interface UserDao {
 
     void delete (User user);
 
-    List<User> searchByFistNameLastName(String like, long authUserId);
+    List<User> searchByFistNameLastName(String p1, String p2, long authUserId);
+
+    List<User> searchByFistOrLastName(String like, long authUserId);
 
     User findBySecretQuestionAndSecretQuestionType (long id, String secretQuestion, long sqtId);
+
+    User selectFirstLastName (long id);
+
+    User findProfileAndFriendStatusById (long myId, long secondId);
 }

@@ -81,7 +81,7 @@
                     <label class="control-label">Role</label>
                     <select name="role" class="form-control">
                         <c:choose>
-                            <c:when test="${user.getRoleId() == 1}">
+                            <c:when test="${user.getRole() == 'USER'}">
                                 <option value="USER">User</option>
                                 <option value="ADMIN">Admin</option>
                             </c:when>
@@ -93,7 +93,6 @@
                     </select>
                 </div>
 
-
                 <fieldset disabled>
                     <div class="form-group">
                         <label for="disabledTextInputRD">Registration date</label>
@@ -104,10 +103,10 @@
                 <fieldset disabled>
                     <div class="form-group">
                         <label for="disabledTextInputR">Role</label>
-                        <c:if test="${user.getRoleId() == 1}">
+                        <c:if test="${user.getRole() == 'USER'}">
                             <input type="text" id="disabledTextInputR" class="form-control" placeholder="User">
                         </c:if>
-                        <c:if test="${user.getRoleId() == 2}">
+                        <c:if test="${user.getRole() == 'ADMIN'}">
                             <input type="text" id="disabledTextInputR" class="form-control" placeholder="Admin">
                         </c:if>
                     </div>
@@ -118,13 +117,15 @@
                 </fieldset>
                 <br/>
                 <div class="text-center">
-                    <input type="submit" name="submit" value="Edit" class="btn btn-success"
-                           onclick="return validRegistration('login', 'password', 'confirmPassword', 'firstName', 'lastName', 'secretQuestion')" style="width: 100%">
+                    <button form="form" type="submit" class="btn btn-success"
+                            onclick="return validRegistration('login', 'password', 'confirmPassword', 'firstName', 'lastName', 'secretQuestion')"
+                            style="width: 100%">
+                        Edit <span class="glyphicon glyphicon-check"/>
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 </body>
-
 </html>

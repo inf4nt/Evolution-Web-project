@@ -25,7 +25,9 @@ public class Validator {
                     !user.getLastName().matches(namePattern) ||
                     user.getRegistrationDate() == null)
                 return  false;
-            if (user.getRoleId()  == UserRoleEnum.ADMIN.getId() || user.getRoleId() == UserRoleEnum.USER.getId())
+//            if (user.getRoleId()  == UserRoleEnum.ADMIN.getId() || user.getRoleId() == UserRoleEnum.USER.getId())
+//                return true;
+            if (user.getRole().equals(UserRoleEnum.ADMIN.toString()) || user.getRole().equals(UserRoleEnum.USER.toString()))
                 return true;
             else
                 return false;

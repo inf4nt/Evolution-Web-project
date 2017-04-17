@@ -1,6 +1,7 @@
 package evolution.config;
 
 
+import evolution.model.Friends;
 import evolution.model.SecretQuestionType;
 import evolution.model.User;
 import org.hibernate.SessionFactory;
@@ -51,6 +52,7 @@ public class HibernateServiceConfig
         return new LocalSessionFactoryBuilder(dataSource())
                 .addAnnotatedClasses(SecretQuestionType.class)
                 .addAnnotatedClasses(User.class)
+                .addAnnotatedClasses(Friends.class)
                 .setProperty("hibernate.show_sql", "true")
                 .setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory")
                 .setProperty("hibernate.cache.use_query_cache", "true")

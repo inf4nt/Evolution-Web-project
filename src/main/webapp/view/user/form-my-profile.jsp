@@ -7,12 +7,12 @@
     <title>Profile</title>
 </head>
 <body>
+
 <%@include file="../index/header.jsp" %>
 
 <sec:authorize access="hasRole('ROLE_ADMIN')">
     <jsp:forward page="../admin/admin-form-profile.jsp"/>
 </sec:authorize>
-
 
 <sec:authorize access="hasRole('ROLE_USER')">
 
@@ -88,8 +88,13 @@
                     </fieldset>
                     <br/>
                     <div class="text-center">
-                        <input type="submit" name="submit" value="Edit" class="btn btn-success"
-                               onclick="return validRegistration('login', 'password', 'confirmPassword', 'firstName', 'lastName', 'secretQuestion')"  style="width: 100%">
+                        <%--<input type="submit" name="submit" value="Edit" class="btn btn-success"--%>
+                               <%--onclick="return validRegistration('login', 'password', 'confirmPassword', 'firstName', 'lastName', 'secretQuestion')"  style="width: 100%">--%>
+                            <button form="form" type="submit" class="btn btn-success"
+                                    onclick="return validRegistration('login', 'password', 'confirmPassword', 'firstName', 'lastName', 'secretQuestion')"
+                                    style="width: 100%">
+                                Edit <span class="glyphicon glyphicon-check"/>
+                            </button>
                     </div>
                 </form>
             </div>
