@@ -1,6 +1,7 @@
 package evolution.model;
 
 import evolution.common.FriendStatusEnum;
+import lombok.ToString;
 import org.hibernate.annotations.WhereJoinTable;
 
 import javax.persistence.*;
@@ -10,8 +11,10 @@ import java.util.List;
 /**
  * Created by Admin on 15.04.2017.
  */
+
 @Entity
 @Table(name = "friends")
+@ToString
 public class Friends implements Serializable{
 
     public Friends() {
@@ -41,22 +44,12 @@ public class Friends implements Serializable{
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Friends{\n");
-        sb.append("user1Id=").append(userId);
-        sb.append(",\n friendId=").append(friendId);
-        sb.append(",\n status=").append(getStatus());
-        sb.append('}');
-        return sb.toString();
-    }
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User userId;
 
-//    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "friend_id")
     private User friendId;

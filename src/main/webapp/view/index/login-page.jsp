@@ -81,12 +81,14 @@
 
 
 <address style="color: #ffffff" class="down">
-  <strong>EvolutionMVC</strong><br>
+  <strong>Evolution</strong><br>
   Author: Maksim Lukaretskiy<br>
   Address: Ukraine, Odessa<br>
   <abbr title="Phone">Phone:</abbr> (+38) 093 53-68-034
   <br/><abbr title="Phone">Skype:</abbr> s4rgeist
 </address>
+
+
 
 </body>
 </html>

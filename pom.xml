@@ -69,6 +69,18 @@
 
     <dependencies>
 
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.10</version>
+        </dependency>
+
+
+
+
+
         <!-- EHCache Core APIs -->
         <dependency>
             <groupId>net.sf.ehcache</groupId>

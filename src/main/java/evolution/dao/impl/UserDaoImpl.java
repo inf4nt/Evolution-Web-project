@@ -100,6 +100,14 @@ public class UserDaoImpl
     }
 
     @Override
+    public User selectIdFirstLastName(long id) {
+        hibernateSession = sessionFactory.getCurrentSession();
+        Query query = hibernateSession.createQuery(MyQuery.SELECT_ID_FIRST_LAST_NAME);
+        query.setParameter("id", id);
+        return (User) query.getSingleResult();
+    }
+
+    @Override
     public User findProfileAndFriendStatusById(long myId, long secondId) {
         hibernateSession = sessionFactory.getCurrentSession();
         Query query = hibernateSession.createQuery(MyQuery.FIND_PROFILE_AND_FRIEND_STATUS_BY_ID);

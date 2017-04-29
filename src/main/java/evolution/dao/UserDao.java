@@ -31,5 +31,7 @@ public interface UserDao {
 
     User selectFirstLastName (long id);
 
+    User selectIdFirstLastName (long id);
+
     User findProfileAndFriendStatusById (long myId, long secondId);
 }

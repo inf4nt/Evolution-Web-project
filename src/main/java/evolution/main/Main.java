@@ -4,16 +4,24 @@ package evolution.main;
 
 
 
-import evolution.common.FriendStatusEnum;
-import evolution.dao.MyQuery;
-import evolution.model.Friends;
+import evolution.dao.MessageDao;
+import evolution.dao.impl.MessageDaoImpl;
+import evolution.model.Dialog;
+import evolution.model.Message;
+import evolution.model.SecretQuestionType;
 import evolution.model.User;
-import evolution.service.SearchService;
+import lombok.Getter;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+
+
+import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 
@@ -24,58 +32,64 @@ public class Main {
 
 
     public static void main(String[] args) {
-
+        SessionFactory sessionFactory = null;
         try {
-            SessionFactory sessionFactory = getSessionFactory();
+            sessionFactory = getSessionFactory();
             Session session = sessionFactory.getCurrentSession();
             session.beginTransaction();
 
 
             System.out.println("===============");
             System.out.println("===============");
+            List list;
+            Query query;
 
-//            Query query = session.createQuery("select new User (u.id, u.firstName, u.lastName, f.status) " +
-//                    "from User u " +
-//                    "left join Friends f on f.friendId.id = u.id and f.userId.id = 226l " +
-//                    "where (lower(u.firstName) like lower (concat('%', :p1, '%')) and lower(u.lastName) like lower(concat('%', :p2, '%'))) " +
-//                    "or (lower(u.lastName) like lower (concat('%', :p1, '%')) and lower(u.firstName) like lower(concat('%', :p2, '%')))");
+
+            MessageDao messageDao = new MessageDaoImpl(sessionFactory);
+//            list = messageDao.findMessageByDialogAndAuthUserId(4, 226);
+
+
+//            query = session.createQuery(
+//                    " select new Message ( d.id , " +
+//                    " m.id, m.message, m.dateDispatch," +
+//                    " sender.id, sender.firstName, sender.lastName," +
+//                    " im.id, im.firstName, im.lastName )" +
+//                    " from Message m " +
+//                    " join m.dialog as d " +
+//                    " join m.sender as sender " +
+//                    " join d.second as im " +
+//                    " where d.first.id = 226l and d.second.id = 216l " +
+//                    " order by m.dateDispatch asc ");
+
+
+
+//            query = session.createQuery(
+//                    " from Dialog d " +
+//                    " where d.dialogPK.first.id = :first " +
+//                    " and d.dialogPK.second.id = :second ");
+//            query.setParameter("first", 226l);
+//            query.setParameter("second", 1111l);
 //
 //
-//            Query query = session.createQuery("select new User (u.id, u.firstName, u.lastName, f.status) " +
-//                    "from User u " +
-//                    "left join Friends f on f.friendId.id = u.id and f.userId.id = :id " +
-//                    "where (lower(u.firstName) like lower (concat('%', :p1, '%'))) or (lower(u.lastName) like lower(concat('%', :p1, '%')))");
-//
-//            query.setParameter("id", 226l);
-//            query.setParameter("p1", "melnichuk");
-//
-//
-//            List list = query.list();
-//
+//            query.getSingleResult();
+
+
+            System.out.println(messageDao.checkDialog(226, 2116));
+
+
+//            list = query.list();
 //            for (Object e : list)
 //                System.out.println(e);
 
 
-//            Query query = session.createQuery("select new User (u, sqt, f.status) " +
-//                    "from User as u " +
-//                    " join SecretQuestionType as sqt on sqt.id = u.secretQuestionType.id"  +
-//                    " left join Friends as f on f.friendId.id = u.id and f.userId.id = 226l where u.id = 216l");
 
 
-//            Query query = session.createQuery("select new User (u) from User as u " +
-//                    " where u.id = :id");
 
 
-            Query query = session.createQuery("select new User (u.id, u.firstName, u.lastName, u.roleId, u.registrationDate, f.status) " +
-                    " from User as u " +
-                    " left join Friends as f on f.friendId.id = u.id and f.userId.id = 226l " +
-                    " where u.id = 55555555l");
 
 
-            List list = query.list();
 
-            for (Object e : list)
-                System.out.println(e);
+
 
 
 
@@ -85,13 +99,10 @@ public class Main {
             session.getTransaction().commit();
             sessionFactory.close();
 
-
-
-
-
-
         } catch (Exception e){
             e.printStackTrace();
+            if (sessionFactory != null)
+                sessionFactory.close();
         }
     }
 
@@ -100,9 +111,6 @@ public class Main {
         return sessionFactory;
     }
 }
-
-
-
 
 
 

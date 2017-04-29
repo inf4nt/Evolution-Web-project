@@ -1,9 +1,7 @@
 package evolution.config;
 
 
-import evolution.model.Friends;
-import evolution.model.SecretQuestionType;
-import evolution.model.User;
+import evolution.model.*;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -53,6 +51,9 @@ public class HibernateServiceConfig
                 .addAnnotatedClasses(SecretQuestionType.class)
                 .addAnnotatedClasses(User.class)
                 .addAnnotatedClasses(Friends.class)
+                .addAnnotatedClasses(Dialog.class)
+                .addAnnotatedClasses(Message.class)
+                .addAnnotatedClasses(Message.MessageDialog.class)
                 .setProperty("hibernate.show_sql", "true")
                 .setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory")
                 .setProperty("hibernate.cache.use_query_cache", "true")

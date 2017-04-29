@@ -88,13 +88,11 @@
                     </fieldset>
                     <br/>
                     <div class="text-center">
-                        <%--<input type="submit" name="submit" value="Edit" class="btn btn-success"--%>
-                               <%--onclick="return validRegistration('login', 'password', 'confirmPassword', 'firstName', 'lastName', 'secretQuestion')"  style="width: 100%">--%>
-                            <button form="form" type="submit" class="btn btn-success"
-                                    onclick="return validRegistration('login', 'password', 'confirmPassword', 'firstName', 'lastName', 'secretQuestion')"
-                                    style="width: 100%">
-                                Edit <span class="glyphicon glyphicon-check"/>
-                            </button>
+                        <button form="form" type="submit" class="btn btn-success"
+                                onclick="return validRegistration('login', 'password', 'confirmPassword', 'firstName', 'lastName', 'secretQuestion')"
+                                style="width: 100%">
+                            Edit <span class="glyphicon glyphicon-check"/>
+                        </button>
                     </div>
                 </form>
             </div>

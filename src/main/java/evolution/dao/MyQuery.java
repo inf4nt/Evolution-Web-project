@@ -56,6 +56,8 @@ public interface MyQuery {
 
     String SELECT_FIRST_LAST_NAME = "select new User(firstName, lastName) " + FIND_ALL_USER + " where id = :id";
 
+    String SELECT_ID_FIRST_LAST_NAME = "select new User(id, firstName, lastName) " + FIND_ALL_USER + " where id = :id";
+
     String SET_STATUS_FRIEND = "update Friends \nset status = :status \nwhere userId.id = :u \nand friendId.id = :f \nand status =:s";
 
     String DELETE_REQUEST_FRIEND = "delete from Friends where (userId.id = :u and friendId.id = :f) \n" +

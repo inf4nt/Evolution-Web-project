@@ -1,4 +1,4 @@
-<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -22,7 +22,7 @@
 
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-			<a class="navbar-brand">EvolutionMVC
+			<a class="navbar-brand">Evolution
 				<span class="glyphicon glyphicon-globe"></span>
 			</a>
 			<div class="callapse navbar-collapse">
@@ -90,13 +90,22 @@
 			<ul class="nav nav-sidebar">
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
 					<hr/>
-					<li><a href="/admin/form-all/user/start" methods="get">Show users</a></li>
-					<li><a href="/admin/form-all/admin/start" methods="get">Show admin</a></li>
-					<li><a href="/form-create-user" methods="get">Registration</a></li>
+					<li><a href="/admin/form-all/user/start" methods="get"><span class="glyphicon glyphicon-pawn"></span> Show users</a></li>
+					<li><a href="/admin/form-all/admin/start" methods="get"><span class="glyphicon glyphicon-king"></span> Show admin</a></li>
+					<li><a href="/form-create-user" methods="get"><span class="glyphicon glyphicon-check"></span> Registration</a></li>
 					<li><a href="/admin/form-create-sqt" methods="get">Create secret question type</a></li>
 					<hr/>
 				</sec:authorize>
-				<li><a href="/user/${authUser.getId()}/friend/start" methods="get">Friends</a></li>
+				<li>
+					<a href="/user/${authUser.getId()}/friend/start" methods="get">
+						<span class="glyphicon glyphicon-user"></span> Friends
+					</a>
+				</li>
+				<li>
+					<a href="/im/" methods="get">
+						<span class="glyphicon glyphicon-envelope"></span> Message
+					</a>
+				</li>
 			</ul>
 	</div>
 </div>

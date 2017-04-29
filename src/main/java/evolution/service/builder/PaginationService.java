@@ -1,5 +1,6 @@
 package evolution.service.builder;
 
+import org.hibernate.query.Query;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;

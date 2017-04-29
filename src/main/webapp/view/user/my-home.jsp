@@ -23,6 +23,17 @@
             <img data-src="holder.js/140x140" class="img-circle center-block" style="width: 250px; height: 300px;"
                  src="http://www.isu.edu.tw/upload/276e/9/coming-soon.jpg" data-holder-rendered="true">
 
+            <c:if test="${authUser.getId() != user.getId()}">
+                <hr/>
+                <h4 class="text-center">
+                    <span class="glyphicon glyphicon-envelope"></span>
+                    <a href="/im/dialog?media=&sel=${user.getId()}">Message</a>
+                </h4>
+                <hr/>
+            </c:if>
+
+
+
 
             <c:if test="${authUser.getId() != user.getId()}">
                 <ul class="nav">
