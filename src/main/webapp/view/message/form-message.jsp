@@ -83,8 +83,6 @@
 
 
 
-<h1 hidden>${dialogId}</h1>
-<h1 hidden>${sel}</h1>
 <script>
 
 

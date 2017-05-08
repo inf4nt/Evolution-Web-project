@@ -81,7 +81,6 @@ public class MessageController {
             @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
             HttpServletResponse response) throws IOException {
         if (dialogId == -1) {
-            // создать диалог, после перезагрузить страницу
             long nextId = messageDao.saveDialog(customUser.getId(), sel);
             messageDao.saveMessage(nextId, message, customUser.getId());
             response.sendRedirect("/im/dialog?sel=" + sel);

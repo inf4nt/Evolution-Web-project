@@ -46,15 +46,12 @@ public class Main {
             Query query;
 
 
-            ObjectMapper objectMapper = new ObjectMapper();
+
             MessageDao messageDao = new MessageDaoImpl(sessionFactory);
 
-            String str = objectToJson(messageDao.findMyDialog(226));
+            list = messageDao.findMessageByUserId(226, 216);
 
-
-            System.out.println(str);
-//            TypeReference<List<User>> mapType = new TypeReference<List<User>>() {};
-//            List<User> jsonToPersonList = objectMapper.readValue(str, mapType);
+            list.forEach(System.out::println);
 
 
 
