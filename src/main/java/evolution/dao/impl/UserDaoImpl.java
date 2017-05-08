@@ -4,23 +4,37 @@ import evolution.dao.MyQuery;
 import evolution.dao.UserDao;
 import evolution.model.SecretQuestionType;
 import evolution.model.User;
+import evolution.model.UserFriend;
+import lombok.NoArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+
+
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Admin on 09.03.2017.
  */
+
+
 @Repository
 @Transactional
+@NoArgsConstructor
 public class UserDaoImpl
         implements UserDao {
+
+    public UserDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public void save(User user) {
@@ -57,21 +71,27 @@ public class UserDaoImpl
     }
 
     @Override
-    public void delete(User userEvolution) {
+    public void delete(User user) {
         hibernateSession = sessionFactory.getCurrentSession();
-        hibernateSession.delete(userEvolution);
+        hibernateSession.delete(user);
     }
 
     @Override
-    public List<User> searchByFistNameLastName(String p1, String p2, long authUserId) {
+    public List<User> findUserByFirstLastName(String p1, String p2) {
         hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createQuery(MyQuery.SEARCH_BY_FIRST_AND_LAST_NAME);
-        query.setParameter("id", authUserId);
+        Query query = hibernateSession.createQuery(FIND_USER_BY_FIRST_LAST_NAME);
         query.setParameter("p1", p1);
         query.setParameter("p2", p2);
         return query.list();
     }
 
+    @Override
+    public List<User> findUserByFirstOrLastName(String p1) {
+        hibernateSession = sessionFactory.getCurrentSession();
+        Query query = hibernateSession.createQuery(FIND_USER_BY_FIRST_OR_LAST_NAME);
+        query.setParameter("p1", p1);
+        return query.list();
+    }
     @Override
     public User findBySecretQuestionAndSecretQuestionType(long id, String secretQuestion, long sqtId) {
         hibernateSession = sessionFactory.getCurrentSession();
@@ -80,15 +100,6 @@ public class UserDaoImpl
         query.setParameter("sqtId", sqtId);
         query.setParameter("sq", secretQuestion);
         return (User) query.getSingleResult();
-    }
-
-    @Override
-    public List<User> searchByFistOrLastName(String like, long authUserId) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createQuery(MyQuery.SEARCH_BY_FIRST_OR_LAST_NAME);
-        query.setParameter("id", authUserId);
-        query.setParameter("p1", like);
-        return query.list();
     }
 
     @Override
@@ -108,12 +119,12 @@ public class UserDaoImpl
     }
 
     @Override
-    public User findProfileAndFriendStatusById(long myId, long secondId) {
+    public UserFriend findUserAndFriendStatus(long myId, long secondId) {
         hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createQuery(MyQuery.FIND_PROFILE_AND_FRIEND_STATUS_BY_ID);
-        query.setParameter("myId", myId);
-        query.setParameter("secondId", secondId);
-        return (User) query.getSingleResult();
+        Query query = hibernateSession.createQuery(FIND_USER_AND_FRIEND_STATUS);
+        query.setParameter("authUserId", myId);
+        query.setParameter("userId", secondId);
+        return (UserFriend) query.getSingleResult();
     }
 
     private Session hibernateSession;

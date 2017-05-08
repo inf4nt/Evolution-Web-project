@@ -14,13 +14,13 @@ import java.util.List;
 @Service
 public class SearchService {
 
-    public List<User> search(String string, Long id) {
+    public List<User> search(String string) {
         if (string.matches("^[a-zA-Z]+$")) {
-            return userDao.searchByFistOrLastName(string, id);
+            return userDao.findUserByFirstOrLastName(string);
         }
         if (string.matches("^[a-zA-Z]+\\s[a-zA-Z]+$")) {
             String regex[] = string.split(" ");
-            return userDao.searchByFistNameLastName(regex[0], regex[1], id);
+            return userDao.findUserByFirstLastName(regex[0], regex[1]);
         }
         throw new NoResultException();
     }

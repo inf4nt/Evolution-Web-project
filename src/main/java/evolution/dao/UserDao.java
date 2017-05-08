@@ -2,6 +2,7 @@ package evolution.dao;
 
 import evolution.model.SecretQuestionType;
 import evolution.model.User;
+import evolution.model.UserFriend;
 
 
 import java.util.List;
@@ -23,9 +24,9 @@ public interface UserDao {
 
     void delete (User user);
 
-    List<User> searchByFistNameLastName(String p1, String p2, long authUserId);
+    List<User> findUserByFirstLastName(String p1, String p2);
 
-    List<User> searchByFistOrLastName(String like, long authUserId);
+    List<User> findUserByFirstOrLastName(String p1);
 
     User findBySecretQuestionAndSecretQuestionType (long id, String secretQuestion, long sqtId);
 
@@ -33,5 +34,20 @@ public interface UserDao {
 
     User selectIdFirstLastName (long id);
 
-    User findProfileAndFriendStatusById (long myId, long secondId);
+    UserFriend findUserAndFriendStatus(long myId, long secondId);
+
+
+    String FIND_USER_AND_FRIEND_STATUS = "select new UserFriend (u.id, u.firstName, u.lastName, f.status ) from UserFriend u" +
+            " left join Friends f on u.id = f.friendId.id and f.userId.id = :authUserId" +
+            " where u.id = :userId";
+
+    String FIND_USER_BY_FIRST_LAST_NAME = "select new User(u.id, u.firstName, u.lastName )from User u " +
+            " where (lower(u.firstName) like lower (concat('%', :p1, '%')) and lower(u.lastName) like lower(concat('%', :p2, '%'))) " +
+            " or (lower(u.lastName) like lower (concat('%', :p1, '%')) and lower(u.firstName) like lower(concat('%', :p2, '%')))";
+
+    String FIND_USER_BY_FIRST_OR_LAST_NAME = " select new User(u.id, u.firstName, u.lastName )from User u " +
+            " where (lower(u.firstName) like lower (concat('%', :p1, '%'))) or (lower(u.lastName) like lower(concat('%', :p1, '%')))";
+
+
+
 }

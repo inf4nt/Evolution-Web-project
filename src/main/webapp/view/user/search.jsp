@@ -81,41 +81,6 @@
                     <td style="width: 10%">
                         <a href="/user/id/${a.getId()}">${a.getFirstName()} ${a.getLastName()}</a>
                     </td>
-                    <td style="width: 2%">
-                        <c:if test="${authUser.getId() != a.getId()}">
-                        <ul class="menu">
-                            <li class="menu-item">
-                                <a href="#">
-                                    <span class="glyphicon glyphicon-option-horizontal"/>
-                                </a>
-                                <ul class="submenu">
-                                    <li class="submenu-item big-submenu-item">
-                                        <c:if test="${a.getFriendStatus() == null}">
-                                            <a href="/user/friend-action/request-friend/${a.getId()}">
-                                                <span class="glyphicon glyphicon-plus text-success"></span> Add friend
-                                            </a>
-                                        </c:if>
-                                        <c:if test="${a.getFriendStatus() == 'PROGRESS'}">
-                                            <a href="/user/friend-action/delete-friend/${a.getId()}">
-                                                <span class="glyphicon glyphicon-remove text-danger"></span> Delete friend
-                                            </a>
-                                        </c:if>
-                                        <c:if test="${a.getFriendStatus() == 'FOLLOWER'}">
-                                            <a href="/user/friend-action/accept-friend/${a.getId()}" >
-                                                <span class="glyphicon glyphicon-plus text-success"></span> Accept request
-                                            </a>
-                                        </c:if>
-                                        <c:if test="${a.getFriendStatus() == 'REQUEST'}">
-                                            <a href="/user/friend-action/delete-request/${a.getId()}" >
-                                                <span class="glyphicon glyphicon-remove text-danger"></span> Delete request
-                                            </a>
-                                        </c:if>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                        </c:if>
-                    </td>
                 </tr>
             </c:forEach>
             </tbody>

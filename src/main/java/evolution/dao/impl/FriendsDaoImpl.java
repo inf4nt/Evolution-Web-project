@@ -6,6 +6,7 @@ import evolution.dao.MyQuery;
 import evolution.model.Friends;
 import evolution.model.User;
 import evolution.service.builder.CustomMapper;
+import lombok.NoArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -22,27 +23,23 @@ import java.util.Map;
  */
 @Repository
 @Transactional
+@NoArgsConstructor
 public class FriendsDaoImpl
             implements FriendsDao {
+
+    public FriendsDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public void friendRequest(long authUserId, long id2) {
         hibernateSession = sessionFactory.getCurrentSession();
-        User user = new User(authUserId);
-        User friend = new User(id2);
-
-        Friends f1 = new Friends();
-        f1.setUser1Id(user);
-        f1.setFriendId(friend);
-        f1.setStatus(FriendStatusEnum.REQUEST.getId());
-
-        Friends f2 = new Friends();
-        f2.setUser1Id(friend);
-        f2.setFriendId(user);
-        f2.setStatus(FriendStatusEnum.FOLLOWER.getId());
-
-        hibernateSession.save(f1);
-        hibernateSession.save(f2);
+        User authUser = new User(authUserId);
+        User user2 = new User(id2);
+        Friends request = new Friends(authUser, user2, FriendStatusEnum.REQUEST.getId());
+        Friends follower = new Friends(user2, authUser, FriendStatusEnum.FOLLOWER.getId());
+        hibernateSession.save(follower);
+        hibernateSession.save(request);
     }
 
     @Override

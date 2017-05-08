@@ -72,6 +72,9 @@
     <mapping class="evolution.model.Dialog"/>
     <mapping class="evolution.model.Message"/>
     <mapping class="evolution.model.Message$MessageDialog"/>
+    <mapping class="evolution.model.UserFriend"/>
+
+
 
 
   </session-factory>

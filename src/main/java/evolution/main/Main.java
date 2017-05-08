@@ -4,24 +4,25 @@ package evolution.main;
 
 
 
-import evolution.dao.MessageDao;
-import evolution.dao.impl.MessageDaoImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import evolution.common.FriendStatusEnum;
+import evolution.dao.*;
+import evolution.dao.impl.*;
 import evolution.model.Dialog;
+import evolution.model.Friends;
 import evolution.model.Message;
-import evolution.model.SecretQuestionType;
 import evolution.model.User;
-import lombok.Getter;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
+
 import org.hibernate.cfg.Configuration;
-
 import org.hibernate.query.Query;
-import org.hibernate.type.LongType;
 
-
-import java.math.BigInteger;
-import java.util.Date;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -45,45 +46,15 @@ public class Main {
             Query query;
 
 
+            ObjectMapper objectMapper = new ObjectMapper();
             MessageDao messageDao = new MessageDaoImpl(sessionFactory);
-//            list = messageDao.findMessageByDialogAndAuthUserId(4, 226);
+
+            String str = objectToJson(messageDao.findMyDialog(226));
 
 
-//            query = session.createQuery(
-//                    " select new Message ( d.id , " +
-//                    " m.id, m.message, m.dateDispatch," +
-//                    " sender.id, sender.firstName, sender.lastName," +
-//                    " im.id, im.firstName, im.lastName )" +
-//                    " from Message m " +
-//                    " join m.dialog as d " +
-//                    " join m.sender as sender " +
-//                    " join d.second as im " +
-//                    " where d.first.id = 226l and d.second.id = 216l " +
-//                    " order by m.dateDispatch asc ");
-
-
-
-//            query = session.createQuery(
-//                    " from Dialog d " +
-//                    " where d.dialogPK.first.id = :first " +
-//                    " and d.dialogPK.second.id = :second ");
-//            query.setParameter("first", 226l);
-//            query.setParameter("second", 1111l);
-//
-//
-//            query.getSingleResult();
-
-
-            System.out.println(messageDao.checkDialog(226, 2116));
-
-
-//            list = query.list();
-//            for (Object e : list)
-//                System.out.println(e);
-
-
-
-
+            System.out.println(str);
+//            TypeReference<List<User>> mapType = new TypeReference<List<User>>() {};
+//            List<User> jsonToPersonList = objectMapper.readValue(str, mapType);
 
 
 
@@ -104,12 +75,40 @@ public class Main {
             if (sessionFactory != null)
                 sessionFactory.close();
         }
+
+
     }
 
     public static SessionFactory getSessionFactory(){
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         return sessionFactory;
     }
+
+    public static String objectToJson(Object obj) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        Hibernate5Module hbm = new Hibernate5Module();
+        hbm.enable(Hibernate5Module.Feature.FORCE_LAZY_LOADING);
+        mapper.registerModule(hbm);
+
+        String jsonObject = mapper.writeValueAsString(obj);
+        return jsonObject;
+    }
+
+    public static Object jsonToObject(String json, Class clazz) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Object obj = mapper.readValue(json, clazz);
+        return obj;
+    }
+
+
+    public static List jsonToListUser(String json) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        TypeReference<List<User>> mapType = new TypeReference<List<User>>() {};
+        List<User> jsonToPersonList = objectMapper.readValue(json, mapType);
+        return jsonToPersonList;
+    }
+
 }
 
 

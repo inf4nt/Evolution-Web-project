@@ -33,7 +33,10 @@ public class IndexController {
     }
 
     @RequestMapping (value = "/welcome", method = RequestMethod.GET)
-    public String welcome (Authentication authentication, HttpServletRequest request, SessionStatus sessionStatus) {
+    public String welcome (
+            Authentication authentication,
+            HttpServletRequest request,
+            SessionStatus sessionStatus) {
 
         if (authentication != null)
             if (authentication.isAuthenticated()) {

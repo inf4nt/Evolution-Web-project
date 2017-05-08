@@ -1,6 +1,7 @@
 package evolution.service.validation;
 
 import evolution.common.UserRoleEnum;
+import evolution.model.Message;
 import evolution.model.User;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +26,6 @@ public class Validator {
                     !user.getLastName().matches(namePattern) ||
                     user.getRegistrationDate() == null)
                 return  false;
-//            if (user.getRoleId()  == UserRoleEnum.ADMIN.getId() || user.getRoleId() == UserRoleEnum.USER.getId())
-//                return true;
             if (user.getRole().equals(UserRoleEnum.ADMIN.toString()) || user.getRole().equals(UserRoleEnum.USER.toString()))
                 return true;
             else
@@ -34,5 +33,21 @@ public class Validator {
         } catch (Exception e){
             return false;
         }
+    }
+
+    public boolean messageValidator(Message message) {
+        try {
+            if (
+                    message.getDialog().getId().toString().matches("^[0-9]+")
+                    || message.getSender().getId().toString().matches("^[0-9]+")
+                    || message.getSender().getFirstName().matches("^[a-zA-Z]{4,32}")
+                    || message.getSender().getLastName().matches("^[a-zA-Z]{4,32}")
+                    || message.getMessage().matches("[a-zA-Z0-9-]")
+            )
+            return false;
+        } catch (Exception e){
+            return false;
+        }
+       return true;
     }
 }

@@ -3,6 +3,7 @@ package evolution.dao.impl;
 import evolution.dao.AdminDao;
 import evolution.dao.MyQuery;
 import evolution.model.User;
+import lombok.NoArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -17,7 +18,14 @@ import java.util.List;
  */
 @Repository
 @Transactional
-public class AdminDaoImpl implements AdminDao {
+@NoArgsConstructor
+public class AdminDaoImpl
+        implements AdminDao {
+
+    public AdminDaoImpl(SessionFactory sessionFactory){
+        this.sessionFactory = sessionFactory;
+    }
+
     @Override
     public List<User> findLikeLogin(String like) {
         hibernateSession = sessionFactory.getCurrentSession();

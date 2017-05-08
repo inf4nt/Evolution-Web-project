@@ -1,7 +1,11 @@
 package evolution.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import evolution.common.FriendStatusEnum;
 import evolution.common.UserRoleEnum;
+import lombok.*;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 
@@ -22,10 +26,9 @@ import java.util.List;
  */
 @Entity
 @Table (name = "user_data")
+@NoArgsConstructor @ToString @Getter @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User implements Serializable{
-
-    public User() {
-    }
 
     public User(Long id){
         this.id = id;
@@ -52,7 +55,6 @@ public class User implements Serializable{
         this.registrationDate = registrationDate;
         setFriendStatus(friendStatus);
     }
-
 
     public User (Long friendId, String firstName, String lastName, Long userId, String userFirstName, String userLastName, Long status){
         this.id = friendId;
@@ -118,104 +120,7 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getDateFormatRegistrationDate() {
-        return DateFormat.getInstance().format(registrationDate);
-    }
-
-    public Date getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(Date registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public SecretQuestionType getSecretQuestionType() {
-        return secretQuestionType;
-    }
-
-    public void setSecretQuestionType(SecretQuestionType secretQuestionType) {
-        this.secretQuestionType = secretQuestionType;
-    }
-
-    public String getSecretQuestion() {
-        return secretQuestion;
-    }
-
-    public void setSecretQuestion(String secretQuestion) {
-        this.secretQuestion = secretQuestion;
-    }
-
-    public String getRole() {
-        if (roleId != null) {
-            if (roleId == UserRoleEnum.USER.getId())
-                return UserRoleEnum.USER.toString();
-            if (roleId == UserRoleEnum.ADMIN.getId())
-                return UserRoleEnum.ADMIN.toString();
-        }
-        return null;
-    }
-
-    public Long getRoleId () {
-        return roleId;
-    }
-
-    public void setRoleId(long roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getFriendStatus() {
-        return friendStatus;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
+    @JsonIgnore
     public void setFriendStatus(Long friendStatus) {
         if (friendStatus != null) {
             if (friendStatus == FriendStatusEnum.FOLLOWER.getId())
@@ -227,61 +132,28 @@ public class User implements Serializable{
         }
     }
 
-    public String getUserFirstName() {
-        return userFirstName;
+    @JsonIgnore
+    public String getRole() {
+        if (roleId != null) {
+            if (roleId == UserRoleEnum.USER.getId())
+                return UserRoleEnum.USER.toString();
+            if (roleId == UserRoleEnum.ADMIN.getId())
+                return UserRoleEnum.ADMIN.toString();
+        }
+        return null;
     }
 
-    public void setUserFirstName(String userFirstName) {
-        this.userFirstName = userFirstName;
-    }
-
-    public String getUserLastName() {
-        return userLastName;
-    }
-
-    public void setUserLastName(String userLastName) {
-        this.userLastName = userLastName;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("User{");
-        if (id != null)
-            sb.append("id=").append(id);
-        if (registrationDate != null)
-            sb.append(", registrationDate=").append(registrationDate);
-//        if (secretQuestionType != null)
-//            sb.append(", secretQuestionType=").append(secretQuestionType);
-        if (roleId != null)
-            sb.append(", roleId=").append(roleId);
-        if (login != null)
-            sb.append(", login='").append(login).append('\'');
-        if (password != null)
-            sb.append(", password='").append(password).append('\'');
-        if (secretQuestion != null)
-            sb.append(", secretQuestion='").append(secretQuestion).append('\'');
-        if (firstName != null)
-            sb.append(", firstName='").append(firstName).append('\'');
-        if (lastName != null)
-            sb.append(", lastName='").append(lastName).append('\'');
-        if (userFirstName != null)
-            sb.append(", userFirstName='").append(userFirstName).append('\'');
-        if (userLastName != null)
-            sb.append(", userLastName='").append(userLastName).append('\'');
-        if (userId != null)
-            sb.append(", userId='").append(userId).append('\'');
-        if (friendStatus != null)
-        sb.append(", status='").append(friendStatus).append('\'');
-        sb.append('}');
-        return sb.toString();
+    @JsonIgnore
+    public String getDateFormatRegistrationDate() {
+        return DateFormat.getInstance().format(registrationDate);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
 
-        User user = (User) o;
+        User user = (User) object;
 
         return id != null ? id.equals(user.id) : user.id == null;
     }
@@ -294,38 +166,61 @@ public class User implements Serializable{
     @Id
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "seq_user")
     @SequenceGenerator(name = "seq_user", sequenceName = "seq_user_data_id", allocationSize = 1)
+    @JsonProperty(value = "userId")
     private Long id;
     @Column(name = "registration_date")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonProperty
     private Date registrationDate;
 
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "secret_question_type_id")
+    @JsonProperty
     private SecretQuestionType secretQuestionType;
 
-
-
     @Column(name = "role_id")
+    @JsonProperty
     private Long roleId;
     @Column(unique = true, nullable = false)
+    @JsonProperty
     private String login;
     @Column (nullable = false)
+    @JsonProperty
     private String password;
     @Column(name = "secret_question")
+    @JsonProperty
     private String secretQuestion;
     @Column(name = "first_name")
+    @JsonProperty
     private String firstName;
     @Column(name = "last_name")
+    @JsonProperty
     private String lastName;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Transient
+    @JsonIgnore
     private String friendStatus;
     @Transient
+    @JsonIgnore
     private String userFirstName;
     @Transient
+    @JsonIgnore
     private String userLastName;
     @Transient
+    @JsonIgnore
     private Long userId;
-
 }

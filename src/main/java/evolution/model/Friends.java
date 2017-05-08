@@ -1,7 +1,8 @@
 package evolution.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import evolution.common.FriendStatusEnum;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.WhereJoinTable;
 
 import javax.persistence.*;
@@ -14,46 +15,21 @@ import java.util.List;
 
 @Entity
 @Table(name = "friends")
-@ToString
+@ToString @NoArgsConstructor @AllArgsConstructor @Getter @Setter
 public class Friends implements Serializable{
-
-    public Friends() {
-    }
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUser1Id(User user1Id) {
-        this.userId = user1Id;
-    }
-
-    public User getFriendId() {
-        return friendId;
-    }
-
-    public void setFriendId(User friendId) {
-        this.friendId = friendId;
-    }
-
-    public Long getStatus() {
-        return status;
-    }
-
-    public void setStatus(Long status) {
-        this.status = status;
-    }
-
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonProperty
     private User userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "friend_id")
+    @JsonProperty
     private User friendId;
 
     @Column(name = "status")
+    @JsonProperty
     private Long status;
 }

@@ -42,7 +42,7 @@
         <h1 class="text-center text-primary">${im.getFirstName()} ${im.getLastName()}</h1>
     </a>
     <hr/>
-    <div id="scroll" class="form-group block-sms">
+    <div id="scroll" class="form-group block-sms scroll-down">
 
         <table class="table table-hover">
             <thead>
@@ -51,12 +51,14 @@
                 <td></td>
             </tr>
             </thead>
-            <tbody>
-            <c:forEach var="a" items="${list}">
+            <tbody id="tbodyMessage">
+            <c:set var="size" value="${list.size()}"/>
+            <c:forEach var = "i" begin = "1" end = "${size}">
+                <c:set var="a" value="${list.get(list.size() - i)}"/>
                 <tr>
                     <td>
                         <p>
-                            <a href="/user/id/${a.getSender().getId()}">${a.getSender().getFirstName()} ${a.getSender().getLastName()} </a><span>${a.getDateFormatDispatch()}</span>
+                            <a href="/user/id/${a.getSender().getId()}">${a.getSender().getFirstName()} ${a.getSender().getLastName()} </a>
                         </p>
                         <p>${a.getMessage()}</p>
                     </td>
@@ -65,31 +67,117 @@
             </tbody>
         </table>
     </div>
-    <c:choose>
-        <c:when test="${dialogId.equals('new')}">
-            <form id="form" action="/im/write?sel=${im.getId()}&media=" method="post">
-        </c:when>
-        <c:otherwise>
-            <form id="form" action="/im/write?sel=${im.getId()}&dialogId=${dialogId}" method="post">
-        </c:otherwise>
-    </c:choose>
+
+    <form id="formMessage">
         <div class="form-group">
-            <textarea placeholder="write message............" name="message" class="form-control" style="height: 100px " rows="5"></textarea>
+            <textarea id="inputMessage" placeholder="write message............" name="message" class="form-control" style="height: 100px " rows="5" ></textarea>
         </div>
 
         <div class="col-lg-12 " >
-            <button form="form" style="width: 100%" class="btn btn-info">
+            <button form="formMessage" style="width: 100%" class="btn btn-info">
                 Send <span class="glyphicon glyphicon-ok"/>
             </button>
         </div>
     </form>
 </div>
 
+
+
+<h1 hidden>${dialogId}</h1>
+<h1 hidden>${sel}</h1>
 <script>
-    window.onload = function () {
-        document.getElementById('scroll').scrollTop = 9999;
+
+
+    $(document).ready(function () {
+        $("#formMessage").submit(function () {
+            var message;
+            $.ajax({
+                url: "/im/save",
+                type: "POST",
+                data: $("#formMessage").serialize(),
+                beforeSend: function () {
+                    message = $("#formMessage #inputMessage").val();
+                    $("#inputMessage").val("");
+                },
+                success: function () {
+                    writeMessage(
+                    ${authUser.getId()},
+                    '${authUser.getFirstName()}',
+                    '${authUser.getLastName()}',
+                    message
+                    );
+                }
+            });
+            return false;
+        });
+    });
+
+    function message(sel) {
+        $.ajax({
+            url: "/im/getMessage?sel="+sel,
+            success:function (data) {
+                    createTableMessage(data, sel),
+                    scrollDown();
+                    }
+        });
     }
+
+    function createTableMessage(data) {
+        if (data) {
+            var jsonData = JSON.parse(data);
+            var result;
+            for (var i = jsonData.length - 1; i >= 0; i--) {
+                var element = jsonData[i];
+                var user = element.sender;
+                var table = ' <tr><td><p><a href="/user/id/' + user.userId + '">'
+                    + user.firstName +
+                    ' ' + user.lastName +
+                    '</a>' +
+                    '</p> ' +
+                    '<p>' + element.message + '</p> ' +
+                    '</td> </tr>';
+                result = result + table;
+            }
+            $("#scroll #tbodyMessage")
+                .html(result);
+        }
+    }
+
+    function writeMessage(sel, first, last, message) {
+        var table = ' <tr><td><p><a href="/user/id/' + sel + '">'
+            + first +
+            ' ' + last +
+            '</a>' +
+            '</p> ' +
+            '<p>' + message + '</p> ' +
+            '</td> </tr>';
+        $("#scroll #tbodyMessage").append(table);
+        scrollDown();
+    }
+
+    function scrollDown() {
+        var div = $(".scroll-down");
+        div.scrollTop(div.prop('scrollHeight'));
+    }
+
+    $(document).ready(
+        function () {
+            scrollDown();
+        }
+    )
+
+    <c:if test="${dialogId != -1}">
+        window.setInterval(
+            function () {
+                message(${im.getId()});
+                scrollDown();
+            }, 6000
+        )
+    </c:if>
 </script>
+
+
+
 
 </body>
 </html>

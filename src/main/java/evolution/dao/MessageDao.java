@@ -57,7 +57,7 @@ public interface MessageDao {
             " join m.sender as sender " +
             " join d.second as im " +
             " where d.first.id = :authUser and d.second.id = :second " +
-            " order by m.dateDispatch asc ";
+            " order by m.id desc ";
 
     String CHECK_DIALOG_BY_USER_ID =  " from Dialog d " +
             " where d.dialogPK.first.id = :first " +

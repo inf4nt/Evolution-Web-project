@@ -6,8 +6,8 @@
 
 <html>
 <head>
-	<script src="<c:url value="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js" />"></script>
-	<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+	<script src="<c:url value="/resources/JQuery/jquery-3.2.1.min.js" />"></script>
+	<script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
 	<script src="/resources/my_js/my_js.js"/>
 	<script>
         $(document).ready(function () {
@@ -15,7 +15,7 @@
         });
 	</script>
 
-	<link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
+	<link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
 	<link href="<c:url value="/resources/my_css/my_css.css" />" rel="stylesheet">
 </head>
 <body>

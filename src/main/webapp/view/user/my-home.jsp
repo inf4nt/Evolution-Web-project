@@ -27,15 +27,9 @@
                 <hr/>
                 <h4 class="text-center">
                     <span class="glyphicon glyphicon-envelope"></span>
-                    <a href="/im/dialog?media=&sel=${user.getId()}">Message</a>
+                    <a href="/im/dialog?sel=${user.getId()}">Message</a>
                 </h4>
                 <hr/>
-            </c:if>
-
-
-
-
-            <c:if test="${authUser.getId() != user.getId()}">
                 <ul class="nav">
                     <li>
                         <a class="text-center " id="showHideFriendPanel"
@@ -48,24 +42,24 @@
                 <div id="divFriendPanel" style="display: none">
                     <br/>
                     <h4 class="text-center">
-                        <c:if test="${user.getFriendStatus() == null}">
+                        <c:if test="${user.getStatus() == null}">
                             <a href="/user/friend-action/request-friend/${user.getId()}">
                                 <span class="glyphicon glyphicon-plus text-success"></span> Add friend
                             </a>
                         </c:if>
-                        <c:if test="${user.getFriendStatus() == 'FOLLOWER'}">
+                        <c:if test="${user.getStatus() == 'FOLLOWER'}">
                             <a href="/user/friend-action/accept-friend/${user.getId()}">
                                 <span class="glyphicon glyphicon-ok text-success"></span> Accept request
                             </a>
                         </c:if>
 
-                        <c:if test="${user.getFriendStatus() == 'PROGRESS'}">
+                        <c:if test="${user.getStatus() == 'PROGRESS'}">
                             <a href="/user/friend-action/delete-friend/${user.getId()}">
                                 <span class="glyphicon glyphicon-remove text-danger"></span> Delete friend
                             </a>
                         </c:if>
 
-                        <c:if test="${user.getFriendStatus() == 'REQUEST'}">
+                        <c:if test="${user.getStatus() == 'REQUEST'}">
                             <a href="/user/friend-action/delete-request/${user.getId()}">
                                 <span class="glyphicon glyphicon-trash text-muted"></span> Delete request
                             </a>

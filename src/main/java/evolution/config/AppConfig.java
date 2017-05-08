@@ -4,6 +4,8 @@ package evolution.config;
 
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.springframework.context.annotation.*;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -36,4 +38,16 @@ public class AppConfig
         viewResolver.setSuffix(".jsp");
         return viewResolver;
     }
+
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        Hibernate5Module hbm = new Hibernate5Module();
+        hbm.enable(Hibernate5Module.Feature.FORCE_LAZY_LOADING);
+        mapper.registerModule(hbm);
+        return mapper;
+    }
+
+
 }

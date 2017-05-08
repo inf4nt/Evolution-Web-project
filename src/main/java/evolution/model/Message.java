@@ -2,12 +2,18 @@ package evolution.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Date;
+
 
 /**
  * Created by Admin on 18.04.2017.
@@ -15,11 +21,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "message")
-@ToString
+@ToString @NoArgsConstructor @Getter @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Message
         implements Serializable{
-
-    public Message(){}
 
     public Message(Long id){
         this.id = id;
@@ -55,6 +60,7 @@ public class Message
         this.dialog.second = new User(imId, imFirstName, imLastName);
     }
 
+    @JsonIgnore
     public String getDateFormatDispatch() {
         return DateFormat.getInstance().format(dateDispatch);
     }
@@ -63,34 +69,33 @@ public class Message
     @Column(name = "message_id", unique = true, nullable = false)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "seq_message")
     @SequenceGenerator(name = "seq_message", sequenceName = "seq_message_id", allocationSize = 1)
-    @Getter
+    @JsonProperty(value = "messageId")
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
-    @Getter
+    @JsonProperty
     private User sender;
 
     @Column
-    @Getter
+    @JsonProperty
     private String message;
 
     @Column(name = "date_dispatch")
     @Temporal(TemporalType.TIMESTAMP)
-    @Getter
+    @JsonProperty
     private Date dateDispatch;
 
     @ManyToOne
     @JoinColumn(name = "dialog_id")
-    @Getter
+    @JsonProperty
     private MessageDialog dialog;
 
     @Entity
     @Table(name = "dialog")
-    @ToString
+    @ToString @NoArgsConstructor @Getter @Setter
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class MessageDialog {
-
-        public MessageDialog(){}
 
         public MessageDialog(Long id){
             this.id = id;
@@ -99,16 +104,15 @@ public class Message
         @Id
         @GeneratedValue
         @Column
-        @Getter
+        @JsonProperty(value = "dialogId")
         private Long id;
         @ManyToOne
         @JoinColumn(name = "first")
-        @Getter
+        @JsonIgnore
         private User first;
         @ManyToOne
         @JoinColumn(name = "second")
-        @Getter
+        @JsonProperty
         private User second;
-
     }
 }

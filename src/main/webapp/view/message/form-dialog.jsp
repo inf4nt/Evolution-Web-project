@@ -32,6 +32,11 @@
 
 <div id="div" class="col-lg-6 col-lg-offset-1 col-md-6 col-md-offset-1">
 
+    <h4 class="text-primary">
+        <span class="glyphicon glyphicon-th-list"></span>
+        Dialog <a href="/user/id/${authUser.getId()}">${authUser.getFirstName()} ${authUser.getLastName()}</a>
+    </h4>
+
     <div class="col-md-12 col-sm-10">
         <table class="table table-hover">
             <thead>
@@ -64,5 +69,7 @@
         </table>
     </div>
 </div>
+
+
 </body>
 </html>

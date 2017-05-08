@@ -6,9 +6,11 @@ package evolution.model;
 
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -18,10 +20,9 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "dialog")
-@ToString
+@ToString @NoArgsConstructor @Getter @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Dialog implements Serializable{
-
-    public Dialog(){}
 
     public Dialog(Long id, User first, User second) {
         this.dialogPK = new DialogPK();
@@ -39,31 +40,24 @@ public class Dialog implements Serializable{
     }
 
     @EmbeddedId
-    @Getter
+    @JsonProperty
     private Dialog.DialogPK dialogPK;
 
     @Embeddable
-    @ToString
-    public static class DialogPK implements Serializable{
-
-        public DialogPK(){}
-
-        public DialogPK(Long id, User first, User second) {
-            this.id = id;
-            this.first = first;
-            this.second = second;
-        }
+    @ToString @NoArgsConstructor @AllArgsConstructor @Getter @Setter
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class DialogPK implements Serializable {
 
         @Column
-        @Getter
+        @JsonProperty
         private Long id;
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "first")
-        @Getter
+        @JsonProperty
         private User first;
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "second")
-        @Getter
+        @JsonProperty
         private User second;
     }
 }

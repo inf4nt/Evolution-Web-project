@@ -4,6 +4,7 @@ import evolution.dao.MessageDao;
 import evolution.model.Dialog;
 import evolution.model.Message;
 import evolution.model.User;
+import lombok.NoArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -21,11 +22,9 @@ import java.util.List;
  */
 @Repository
 @Transactional
+@NoArgsConstructor
 public class MessageDaoImpl
         implements MessageDao {
-
-    public MessageDaoImpl() {
-    }
 
     public MessageDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -81,6 +80,7 @@ public class MessageDaoImpl
     public List<Message> findMessageByUserId(long authUserId, long second) {
         hibernateSession = sessionFactory.getCurrentSession();
         Query query = hibernateSession.createQuery(FIND_MY_MESSAGE_BY_USER_ID);
+        query.setMaxResults(7);
         query.setParameter("authUser", authUserId);
         query.setParameter("second", second);
         return query.list();
@@ -111,6 +111,4 @@ public class MessageDaoImpl
     private Session hibernateSession;
     @Autowired
     private SessionFactory sessionFactory;
-
-
 }

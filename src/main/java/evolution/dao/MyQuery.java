@@ -3,9 +3,14 @@ package evolution.dao;
 import evolution.common.FriendStatusEnum;
 import evolution.common.UserRoleEnum;
 
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+
 /**
  * Created by Admin on 02.04.2017.
  */
+
+
 public interface MyQuery {
 
     String USER_LEFT_FRIEND = "select new User (u.id, u.firstName, u.lastName, f.status) " +
@@ -16,9 +21,12 @@ public interface MyQuery {
             " where (lower(u.firstName) like lower (concat('%', :p1, '%')) and lower(u.lastName) like lower(concat('%', :p2, '%'))) " +
             " or (lower(u.lastName) like lower (concat('%', :p1, '%')) and lower(u.firstName) like lower(concat('%', :p2, '%')))";
 
+
+
+
     String SEARCH_BY_FIRST_OR_LAST_NAME = USER_LEFT_FRIEND +
             " and f.userId.id = :id " +
-            "where (lower(u.firstName) like lower (concat('%', :p1, '%'))) or (lower(u.lastName) like lower(concat('%', :p1, '%')))";
+            " where (lower(u.firstName) like lower (concat('%', :p1, '%'))) or (lower(u.lastName) like lower(concat('%', :p1, '%')))";
 
     String FIND_PROFILE_AND_FRIEND_STATUS_BY_ID = " select new User (u.id, u.firstName, u.lastName, u.roleId, u.registrationDate, f.status) " +
             " from User as u " +

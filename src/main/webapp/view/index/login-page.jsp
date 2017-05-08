@@ -3,9 +3,9 @@
 <html>
 <head>
   <title>Login</title>
-  <script src="<c:url value="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js" />"></script>
-  <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
-  <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
+  <script src="<c:url value="/resources/JQuery/jquery-3.2.1.min.js" />"></script>
+  <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
+  <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
   <script src="<c:url value="/resources/my_js/my_js.js" />"></script>
   <style>
     html { height: 100%; }
