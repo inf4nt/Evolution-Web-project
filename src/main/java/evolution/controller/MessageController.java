@@ -1,26 +1,23 @@
 package evolution.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import evolution.dao.MessageDao;
 import evolution.dao.UserDao;
-import evolution.model.Dialog;
 import evolution.model.Message;
-import evolution.model.User;
 import evolution.service.MyJacksonService;
 import evolution.service.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -95,6 +92,8 @@ public class MessageController {
     private MessageDao messageDao;
     @Autowired
     private UserDao userDao;
+
+
 }
 
 

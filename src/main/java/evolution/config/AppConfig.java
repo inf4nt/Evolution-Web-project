@@ -43,10 +43,8 @@ public class AppConfig
         viewResolver.setViewClass(JstlView.class);
         viewResolver.setPrefix("/view/");
         viewResolver.setSuffix(".jsp");
-        viewResolver.setContentType("text/html;charset=UTF-8");
         return viewResolver;
     }
-
 
     @Bean
     public ObjectMapper objectMapper() {

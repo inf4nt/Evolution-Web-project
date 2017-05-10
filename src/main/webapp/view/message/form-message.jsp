@@ -86,33 +86,12 @@
 <script>
 
 
-    $(document).ready(function () {
-        $("#formMessage").submit(function () {
-            var message;
-            $.ajax({
-                url: "/im/save",
-                type: "POST",
-                data: $("#formMessage").serialize(),
-                beforeSend: function () {
-                    message = $("#formMessage #inputMessage").val();
-                    $("#inputMessage").val("");
-                },
-                success: function () {
-                    writeMessage(
-                    ${authUser.getId()},
-                    '${authUser.getFirstName()}',
-                    '${authUser.getLastName()}',
-                    message
-                    );
-                }
-            });
-            return false;
-        });
-    });
-
     function message(sel) {
         $.ajax({
             url: "/im/getMessage?sel="+sel,
+            type:"GET",
+            contentType:"application/json; charset=UTF-8",
+            dataType: "json",
             success:function (data) {
                     createTableMessage(data, sel),
                     scrollDown();
@@ -122,7 +101,8 @@
 
     function createTableMessage(data) {
         if (data) {
-            var jsonData = JSON.parse(data);
+//            var jsonData = JSON.parse(data);
+            var jsonData = data;
             var result;
             for (var i = jsonData.length - 1; i >= 0; i--) {
                 var element = jsonData[i];
@@ -141,6 +121,30 @@
         }
     }
 
+    $(document).ready(function () {
+        $("#formMessage").submit(function () {
+            var message;
+            $.ajax({
+                url: "/im/save",
+                type: "POST",
+                data: $("#formMessage").serialize(),
+                beforeSend: function () {
+                    message = $("#formMessage #inputMessage").val();
+                    $("#inputMessage").val("");
+                },
+                success: function () {
+                    writeMessage(
+                        ${authUser.getId()},
+                        '${authUser.getFirstName()}',
+                        '${authUser.getLastName()}',
+                        message
+                    );
+                }
+            });
+            return false;
+        });
+    });
+
     function writeMessage(sel, first, last, message) {
         var table = ' <tr><td><p><a href="/user/id/' + sel + '">'
             + first +
@@ -158,11 +162,8 @@
         div.scrollTop(div.prop('scrollHeight'));
     }
 
-    $(document).ready(
-        function () {
-            scrollDown();
-        }
-    )
+    $(document).ready(function () {
+            scrollDown();})
 
     <c:if test="${dialogId != -1}">
         window.setInterval(

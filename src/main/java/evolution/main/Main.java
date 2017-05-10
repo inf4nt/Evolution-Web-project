@@ -4,6 +4,8 @@ package evolution.main;
 
 
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -12,10 +14,7 @@ import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import evolution.common.FriendStatusEnum;
 import evolution.dao.*;
 import evolution.dao.impl.*;
-import evolution.model.Dialog;
-import evolution.model.Friends;
-import evolution.model.Message;
-import evolution.model.User;
+import evolution.model.*;
 import org.hibernate.*;
 
 import org.hibernate.cfg.Configuration;
@@ -46,26 +45,7 @@ public class Main {
             Query query;
 
 
-
-            UserDao userDao = new UserDaoImpl(sessionFactory);
-
-            userDao.update("com.infant@gmail.com", "51a", 1, "77788877");
-
-
-//            User user = new User();
-//            user.setId(226l);
-//            user.setFirstName("DURAK");
-
-
-//            query = session.createQuery("update User u" +
-//                    " set u.firstName = :fn, u.lastName = :ln, u.password = :p, u.roleId = :r " +
-//                    " where u.id = :id");
-
-
-
-
-
-
+            MessageDao messageDao = new MessageDaoImpl(sessionFactory);
 
 
 
@@ -89,11 +69,9 @@ public class Main {
 
     public static String objectToJson(Object obj) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-
         Hibernate5Module hbm = new Hibernate5Module();
         hbm.enable(Hibernate5Module.Feature.FORCE_LAZY_LOADING);
         mapper.registerModule(hbm);
-
         String jsonObject = mapper.writeValueAsString(obj);
         return jsonObject;
     }
