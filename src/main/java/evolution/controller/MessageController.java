@@ -64,7 +64,7 @@ public class MessageController {
         return "message/form-message";
     }
 
-    @ResponseBody @RequestMapping(value = "/getMessage", method = RequestMethod.GET)
+    @ResponseBody @RequestMapping(value = "/getMessage", method = RequestMethod.GET, produces={"application/json; charset=UTF-8"})
     public String getMessage(
             @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
             @RequestParam Long sel

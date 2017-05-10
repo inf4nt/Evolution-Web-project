@@ -4,6 +4,7 @@ package evolution.service.security;
 import evolution.dao.UserDao;
 import evolution.model.User;
 import evolution.service.builder.UserBuilderService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,18 +32,6 @@ public class UserDetailsServiceImpl
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user;
 
-//        if (s.equals("defaultUser@evolution.com") )
-//            user = userBuilderService.getDefaultUser();
-//        else if (s.equals("defaultAdmin@evolution.com"))
-//            user = userBuilderService.getDefaultAdmin();
-//        else {
-//            try {
-//                user = userDao.findByLogin(s);
-//            } catch (NoResultException e) {
-//                throw new UsernameNotFoundException("user " + s + " not found");
-//            }
-//        }
-
         try {
             user = userDao.findByLogin(s);
         } catch (NoResultException e) {
@@ -63,6 +52,7 @@ public class UserDetailsServiceImpl
         return customUser;
     }
 
+    @Getter
     public class CustomUser extends org.springframework.security.core.userdetails.User {
 
         public CustomUser(
@@ -74,16 +64,9 @@ public class UserDetailsServiceImpl
             super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
             this.id = id;
         }
-
-        public long getId() {
-            return id;
-        }
-
         private final long id;
     }
 
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private UserBuilderService userBuilderService;
 }

@@ -35,8 +35,7 @@ public class IndexController {
     @RequestMapping (value = "/welcome", method = RequestMethod.GET)
     public String welcome (
             Authentication authentication,
-            HttpServletRequest request,
-            SessionStatus sessionStatus) {
+            HttpServletRequest request, SessionStatus sessionStatus) {
 
         if (authentication != null)
             if (authentication.isAuthenticated()) {
@@ -52,7 +51,6 @@ public class IndexController {
         if (request == null || request.getParameter("error") == null) {
             return "index/login-page";
         }
-
         return "index/login-page";
     }
 

@@ -51,6 +51,8 @@ public interface MyQuery {
 
     String FIND_USER_BY_SQ_AND_SQT_AND_ID = FIND_ALL_USER + " where secretQuestionType.id = :sqtId and secretQuestion = :sq and id = :id";
 
+    String FIND_USER_BY_SQ_AND_SQT_AND_USERNAME = FIND_ALL_USER + " where secretQuestionType.id = :sqtId and secretQuestion = :sq and login = :login";
+
     String FRIEND_JOIN_USER = "select new User(friend.id, friend.firstName, friend.lastName, user.id, user.firstName, user.lastName, f.status) " +
             " from Friends f join f.friendId as friend " +
             " join f.userId as user " +

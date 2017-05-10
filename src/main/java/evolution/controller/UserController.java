@@ -3,6 +3,7 @@ package evolution.controller;
 
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.dao.FriendsDao;
 import evolution.dao.SecretQuestionTypeDao;
 
@@ -10,6 +11,7 @@ import evolution.dao.SecretQuestionTypeDao;
 import evolution.dao.UserDao;
 import evolution.model.User;
 import evolution.model.UserFriend;
+import evolution.service.MyJacksonService;
 import evolution.service.SearchService;
 import evolution.service.builder.PaginationService;
 import evolution.service.builder.UserBuilderService;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 
 
 /**
@@ -57,6 +60,7 @@ public class UserController {
             }
         }
         return "user/my-home";
+//        return "user/dynamicHomePage";
     }
 
     @RequestMapping (value = {"/search/{action}"}, method = RequestMethod.GET)
@@ -82,6 +86,28 @@ public class UserController {
         return "user/search";
     }
 
+//    @ResponseBody @RequestMapping (value = "/profile", method = RequestMethod.GET)
+//    public String profile (
+//            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser
+//    ) throws JsonProcessingException {
+//        User user = userDao.findById(customUser.getId());
+//        return jacksonService.objectToJson(user);
+//    }
+//
+//    @ResponseBody @RequestMapping (value = "/update", method = RequestMethod.POST)
+//    public String edit (
+//            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
+//            HttpServletRequest request) {
+//
+//        String res = request.getParameter("login") + " " + request.getParameter("password") + " " +
+//                request.getParameter("sqtId") + " " + request.getParameter("secretQuestion") + " " +
+//                request.getParameter("firstName") + " " + request.getParameter("lastName") + " " +
+//                request.getParameter("role") + " " + request.getParameter("registrationDate");
+//
+//        return res;
+//    }
+
+
     @RequestMapping (value = "/form-my-profile/{id}", method = RequestMethod.GET)
     public String profile (@PathVariable long id, Model model) {
             User user;
@@ -105,13 +131,7 @@ public class UserController {
     }
 
 
-//
-//    @RequestMapping (value = "/edit/{id}", method = RequestMethod.POST)
-//    public void edit (@PathVariable long id, HttpServletRequest request) {
-//        User user = userBuilderService.build(id, request);
-//        if (validator.userValidator(user))
-//            userDao.update(user);
-//    }
+
 
 
     // FRIENDS
@@ -183,6 +203,8 @@ public class UserController {
     @Autowired
     private SecretQuestionTypeDao sqtDao;
     @Autowired
+    private MyJacksonService jacksonService;
+    @Autowired
     private UserBuilderService userBuilderService;
     @Autowired
     private PaginationService paginationService;
@@ -192,4 +214,48 @@ public class UserController {
     private Validator validator;
     @Autowired
     private SearchService searchService;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    @ResponseBody @RequestMapping(value = "/forgot-password-step-one", method = RequestMethod.GET)
+//    public boolean forgotStepOne(@RequestParam String login) {
+//        try {userDao.findByLogin(login);return true;
+//        } catch (NoResultException nre){return false;}
+//    }
+//
+//    @ResponseBody @RequestMapping(value = "/forgot-password-step-two", method = RequestMethod.GET)
+//    public boolean forgotStepTwo(@RequestParam String sq, @RequestParam Long sqtId, @RequestParam String login) {
+//        try {
+//            userDao.findBySecretQuestionAndSecretQuestionType(login, sq, sqtId);
+//            return true;
+//        } catch (NoResultException nre){return false;}
+//    }
+//
+//    @ResponseBody @RequestMapping(value = "/forgot-password-step-final", method = RequestMethod.GET)
+//    public boolean forgotStepFinal(@RequestParam String sq, @RequestParam Long sqtId, @RequestParam String login, @RequestParam String password) {
+//        try {
+//            userDao.findBySecretQuestionAndSecretQuestionType(login, sq, sqtId);
+//            userDao.update(login, sq, sqtId, password);
+//            return true;
+//        } catch (NoResultException nre){return false;}
+//    }
+
+
+
+
+
+
 }

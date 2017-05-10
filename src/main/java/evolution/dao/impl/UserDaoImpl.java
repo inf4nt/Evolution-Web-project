@@ -40,12 +40,30 @@ public class UserDaoImpl
     public void save(User user) {
         hibernateSession = sessionFactory.getCurrentSession();
         hibernateSession.save(user);
+        Query query = hibernateSession.createQuery(UPDATE_USER);
+        query.setParameter("id", user.getId());
+        query.setParameter("fn", user.getFirstName());
+        query.setParameter("ln", user.getLastName());
+        query.setParameter("p", user.getPassword());
+        query.setParameter("r", user.getRoleId());
+        query.executeUpdate();
     }
 
     @Override
     public void update(User user) {
         hibernateSession = sessionFactory.getCurrentSession();
         hibernateSession.update(user);
+    }
+
+    @Override
+    public void update(String username, String secretQuestion, long sqtId, String password) {
+        hibernateSession = sessionFactory.getCurrentSession();
+        Query query = hibernateSession.createQuery(UPDATE_FORGOT_PASSWORD);
+        query.setParameter("password", password);
+        query.setParameter("login", username);
+        query.setParameter("sqtId", sqtId);
+        query.setParameter("sq", secretQuestion);
+        query.executeUpdate();
     }
 
     @Override
@@ -97,6 +115,16 @@ public class UserDaoImpl
         hibernateSession = sessionFactory.getCurrentSession();
         Query query = hibernateSession.createQuery(MyQuery.FIND_USER_BY_SQ_AND_SQT_AND_ID);
         query.setParameter("id", id);
+        query.setParameter("sqtId", sqtId);
+        query.setParameter("sq", secretQuestion);
+        return (User) query.getSingleResult();
+    }
+
+    @Override
+    public User findBySecretQuestionAndSecretQuestionType(String username, String secretQuestion, long sqtId) {
+        hibernateSession = sessionFactory.getCurrentSession();
+        Query query = hibernateSession.createQuery(MyQuery.FIND_USER_BY_SQ_AND_SQT_AND_USERNAME);
+        query.setParameter("login", username);
         query.setParameter("sqtId", sqtId);
         query.setParameter("sq", secretQuestion);
         return (User) query.getSingleResult();

@@ -47,13 +47,19 @@ public class Main {
 
 
 
-            MessageDao messageDao = new MessageDaoImpl(sessionFactory);
+            UserDao userDao = new UserDaoImpl(sessionFactory);
 
-            list = messageDao.findMessageByUserId(226, 216);
-
-            list.forEach(System.out::println);
+            userDao.update("com.infant@gmail.com", "51a", 1, "77788877");
 
 
+//            User user = new User();
+//            user.setId(226l);
+//            user.setFirstName("DURAK");
+
+
+//            query = session.createQuery("update User u" +
+//                    " set u.firstName = :fn, u.lastName = :ln, u.password = :p, u.roleId = :r " +
+//                    " where u.id = :id");
 
 
 

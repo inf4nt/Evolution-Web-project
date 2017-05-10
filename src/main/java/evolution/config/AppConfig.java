@@ -33,15 +33,6 @@ public class AppConfig
         extends WebMvcConfigurerAdapter {
 
     @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        Charset UTF8 = Charset.forName("UTF-8");
-        StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
-        stringConverter.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "plain", UTF8)));
-        converters.add(stringConverter);
-    }
-
-
-    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
@@ -52,6 +43,7 @@ public class AppConfig
         viewResolver.setViewClass(JstlView.class);
         viewResolver.setPrefix("/view/");
         viewResolver.setSuffix(".jsp");
+        viewResolver.setContentType("text/html;charset=UTF-8");
         return viewResolver;
     }
 
@@ -64,6 +56,4 @@ public class AppConfig
         mapper.registerModule(hbm);
         return mapper;
     }
-
-
 }
