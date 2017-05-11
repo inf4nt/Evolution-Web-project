@@ -15,7 +15,6 @@ import evolution.common.FriendStatusEnum;
 import evolution.dao.*;
 import evolution.dao.impl.*;
 import evolution.model.*;
-import evolution.service.search.FactorySearchService;
 import org.hibernate.*;
 
 import org.hibernate.cfg.Configuration;
