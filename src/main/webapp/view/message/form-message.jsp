@@ -101,7 +101,6 @@
 
     function createTableMessage(data) {
         if (data) {
-//            var jsonData = JSON.parse(data);
             var jsonData = data;
             var result;
             for (var i = jsonData.length - 1; i >= 0; i--) {

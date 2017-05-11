@@ -73,7 +73,7 @@
               </div>
               <div id="div_password_formLogin"  class="form-group has-feedback">
                 <label class="control-label" style="color: #ffffff">Password</label>
-                <input onblur="firstPasswordValid('div_password_formLogin')" type="password" value="77788877"  name="password" class="form-control text-center"/>
+                <input autocomplete="off" onblur="firstPasswordValid('div_password_formLogin')" type="password" value="77788877"  name="password" class="form-control text-center"/>
                 <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
                 <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
               </div>
@@ -137,7 +137,7 @@
 
           <div id="div_secret_question_formForgotPassword"  class="form-group has-feedback">
             <label id="secret_question_error" class="control-label">Secret question</label>
-            <input type="text" name="secretQuestion" class="form-control text-center"/>
+            <input autocomplete="off" type="text" name="secretQuestion" class="form-control text-center"/>
             <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
             <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
           </div>
@@ -152,7 +152,7 @@
           <hr/>
           <div id="div_password_formForgotPassword"  class="form-group has-feedback">
             <label class="control-label" >Password</label>
-            <input onblur="firstPasswordValid('div_password_formForgotPassword')" type="password"  name="password" class="form-control text-center"/>
+            <input autocomplete="off" onblur="firstPasswordValid('div_password_formForgotPassword')" type="password"  name="password" class="form-control text-center"/>
             <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
             <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
           </div>
@@ -160,7 +160,7 @@
 
           <div id="div_password_confirm_formForgotPassword"  class="form-group has-feedback">
             <label class="control-label" >Confirm password</label>
-            <input onblur="confirmPassword('div_password_formForgotPassword', 'div_password_confirm_formForgotPassword')" type="password" name="passwordConfirm" class="form-control text-center"/>
+            <input autocomplete="off" onblur="confirmPassword('div_password_formForgotPassword', 'div_password_confirm_formForgotPassword')" type="password" name="passwordConfirm" class="form-control text-center"/>
             <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
             <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
           </div>

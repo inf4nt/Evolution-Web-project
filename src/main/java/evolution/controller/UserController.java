@@ -60,28 +60,29 @@ public class UserController {
 //        return "user/dynamicHomePage";
     }
 
-    @RequestMapping (value = {"/search/{action}"}, method = RequestMethod.GET)
-    public String search (
-            @PathVariable  String action,
-            @RequestParam String like,
-            Model model, HttpServletRequest request, SessionStatus sessionStatus){
-        PagedListHolder pagedListHolder;
-        if (action.equals("start")) {
-            sessionStatus.setComplete();
-            try {
-                pagedListHolder = paginationService.pagedListHolder(searchService.search(like));
-                model.addAttribute("productList", pagedListHolder);
-            } catch (NoResultException nre) {
-                return "redirect:/welcome";
-            }
-        } else {
-            pagedListHolder = (PagedListHolder) request.getSession().getAttribute("productList");
-            paginationService.getPage(action, pagedListHolder);
-        }
-
-        model.addAttribute("page_url", "/user/search");
-        return "user/search";
-    }
+//    @RequestMapping (value = {"/search/{action}"}, method = RequestMethod.GET)
+//    public String search (
+//            @PathVariable  String action,
+//            Model model, HttpServletRequest request){
+//        PagedListHolder pagedListHolder;
+//
+//
+//        if (action.equals("start")) {
+//            try {
+//                String like = request.getParameter("like");
+//                pagedListHolder = paginationService.pagedListHolder(searchService.search(like));
+//                model.addAttribute("productList", pagedListHolder);
+//            } catch (NoResultException nre) {
+//                return "redirect:/welcome";
+//            }
+//        } else {
+//            pagedListHolder = (PagedListHolder) request.getSession().getAttribute("productList");
+//            paginationService.getPage(action, pagedListHolder);
+//        }
+//
+//        model.addAttribute("page_url", "/user/search");
+//        return "user/search";
+//    }
 
 //    @ResponseBody @RequestMapping (value = "/profile", method = RequestMethod.GET)
 //    public String profile (
@@ -126,9 +127,6 @@ public class UserController {
         userDao.update(user);
         return "redirect:/user/form-my-profile/" + id;
     }
-
-
-
 
 
     // FRIENDS
@@ -195,6 +193,19 @@ public class UserController {
     }
 
 
+    @RequestMapping(value = "/search-test", method = RequestMethod.GET)
+    public String viewSearch(){
+        return "user/new-search";
+    }
+
+
+    @ResponseBody @RequestMapping(value = "/search-result", method = RequestMethod.GET, produces={"application/json; charset=UTF-8"})
+    public String resultSearch(@RequestParam String like) throws JsonProcessingException {
+        return jacksonService.objectToJson(searchService.searchUser(like));
+    }
+
+
+
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -211,32 +222,5 @@ public class UserController {
     private Validator validator;
     @Autowired
     private SearchService searchService;
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @RequestMapping(value = "/search-test", method = RequestMethod.GET)
-    public String viewSearch(Model model){
-        return "user/search";
-    }
-
-
-    @ResponseBody @RequestMapping(value = "/search-result", method = RequestMethod.GET, produces={"application/json; charset=UTF-8"})
-    public String resultSearch(@RequestParam String like) throws JsonProcessingException {
-        return jacksonService.objectToJson(searchService.searchUser(like));
-    }
-
-
-
-
 
 }
