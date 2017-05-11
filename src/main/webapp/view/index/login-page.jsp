@@ -20,11 +20,31 @@
       bottom: 0;
       right: 0;
     }
+    .centerLayer {
+      position: absolute; /* Абсолютное позиционирование */
+      width: 400px; /* Ширина слоя в пикселах */
+      height: 300px; /* Высота слоя в пикселах */
+      left: 50%; /* Положение слоя от левого края */
+      top: 50%; /* Положение слоя от верхнего края */
+      margin-left: -190px; /* Отступ слева */
+      margin-top: -190px;	/* Отступ сверху */
+      padding: 10px; /* Поля вокруг текста */
+      overflow: auto; /* Добавление полосы прокрутки */
+    }
   </style>
 </head>
 
 
 <body>
+
+
+
+<div id="loader" style="display: none" class="centerLayer">
+  <h1 class="text text-center">
+    <img src="/resources/3.gif"/>
+  </h1>
+</div>
+
 
 <div id="firstPage">
 
@@ -83,13 +103,13 @@
          class="col-lg-5 col-lg-offset-2 col-md-5 col-md-offset-1 col-sm-4 col-sm-offset-1 col-xs-5 col-xs-offset-2">
     </div>
     <div class="col-lg-6 col-lg-offset-3 col-md-5 col-md-offset-4 col-sm-6 col-sm-offset-4 col-xs-5 col-xs-offset-2">
-      <div style="display: none" id="loader" class="parent">
-        <div class="block">
-          <h1 class="text text-center">
-            <img src="/resources/3.gif"/>
-          </h1>
-        </div>
-      </div>
+      <%--<div style="display: none" id="loader" class="parent">--%>
+        <%--<div class="block">--%>
+          <%--<h1 class="text text-center">--%>
+            <%--<img src="/resources/3.gif"/>--%>
+          <%--</h1>--%>
+        <%--</div>--%>
+      <%--</div>--%>
       <form id="formForgotPassword">
         <div id="stepOne" class="step">
           <h3 class="text-center">Step one</h3>
@@ -176,22 +196,32 @@
     <br/><abbr title="Phone">Skype:</abbr> s4rgeist
   </address>
 </div>
+
+
 <script>
 
+
     $(document).ready(function () {
-        $("#loginPage").submit(function () {
+        $('#formLogin').on('submit', function () {
             var check = validLoginPage('div_email_formLogin', 'div_password_formLogin');
-            if (check == true){
-                $("#loginPage").slideUp(2000);
-                return true;
-            }
+            if (check == false)
+                return false;
+            var form = this;
+            $("#loginPage").slideUp(2000);
+            $("#loader").slideDown(2000);
+            setTimeout(function () {
+                form.submit();
+            }, 2000);
             return false;
-        })
+        });
     })
 
     $(document).ready(function () {
-        $("#loginPage").slideDown(2500);
+        $("#loginPage").slideDown(1000);
     })
+
+
+
 
     // FORGOT STEP FINAL
     $(document).ready(function () {

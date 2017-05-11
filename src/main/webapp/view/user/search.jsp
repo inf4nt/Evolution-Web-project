@@ -13,81 +13,12 @@
 <html>
 <head>
     <title>Search</title>
-    <spring:url value="${page_url}" var="pageurl" />
 </head>
 <body>
 <%@include file="../index/header.jsp" %>
-<c:set var="pageListHolder" value="${productList}" scope="session"/>
 
 
-<div class="col-md-9">
-<div class="row">
-    <div class="col-md-4">
-        <ul class="pagination justify-content-end pull-left">
-            <li class="page-item">
-                <c:if test="${pageListHolder.isFirstPage()}">
-                    <a class="page-link">First</a>
-                </c:if>
-                <c:if test="${!pageListHolder.isFirstPage()}">
-                    <a class="page-link" href="${pageurl}/0">First</a>
-                </c:if>
-            </li>
-            <li class="page-item">
-                <c:if test="${pageListHolder.isFirstPage()}">
-                    <a class="page-link">Prev</a>
-                </c:if>
-                <c:if test="${!pageListHolder.isFirstPage()}">
-                    <a class="page-link" href="${pageurl}/${productList.getPage() - 1}">Prev</a>
-                </c:if>
-            </li>
-            <li class="page-item">
-                <a class="page-link">${pageListHolder.getPage()}</a>
-            </li>
-            <li class="page-item">
-                <c:if test="${pageListHolder.isLastPage()}">
-                    <a class="page-link">Next</a>
-                </c:if>
-                <c:if test="${!pageListHolder.isLastPage()}">
-                    <a class="page-link" href="${pageurl}/${productList.getPage() + 1}">Next</a>
-                </c:if>
-            </li>
-            <li class="page-item">
-                <c:if test="${pageListHolder.isLastPage()}">
-                    <a class="page-link">Last</a>
-                </c:if>
-                <c:if test="${!pageListHolder.isLastPage()}">
-                    <a class="page-link" href="${pageurl}/${pageListHolder.getPageCount() - 1}">Last</a>
-                </c:if>
-            </li>
-        </ul>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-14">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <td></td>
-                <td></td>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="a" items="${pageListHolder.pageList}">
-                <tr>
-                    <td style="width: 2%">
-                        <img data-src="holder.js/140x140" class="img-circle center-block" style="width: 100px; height: 100px;"
-                             src="http://www.isu.edu.tw/upload/276e/9/coming-soon.jpg" data-holder-rendered="true">
-                    </td>
-                    <td style="width: 10%">
-                        <a href="/user/id/${a.getId()}">${a.getFirstName()} ${a.getLastName()}</a>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </div>
-</div>
-</div>
+
 
 
 

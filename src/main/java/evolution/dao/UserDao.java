@@ -30,6 +30,10 @@ public interface UserDao {
 
     List<User> findUserByFirstOrLastName(String p1);
 
+    List<User> findUserByFirstLastName(String p1, String p2, int limit);
+
+    List<User> findUserByFirstOrLastName(String p1, int limit);
+
     User findBySecretQuestionAndSecretQuestionType (long id, String secretQuestion, long sqtId);
 
     User findBySecretQuestionAndSecretQuestionType (String username, String secretQuestion, long sqtId);

@@ -3,11 +3,10 @@ package evolution.controller;
 
 
 
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.dao.FriendsDao;
 import evolution.dao.SecretQuestionTypeDao;
-
-
 import evolution.dao.UserDao;
 import evolution.model.User;
 import evolution.model.UserFriend;
@@ -19,17 +18,15 @@ import evolution.service.security.UserDetailsServiceImpl;
 import evolution.service.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import java.util.List;
 
 
 /**
@@ -227,32 +224,16 @@ public class UserController {
 
 
 
+    @RequestMapping(value = "/search-test", method = RequestMethod.GET)
+    public String viewSearch(Model model){
+        return "user/search";
+    }
 
 
-
-//    @ResponseBody @RequestMapping(value = "/forgot-password-step-one", method = RequestMethod.GET)
-//    public boolean forgotStepOne(@RequestParam String login) {
-//        try {userDao.findByLogin(login);return true;
-//        } catch (NoResultException nre){return false;}
-//    }
-//
-//    @ResponseBody @RequestMapping(value = "/forgot-password-step-two", method = RequestMethod.GET)
-//    public boolean forgotStepTwo(@RequestParam String sq, @RequestParam Long sqtId, @RequestParam String login) {
-//        try {
-//            userDao.findBySecretQuestionAndSecretQuestionType(login, sq, sqtId);
-//            return true;
-//        } catch (NoResultException nre){return false;}
-//    }
-//
-//    @ResponseBody @RequestMapping(value = "/forgot-password-step-final", method = RequestMethod.GET)
-//    public boolean forgotStepFinal(@RequestParam String sq, @RequestParam Long sqtId, @RequestParam String login, @RequestParam String password) {
-//        try {
-//            userDao.findBySecretQuestionAndSecretQuestionType(login, sq, sqtId);
-//            userDao.update(login, sq, sqtId, password);
-//            return true;
-//        } catch (NoResultException nre){return false;}
-//    }
-
+    @ResponseBody @RequestMapping(value = "/search-result", method = RequestMethod.GET, produces={"application/json; charset=UTF-8"})
+    public String resultSearch(@RequestParam String like) throws JsonProcessingException {
+        return jacksonService.objectToJson(searchService.searchUser(like));
+    }
 
 
 

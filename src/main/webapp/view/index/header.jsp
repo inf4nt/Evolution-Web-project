@@ -88,29 +88,71 @@
 <div class="col-md-3 col-lg-2 col-sm-3 col-xs-3">
 	<div class="col-sm-10 col-md-9 col-lg-12 col-xs-12 sidebar">
 			<ul class="nav nav-sidebar">
-				<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<div id="userPanel">
 					<hr/>
-					<li><a href="/admin/form-all/user/start" methods="get"><span class="glyphicon glyphicon-pawn"></span> Show users</a></li>
-					<li><a href="/admin/form-all/admin/start" methods="get"><span class="glyphicon glyphicon-king"></span> Show admin</a></li>
-					<li><a href="/form-create-user" methods="get"><span class="glyphicon glyphicon-check"></span> Registration</a></li>
-					<li><a href="/admin/form-create-sqt" methods="get">Create secret question type</a></li>
+					<li>
+						<a href="/user/search-test">
+							<span class="glyphicon glyphicon-search"></span> Search
+						</a>
+					</li>
+					<br/>
+					<li>
+						<a href="/user/${authUser.getId()}/friend/start">
+							<span class="glyphicon glyphicon-user"></span> Friends
+						</a>
+					</li>
+					<br/>
+					<li>
+						<a href="/im/">
+							<span class="glyphicon glyphicon-envelope"></span> Message
+						</a>
+					</li>
+					<hr/>
+				</div>
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<div id="showAdminPanel">
+						<li><a href="#"><span class="glyphicon glyphicon-arrow-down"></span> Admin panel</a></li>
+					</div>
+					<div id="adminPanel" style="display:none;">
+						<li><a href="/admin/form-all/user/start"><span class="glyphicon glyphicon-pawn"></span> Show users</a></li>
+						<br/>
+						<li><a href="/admin/form-all/admin/start"><span class="glyphicon glyphicon-king"></span> Show admin</a></li>
+						<br/>
+						<li><a href="/form-create-user"><span class="glyphicon glyphicon-check"></span> Registration</a></li>
+						<br/>
+						<li><a href="/admin/form-create-sqt" >Create secret question type</a></li>
+						<br/>
+						<li><a id="hideAdminPanel"  href="#"><span class="glyphicon glyphicon-arrow-up"></span> Hide admin panel</a></li>
+					</div>
 					<hr/>
 				</sec:authorize>
-				<li>
-					<a href="/user/${authUser.getId()}/friend/start" methods="get">
-						<span class="glyphicon glyphicon-user"></span> Friends
-					</a>
-				</li>
-				<li>
-					<a href="/im/" methods="get">
-						<span class="glyphicon glyphicon-envelope"></span> Message
-					</a>
-				</li>
 			</ul>
 	</div>
 </div>
 </sec:authorize>
 </body>
+
+<script>
+	$(document).ready(function () {
+	    $("#showAdminPanel li a").click(function () {
+			$("#adminPanel").slideDown(500);
+            $("#showAdminPanel").slideUp(500);
+        })
+		$("#hideAdminPanel").click(function () {
+            $("#adminPanel").slideUp(500);
+            $("#showAdminPanel").slideDown(500);
+        })
+    })
+
+
+
+
+
+
+</script>
+
+
+
 </html>
 
 

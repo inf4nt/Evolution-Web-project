@@ -15,6 +15,7 @@ import evolution.common.FriendStatusEnum;
 import evolution.dao.*;
 import evolution.dao.impl.*;
 import evolution.model.*;
+import evolution.service.search.FactorySearchService;
 import org.hibernate.*;
 
 import org.hibernate.cfg.Configuration;
@@ -45,7 +46,6 @@ public class Main {
             Query query;
 
 
-            MessageDao messageDao = new MessageDaoImpl(sessionFactory);
 
 
 
@@ -60,7 +60,20 @@ public class Main {
         }
 
 
+
+
+
+
+
     }
+
+    public static boolean check(Class clazz) {
+        if (clazz == User.class)
+            return true;
+        else return false;
+    }
+
+
 
     public static SessionFactory getSessionFactory(){
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
