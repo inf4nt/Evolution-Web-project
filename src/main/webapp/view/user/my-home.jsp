@@ -30,16 +30,8 @@
                     <a href="/im/dialog?sel=${user.getId()}">Message</a>
                 </h4>
                 <hr/>
-                <ul class="nav">
-                    <li>
-                        <a class="text-center " id="showHideFriendPanel"
-                           onclick="showHideAllInfo('divFriendPanel', 'showHideFriendPanel', 'Hide friend panel', 'Show friend panel')" href="#" >
-                            Show friend panel
-                        </a>
-                    </li>
-                </ul>
 
-                <div id="divFriendPanel" style="display: none">
+                <div id="divFriendPanel">
                     <br/>
                     <h4 class="text-center">
                         <c:if test="${user.getStatus() == null}">
@@ -91,61 +83,39 @@
         <div class="col-lg-8 pull-right">
             <div class="text-center text-info">
                 <h3>
-                    <c:if test="${user.getId() == authUser.getId()}">
+                    <c:if test="${user.id == authUser.id}">
                         <ins><span>Hello!</span></ins>
                     </c:if>
-                    <a href="/user/id/${user.getId()}">${user.getFirstName()} ${user.getLastName()}</a>
+                    <a href="/user/id/${user.id}">${user.firstName} ${user.lastName}</a>
                 </h3>
                 <hr/>
-                <ul class="nav">
-                    <li><a  id="showHideUserInfo" onclick="showHideAllInfo('divAllUserInfo', 'showHideUserInfo', 'Hide full information', 'Show full information')" href="#" >Show full information</a></li>
-                </ul>
-                <div id="divAllUserInfo" style="display: none">
-                    <h1>FRIEND COUNT</h1>
-                    <h1>FOLLOWER COUNT</h1>
-                    <h1>Offer to be friends</h1>
-                </div>
             </div>
         </div>
         <sec:authorize access="hasRole('ROLE_ADMIN')">
-            <div class="col-lg-8 pull-right">
-                <div class="text-center text-info">
-                    <h3 class="text-danger"><span class="glyphicon glyphicon-wrench"></span> Admin panel</h3>
-                    <hr/>
-                    <ul class="nav">
-                        <li><a  id="showHideAdminPanel" onclick="showHideAllInfo('divShowHideAdminPanel', 'showHideAdminPanel', 'Hide panel', 'Show panel')" href="#" >Show panel</a></li>
-                    </ul>
-                    <div id="divShowHideAdminPanel" style="display: none">
-                        <h4 class="text-center">
-                            <br/>
-                            <a href="/user/form-my-profile/${user.getId()}" >
-                                <span class="glyphicon glyphicon-edit text-muted"></span> Edit
-                            </a>
-                            <a href="/admin/remove-user/${user.getId()}" >
-                                <span class="glyphicon glyphicon-remove text-danger"></span> Remove
-                            </a>
-                        </h4>
+            <c:if test="${authUser.id != user.id}">
+                <div class="col-lg-8 pull-right">
+                    <div class="text-center text-info">
+                        <h3 class="text-danger"><span class="glyphicon glyphicon-wrench"></span> Admin panel</h3>
+                        <hr/>
+                        <div id="divShowHideAdminPanel">
+                            <h4 class="text-center">
+                                <br/>
+                                <a href="/admin/profile/${user.id}" >
+                                    <span class="glyphicon glyphicon-edit text-muted"></span> Edit
+                                </a>
+                                <a href="/admin/remove-user/${user.id}" >
+                                    <span class="glyphicon glyphicon-remove text-danger"></span> Remove
+                                </a>
+                            </h4>
+                        </div>
+                        <hr/>
                     </div>
                 </div>
-            </div>
+            </c:if>
         </sec:authorize>
     </div>
 </c:if>
 
-
-<script>
-    function showHideAllInfo(divElementId, elementId,messageHide, messageShow) {
-        var cl = getById(divElementId).style.display;
-        if (cl == "none"){
-            getById(divElementId).style.display = "block";
-            getById(elementId).innerHTML = messageHide;
-        }
-        if (cl == "block"){
-            getById(divElementId).style.display = "none";
-            getById(elementId).innerHTML = messageShow;
-        }
-    }
-</script>
 
 
 </body>

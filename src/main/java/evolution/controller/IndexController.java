@@ -1,9 +1,9 @@
 package evolution.controller;
 
+import evolution.common.UserRoleEnum;
 import evolution.dao.SecretQuestionTypeDao;
 import evolution.dao.UserDao;
 import evolution.model.User;
-import evolution.service.ResetPasswordService;
 import evolution.service.builder.UserBuilderService;
 import evolution.service.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,47 +57,30 @@ public class IndexController {
     @RequestMapping (value = "/form-create-user", method = RequestMethod.GET)
     public String createUserForm (Model model) {
         model.addAttribute("sqt", sqtDao.findAll());
-        return "user/form-create-user";
+        return "old/form-create-user";
     }
 
-    @RequestMapping (value = "/create-user", method = RequestMethod.POST)
-    public String createUser(
-            HttpServletRequest request,
-            Model model, SessionStatus sessionStatus) {
-
-        User result = null;
-//        try {
-//            result = userDao.findByLogin(request.getParameter("login"));
-//        } catch (NoResultException e) {}
-//        if (result != null) {
-//            model.addAttribute("info", "User " + result.getLogin() + " is exist. Try again");
-//            return "user/form-create-user";
-//        }
-
+    @ResponseBody @RequestMapping(value = "/create-user", method = RequestMethod.POST)
+    public String createUser(HttpServletRequest request) {
+        User result;
         try {
             result = userDao.findByLogin(request.getParameter("login"));
-            model.addAttribute("info", "User " + result.getLogin() + " is exist. Try again");
-            return "user/form-create-user";
-        } catch (NoResultException e) {
-
-        }
-
+            return "info, User " + result.getLogin() + " is exist. Try again";
+        } catch (NoResultException e){}
 
         try {
-            result = userBuilderService.build(null, request);
+            result = userBuilderService.requestBuild(true, UserRoleEnum.USER.getId(),null, request);
             if (!validator.userValidator(result)) {
-                model.addAttribute("info", "Sorry, I can not create such a user");
-                return "user/form-create-user";
+                return "validator";
             }
         } catch (Exception e){
-            model.addAttribute("info", "Sorry, I can not create such a user");
-            return "user/form-create-user";
+            return "error " + e;
         }
 
         userDao.save(result);
-        sessionStatus.setComplete();
-        return "redirect:/welcome";
+        return "Success";
     }
+
 
     @RequestMapping(value="/logout", method = RequestMethod.GET)
     public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
@@ -107,22 +90,7 @@ public class IndexController {
         return "redirect:/welcome";
     }
 
-    @RequestMapping (value = "/form-reset-password", method = RequestMethod.GET)
-    public String formResetPassword (Model model) {
-        model.addAttribute("sqt", sqtDao.findAll());
-        return "user/form-reset";
-    }
 
-    @RequestMapping (value = "/reset-password", method = RequestMethod.POST)
-    public String reset (Model model, HttpServletRequest request) {
-        boolean reset = resetPasswordService.reset(request);
-        if (!reset) {
-            model.addAttribute("info", "Excuse me. I could not retrieve password");
-            return "user/form-reset";
-        }
-        model.addAttribute("info", "Your password has been restored. You can log in");
-        return "user/form-reset";
-    }
 
     @Autowired
     private UserDao userDao;
@@ -132,6 +100,4 @@ public class IndexController {
     private UserBuilderService userBuilderService;
     @Autowired
     private Validator validator;
-    @Autowired
-    private ResetPasswordService resetPasswordService;
 }

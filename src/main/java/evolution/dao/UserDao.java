@@ -16,7 +16,7 @@ public interface UserDao {
 
     void update (User user);
 
-    void update (String username, String secretQuestion, long sqtId, String password);
+    void updateForgotPassword (String username, String secretQuestion, long sqtId, String password);
 
     User findById (long id);
 

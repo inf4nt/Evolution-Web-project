@@ -5,6 +5,7 @@ package evolution.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import evolution.common.UserRoleEnum;
 import evolution.dao.FriendsDao;
 import evolution.dao.SecretQuestionTypeDao;
 import evolution.dao.UserDao;
@@ -26,8 +27,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-
 
 /**
  * Created by Admin on 05.03.2017.
@@ -40,92 +39,50 @@ public class UserController {
     @RequestMapping (value = "/id/{id}", method = RequestMethod.GET)
     public String home (
             @PathVariable long id,
-            @SessionAttribute User authUser,
-            Model model, Authentication authentication, SessionStatus sessionStatus) {
-        if (authentication == null)
-            return "redirect:/welcome";
+            Model model, Authentication authentication,
+            SessionStatus sessionStatus,
+            HttpServletRequest request) {
 
-        sessionStatus.setComplete();
-        if (authUser.getId() == id) {
-            model.addAttribute("user", authUser);
-        } else {
-            try {
-                UserFriend user = userDao.findUserAndFriendStatus(authUser.getId(), id);
-                model.addAttribute("user", user);
-            } catch (NoResultException nre) {
-                model.addAttribute("info", "This user does not exist");
-            }
-        }
-        return "user/my-home";
-//        return "user/dynamicHomePage";
-    }
-
-//    @RequestMapping (value = {"/search/{action}"}, method = RequestMethod.GET)
-//    public String search (
-//            @PathVariable  String action,
-//            Model model, HttpServletRequest request){
-//        PagedListHolder pagedListHolder;
-//
-//
-//        if (action.equals("start")) {
-//            try {
-//                String like = request.getParameter("like");
-//                pagedListHolder = paginationService.pagedListHolder(searchService.search(like));
-//                model.addAttribute("productList", pagedListHolder);
-//            } catch (NoResultException nre) {
-//                return "redirect:/welcome";
-//            }
-//        } else {
-//            pagedListHolder = (PagedListHolder) request.getSession().getAttribute("productList");
-//            paginationService.getPage(action, pagedListHolder);
-//        }
-//
-//        model.addAttribute("page_url", "/user/search");
-//        return "user/search";
-//    }
-
-//    @ResponseBody @RequestMapping (value = "/profile", method = RequestMethod.GET)
-//    public String profile (
-//            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser
-//    ) throws JsonProcessingException {
-//        User user = userDao.findById(customUser.getId());
-//        return jacksonService.objectToJson(user);
-//    }
-//
-//    @ResponseBody @RequestMapping (value = "/update", method = RequestMethod.POST)
-//    public String edit (
-//            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-//            HttpServletRequest request) {
-//
-//        String res = request.getParameter("login") + " " + request.getParameter("password") + " " +
-//                request.getParameter("sqtId") + " " + request.getParameter("secretQuestion") + " " +
-//                request.getParameter("firstName") + " " + request.getParameter("lastName") + " " +
-//                request.getParameter("role") + " " + request.getParameter("registrationDate");
-//
-//        return res;
-//    }
-
-
-    @RequestMapping (value = "/form-my-profile/{id}", method = RequestMethod.GET)
-    public String profile (@PathVariable long id, Model model) {
-            User user;
-            user = userDao.findById(id);
-            if (user == null)
+        try {
+            if (authentication == null)
                 return "redirect:/welcome";
-            model.addAttribute("user", user);
-            model.addAttribute("sqt", sqtDao.findAll());
-            return "user/form-my-profile";
-    }
+            sessionStatus.setComplete();
 
-    // этот метод нужно засунуть в админа. А тут сделать простое редактирование . Ид брать из сессии
-    @RequestMapping (value = "/edit/{id}", method = RequestMethod.POST)
-    public String edit (@PathVariable long id, HttpServletRequest request, Model model) {
-        User user = userBuilderService.build(id, request);
-        if (!validator.userValidator(user)) {
+            User authUser = (User) request.getSession().getAttribute("authUser");
+
+            if (authUser.getId() == id) {
+                model.addAttribute("user", authUser);
+            } else {
+                try {
+                    UserFriend user = userDao.findUserAndFriendStatus(authUser.getId(), id);
+                    model.addAttribute("user", user);
+                } catch (NoResultException nre) {
+                    model.addAttribute("info", "This user does not exist");
+                }
+            }
+            return "user/my-home";
+
+
+        } catch (Exception e){
             return "redirect:/logout";
         }
-        userDao.update(user);
-        return "redirect:/user/form-my-profile/" + id;
+    }
+
+
+    @RequestMapping(value = "/form-profile")
+    public String myProfile(@SessionAttribute User authUser, Model model) {
+        model.addAttribute("user", authUser);
+        return "user/form-my-profile";
+    }
+
+    @ResponseBody @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public void edit(@SessionAttribute User authUser,
+                        HttpServletRequest request){
+        User user = userBuilderService.requestBuild(false, authUser.getRoleId(), authUser, request);
+        if (validator.userValidator(user)){
+            userDao.update(user);
+            authUser.updateFields(user);
+        }
     }
 
 

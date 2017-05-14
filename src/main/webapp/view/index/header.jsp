@@ -8,7 +8,6 @@
 <head>
 	<script src="<c:url value="/resources/JQuery/jquery-3.2.1.min.js" />"></script>
 	<script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
-	<script src="/resources/my_js/my_js.js"/>
 	<script>
         $(document).ready(function () {
             $('.dropdown-toggle').dropdown();
@@ -17,6 +16,7 @@
 
 	<link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
 	<link href="<c:url value="/resources/my_css/my_css.css" />" rel="stylesheet">
+
 </head>
 <body>
 
@@ -37,7 +37,7 @@
 							</li>
 						<c:if test="${authUser.getId() > 0}">
 							<li>
-								<a href="/user/form-my-profile/${authUser.getId()}" methods="get">
+								<a href="/user/form-profile" methods="get">
 									<span class="glyphicon glyphicon-edit"> Profile</span>
 								</a>
 							</li>
@@ -55,19 +55,6 @@
 							</ul>
 						</li>
 					</ul>
-
-					<%--<form role="form" action="/user/search" class="navbar-form navbar-right">--%>
-						<%--<div class="input-group">--%>
-							<%--<input type="text" class="form-control input-xs" name="like">--%>
-							<%--<div class="input-group-btn">--%>
-									<%--<button type="submit" formaction="/user/search/start" class="btn btn-search btn-info">--%>
-									<%--<span class="glyphicon glyphicon-search"></span>--%>
-									<%--<span class="label-icon">Search</span>--%>
-								<%--</button>--%>
-							<%--</div>--%>
-						<%--</div>--%>
-					<%--</form>--%>
-
 				</sec:authorize>
 
 				<sec:authorize access="!isAuthenticated()">
@@ -111,18 +98,17 @@
 				</div>
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
 					<div id="showAdminPanel">
-						<li><a href="#"><span class="glyphicon glyphicon-arrow-down"></span> Admin panel</a></li>
+						<li><a onclick="adminPanel()" href="#"><span class="glyphicon glyphicon-arrow-down"></span> Admin panel</a></li>
 					</div>
+					<br/>
 					<div id="adminPanel" style="display:none;">
 						<li><a href="/admin/form-all/user/start"><span class="glyphicon glyphicon-pawn"></span> Show users</a></li>
 						<br/>
 						<li><a href="/admin/form-all/admin/start"><span class="glyphicon glyphicon-king"></span> Show admin</a></li>
 						<br/>
-						<li><a href="/form-create-user"><span class="glyphicon glyphicon-check"></span> Registration</a></li>
+						<li><a href="/admin/form-create-user"><span class="glyphicon glyphicon-check"></span> Registration</a></li>
 						<br/>
 						<li><a href="/admin/form-create-sqt" >Create secret question type</a></li>
-						<br/>
-						<li><a id="hideAdminPanel"  href="#"><span class="glyphicon glyphicon-arrow-up"></span> Hide admin panel</a></li>
 					</div>
 					<hr/>
 				</sec:authorize>
@@ -133,18 +119,27 @@
 </body>
 
 <script>
-	$(document).ready(function () {
-	    $("#showAdminPanel li a").click(function () {
-			$("#adminPanel").slideDown(500);
-            $("#showAdminPanel").slideUp(500);
-        })
-		$("#hideAdminPanel").click(function () {
-            $("#adminPanel").slideUp(500);
-            $("#showAdminPanel").slideDown(500);
-        })
-    })
+//	$(document).ready(function () {
+//	    $("#showAdminPanel li a").click(function () {
+//			$("#adminPanel").slideDown(500);
+//            $("#showAdminPanel").slideUp(500);
+//        })
+//		$("#hideAdminPanel").click(function () {
+//            $("#adminPanel").slideUp(500);
+//            $("#showAdminPanel").slideDown(500);
+//        })
+//    })
 
 
+
+	function adminPanel() {
+		var check = $("#adminPanel").css("display");
+		if (check == 'none'){
+		    $("#adminPanel").slideDown(500);
+		} else {
+		    $("#adminPanel").slideUp(500);
+		}
+    }
 
 
 

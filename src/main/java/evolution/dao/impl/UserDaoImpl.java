@@ -40,13 +40,6 @@ public class UserDaoImpl
     public void save(User user) {
         hibernateSession = sessionFactory.getCurrentSession();
         hibernateSession.save(user);
-        Query query = hibernateSession.createQuery(UPDATE_USER);
-        query.setParameter("id", user.getId());
-        query.setParameter("fn", user.getFirstName());
-        query.setParameter("ln", user.getLastName());
-        query.setParameter("p", user.getPassword());
-        query.setParameter("r", user.getRoleId());
-        query.executeUpdate();
     }
 
     @Override
@@ -56,7 +49,7 @@ public class UserDaoImpl
     }
 
     @Override
-    public void update(String username, String secretQuestion, long sqtId, String password) {
+    public void updateForgotPassword (String username, String secretQuestion, long sqtId, String password) {
         hibernateSession = sessionFactory.getCurrentSession();
         Query query = hibernateSession.createQuery(UPDATE_FORGOT_PASSWORD);
         query.setParameter("password", password);

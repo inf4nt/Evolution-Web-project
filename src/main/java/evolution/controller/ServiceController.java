@@ -41,7 +41,7 @@ public class ServiceController {
                                    @RequestParam String password) {
         try {
             userDao.findBySecretQuestionAndSecretQuestionType(login, sq, sqtId);
-            userDao.update(login, sq, sqtId, password);
+            userDao.updateForgotPassword(login, sq, sqtId, password);
             return true;
         } catch (NoResultException nre){return false;}
     }

@@ -120,6 +120,20 @@ public class User implements Serializable{
         this.password = password;
     }
 
+
+    @JsonIgnore
+    public void updateFields(User user) {
+        this.id = user.id;
+        this.login = user.login;
+        this.password = user.password;
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
+        this.secretQuestionType = user.secretQuestionType;
+        this.secretQuestion = user.secretQuestion;
+        this.roleId = user.roleId;
+        this.registrationDate = user.registrationDate;
+    }
+
     @JsonIgnore
     public void setFriendStatus(Long friendStatus) {
         if (friendStatus != null) {

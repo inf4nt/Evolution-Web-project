@@ -88,10 +88,10 @@
                                         </a>
                                         <ul class="submenu">
                                             <li class="submenu-item">
-                                                <a href="/user/form-my-profile/${a.getId()}" >
+                                                <a href="/admin/profile/${a.id}" >
                                                     <span class="glyphicon glyphicon-edit text-muted"></span> Edit
                                                 </a>
-                                                <a href="/admin/remove-user/${a.getId()}" >
+                                                <a href="/admin/remove-user/${a.id}" >
                                                     <span class="glyphicon glyphicon-remove text-danger"></span> Remove
                                                 </a>
                                             </li>

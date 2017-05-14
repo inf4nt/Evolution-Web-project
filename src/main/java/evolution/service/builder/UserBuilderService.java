@@ -16,44 +16,31 @@ import java.util.Date;
 @Service
 public class UserBuilderService {
 
-    public User build (Long id, HttpServletRequest request) {
-        User user = new User();
-        SecretQuestionType sqt = sqtDao.findById(Long.parseLong(request.getParameter("sqtId")));
-        long roleId = UserRoleEnum.valueOf(request.getParameter("role")).getId();
-        if (id != null) {
-            user.setId(id);
-            user.setRegistrationDate(new Date(Long.parseLong(request.getParameter("registrationDate"))));
+    public User requestBuild(boolean newUser, Long role, User authUser, HttpServletRequest request) {
+        User result = new User();
+
+        if (newUser) {
+            SecretQuestionType sqt = new SecretQuestionType();
+            sqt.setId(Long.parseLong(request.getParameter("sqtId")));
+            result.setSecretQuestionType(sqt);
+            result.setSecretQuestion(request.getParameter("secretQuestion"));
+            result.setRegistrationDate(new Date());
+
         } else {
-            user.setRegistrationDate(new Date());
+            result.setId(authUser.getId());
+            result.setRegistrationDate(authUser.getRegistrationDate());
+            result.setSecretQuestionType(authUser.getSecretQuestionType());
+            result.setSecretQuestion(authUser.getSecretQuestion());
         }
-        user.setLogin(request.getParameter("login"));
-        user.setPassword(request.getParameter("password"));
-        user.setRoleId(roleId);
-        user.setSecretQuestionType(sqt);
-        user.setSecretQuestion(request.getParameter("secretQuestion"));
-        user.setFirstName(request.getParameter("firstName"));
-        user.setLastName(request.getParameter("lastName"));
-        return user;
+
+        result.setRoleId(role);
+
+        result.setLogin(request.getParameter("login"));
+        result.setPassword(request.getParameter("password"));
+        result.setFirstName(request.getParameter("firstName"));
+        result.setLastName(request.getParameter("lastName"));
+        return result;
     }
 
-    public User getDefaultUser() {
-        User user = new User();
-        user.setRoleId(UserRoleEnum.USER.getId());
-        user.setLogin("defaultUser@evolution.com");
-        user.setPassword("defaultUser");
-        user.setId(0l);
-        return user;
-    }
 
-    public User getDefaultAdmin() {
-        User user = new User();
-        user.setRoleId(UserRoleEnum.ADMIN.getId());
-        user.setLogin("defaultAdmin@evolution.com");
-        user.setPassword("defaultAdmin");
-        user.setId(0l);
-        return user;
-    }
-
-    @Autowired
-    private SecretQuestionTypeDao sqtDao;
 }
