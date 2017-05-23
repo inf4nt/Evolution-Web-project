@@ -1,10 +1,9 @@
 package evolution.dao.impl;
 
+
 import evolution.dao.MyQuery;
 import evolution.dao.UserDao;
-import evolution.model.SecretQuestionType;
-import evolution.model.User;
-import evolution.model.UserFriend;
+import evolution.model.user.User;
 import lombok.NoArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,9 +15,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,18 +63,9 @@ public class UserDaoImpl
 
     @Override
     public User findByLogin(String login) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createQuery(MyQuery.FIND_USER_BY_LOGIN);
+        Query query = session().createQuery(FIND_USER_BY_USERNAME);
         query.setParameter("l", login);
         return (User) query.getSingleResult();
-    }
-
-    @Override
-    public void deleteById(long id) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createQuery(MyQuery.DELETE_USER_BY_ID);
-        query.setParameter("i", id);
-        query.executeUpdate();
     }
 
     @Override
@@ -124,16 +111,6 @@ public class UserDaoImpl
     }
 
     @Override
-    public User findBySecretQuestionAndSecretQuestionType(long id, String secretQuestion, long sqtId) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createQuery(MyQuery.FIND_USER_BY_SQ_AND_SQT_AND_ID);
-        query.setParameter("id", id);
-        query.setParameter("sqtId", sqtId);
-        query.setParameter("sq", secretQuestion);
-        return (User) query.getSingleResult();
-    }
-
-    @Override
     public User findBySecretQuestionAndSecretQuestionType(String username, String secretQuestion, long sqtId) {
         hibernateSession = sessionFactory.getCurrentSession();
         Query query = hibernateSession.createQuery(MyQuery.FIND_USER_BY_SQ_AND_SQT_AND_USERNAME);
@@ -159,13 +136,9 @@ public class UserDaoImpl
         return (User) query.getSingleResult();
     }
 
-    @Override
-    public UserFriend findUserAndFriendStatus(long myId, long secondId) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createQuery(FIND_USER_AND_FRIEND_STATUS);
-        query.setParameter("authUserId", myId);
-        query.setParameter("userId", secondId);
-        return (UserFriend) query.getSingleResult();
+
+    public Session session(){
+        return sessionFactory.getCurrentSession();
     }
 
     private Session hibernateSession;

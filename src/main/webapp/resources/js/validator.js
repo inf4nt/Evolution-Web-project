@@ -14,7 +14,6 @@ function validRegistrationForm(divLogin, divPassword, divConfirmPassword, divFir
         return true;
 }
 
-
 function validLoginPage(divEmail, divPassword) {
     if (loginValid(divEmail) === false ||
         firstPasswordValid(divPassword) == false)

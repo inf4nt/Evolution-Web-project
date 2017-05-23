@@ -7,8 +7,7 @@ public enum FriendStatusEnum {
 
     PROGRESS(1),
     FOLLOWER(2),
-    REQUEST(3),
-    NO_MATCHES(4);
+    REQUEST(3);
 
     FriendStatusEnum(long i) {
         this.id = i;

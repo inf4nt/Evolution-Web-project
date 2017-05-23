@@ -1,11 +1,9 @@
 package evolution.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import evolution.dao.MessageDao;
 import evolution.dao.UserDao;
-import evolution.model.Message;
+import evolution.model.message.Message;
 import evolution.service.MyJacksonService;
 import evolution.service.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +13,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Admin on 19.04.2017.
  */
+
 @Controller
 @RequestMapping("/im")
 @SessionAttributes({"dialogId", "sel"})
@@ -35,19 +34,19 @@ public class MessageController {
             Model model,
             SessionStatus sessionStatus) {
         sessionStatus.setComplete();
-        List list = messageDao.findMyDialog(customUser.getId());
+        List<Message> list = messageDao.lastMessagesFromDialog (customUser.getUser().getId());
         model.addAttribute("list", list);
         return "message/form-dialog";
     }
 
-    @RequestMapping(value = "/dialog", method = RequestMethod.GET)
-    public String dialog(
-            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-            @RequestParam Long sel,
-            Model model) {
+    @RequestMapping(value = "/{sel}", method = RequestMethod.GET)
+    public String dialog(@AuthenticationPrincipal UserDetailsServiceImpl.CustomUser  customUser,
+                         @PathVariable Long sel,
+                         Model model) {
         List<Message> list;
-        if (messageDao.checkDialog(customUser.getId(), sel)) {
-            list = messageDao.findMessageByUserId(customUser.getId(), sel);
+
+        if (messageDao.checkDialog(customUser.getUser().getId(), sel)) {
+            list = messageDao.findMessageByUserId(customUser.getUser().getId(), sel, 7, 0);
         } else {
             model.addAttribute("im", userDao.selectIdFirstLastName(sel));
             model.addAttribute("dialogId", -1l);
@@ -61,16 +60,7 @@ public class MessageController {
         return "message/form-message";
     }
 
-    @ResponseBody @RequestMapping(value = "/getMessage", method = RequestMethod.GET, produces={"application/json; charset=UTF-8"})
-    public String getMessage(
-            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-            @RequestParam Long sel
-    ) throws JsonProcessingException {
-        List result = messageDao.findMessageByUserId(customUser.getId(), sel);
-        return jacksonService.objectToJson(result);
-    }
-
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody @RequestMapping(value = "/", method = RequestMethod.POST)
     public void saveMessage(
             @RequestParam String message,
             @SessionAttribute Long dialogId,
@@ -78,13 +68,23 @@ public class MessageController {
             @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
             HttpServletResponse response) throws IOException {
         if (dialogId == -1) {
-            long nextId = messageDao.saveDialog(customUser.getId(), sel);
-            messageDao.saveMessage(nextId, message, customUser.getId());
-            response.sendRedirect("/im/dialog?sel=" + sel);
+            long nextId = messageDao.saveDialog(customUser.getUser().getId(), sel);
+            messageDao.saveMessage(nextId, message, customUser.getUser().getId());
+            response.sendRedirect("/im/" + sel);
         } else {
-            messageDao.saveMessage(dialogId, message, customUser.getId());
+            messageDao.saveMessage(dialogId, message, customUser.getUser().getId());
         }
     }
+
+    @ResponseBody @RequestMapping(value = "/getMessage", method = RequestMethod.GET, produces={"application/json; charset=UTF-8"})
+    public String getMessage(
+            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
+            @RequestParam Long sel
+    ) throws JsonProcessingException {
+        List result = messageDao.findMessageByUserId(customUser.getUser().getId(), sel, 7, 0);
+        return jacksonService.objectToJson(result);
+    }
+
 
     @Autowired
     private MyJacksonService jacksonService;
@@ -93,51 +93,36 @@ public class MessageController {
     @Autowired
     private UserDao userDao;
 
-
 }
 
 
-
-
-
-
-
-
-
-
-
-
-//    @ResponseBody @RequestMapping(value = "/", method = RequestMethod.GET)
-//    public String im(
-//            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-//            SessionStatus sessionStatus) throws JsonProcessingException {
-//        sessionStatus.setComplete();
-//        List list = messageDao.findMyDialog(customUser.getId());
-//        return jacksonService.objectToJson(list);
+//    @RequestMapping(value = "/im", method = RequestMethod.GET)
+//    public String imLast(@AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
+//                         Model model) {
+//        List<Message> list = messageDao.lastMessagesFromDialog (customUser.getUser().getId());
+//        model.addAttribute("list", list);
+//        return "message/dialog-message";
 //    }
 //
-//    @ResponseBody @RequestMapping(value = "/dialog", method = RequestMethod.GET)
-//    public String dialog(
-//            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-//            @RequestParam Long sel,
-//            Model model
-//    ) throws JsonProcessingException {
-//        List<Message> result = null;
-//
-//        result = messageDao.findMessageByUserId(customUser.getId(), sel);
-//
-//        model.addAttribute("dialogId", result.get(0).getDialog().getId());
-//        model.addAttribute("sel", sel);
-//        return jacksonService.objectToJson(result);
+//    @ResponseBody @RequestMapping(value = "/im/{authUserId}/{userId}", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)
+//    public String messageFromDialog(@AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
+//                                    HttpServletRequest request,
+//                                    @PathVariable Long authUserId,
+//                                    @PathVariable Long userId) throws JsonProcessingException {
+//        if (request.isUserInRole("ROLE_ADMIN") || customUser.getUser().getId().equals(authUserId)) {
+//            List result = messageDao.findMessageByUserId(authUserId, userId);
+//            return jacksonService.objectToJson(result);
+//        } else {
+//            return null;
+//        }
 //    }
-//
-//
-//    @ResponseStatus(HttpStatus.OK) @RequestMapping (value = "/write", method = RequestMethod.POST)
-//    public void write (
-//            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-//            @RequestParam String message,
-//            @SessionAttribute Long dialogId,
-//            @SessionAttribute Long sel
-//    ) {
-//        messageDao.saveMessage(dialogId, message, sel);
-//    }
+
+
+
+
+
+
+
+
+
+

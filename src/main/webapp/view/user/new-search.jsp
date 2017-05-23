@@ -65,19 +65,6 @@
     })
 
 
-//    $(document).ready(function () {
-//        $("#searchBox input").keyup(function () {
-//                var like = $("#searchBox input").val();
-//                if (like.length > 2) {
-//                    $("#headSearchResult").show();
-//                    getResultAjax(like);
-//                } else {
-//                    $("#headSearchResult").hide();
-//
-//                }
-//        });
-//    })
-
     $(document).ready(function () {
         $("#searchBox input").keyup(function () {
             setTimeout(function () {
@@ -112,12 +99,13 @@
         if (data) {
             var jsonData = data;
             var result;
+            $("#result").html(jsonData.length +' matches')
             for (var i = jsonData.length - 1; i >= 0; i--) {
                 var user = jsonData[i];
                 var imageTable = '<tr><td style="width: 2%"><img data-src="holder.js/140x140" class="img-circle center-block" style="width: 100px; height: 100px;"  src="http://www.isu.edu.tw/upload/276e/9/coming-soon.jpg" data-holder-rendered="true">' +
                     '</td>';
                 var userTable = '<td style="width: 10%">' +
-                    '<a href="/user/id/' + user.userId +'">' + user.firstName + ' ' + user.lastName + '</a>'+
+                    '<a href="/user/id' + user.userId +'">' + user.firstName + ' ' + user.lastName + '</a>'+
                     '</td>' +
                     '</tr>';
                 result = result + imageTable + userTable

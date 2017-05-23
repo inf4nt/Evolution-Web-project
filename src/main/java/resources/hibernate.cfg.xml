@@ -65,14 +65,24 @@
 
 
 
-    <mapping class="evolution.model.User"/>
-    <mapping class="evolution.model.SecretQuestionType"/>
+    <mapping class="evolution.model.user.User"/>
+    <mapping class="evolution.model.secretQuestionType.SecretQuestionType"/>
+    <mapping class="evolution.model.friend.Friends"/>
+    <mapping class="evolution.model.message.Dialog"/>
+    <mapping class="evolution.model.message.Message"/>
+    <mapping class="evolution.model.message.Message$MessageDialog"/>
 
-    <mapping class="evolution.model.Friends"/>
-    <mapping class="evolution.model.Dialog"/>
-    <mapping class="evolution.model.Message"/>
-    <mapping class="evolution.model.Message$MessageDialog"/>
-    <mapping class="evolution.model.UserFriend"/>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

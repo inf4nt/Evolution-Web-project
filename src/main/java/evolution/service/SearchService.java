@@ -1,7 +1,7 @@
 package evolution.service;
 
 import evolution.dao.UserDao;
-import evolution.model.User;
+import evolution.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

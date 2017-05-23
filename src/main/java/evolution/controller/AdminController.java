@@ -4,16 +4,18 @@ import evolution.common.UserRoleEnum;
 import evolution.dao.AdminDao;
 import evolution.dao.SecretQuestionTypeDao;
 import evolution.dao.UserDao;
-import evolution.model.SecretQuestionType;
-import evolution.model.User;
+import evolution.model.secretQuestionType.SecretQuestionType;
+import evolution.model.user.User;
 import evolution.model.form.SecretQuestionTypeForm;
 import evolution.service.builder.PaginationService;
 import evolution.service.builder.SecretQuestionTypeBuilderService;
 import evolution.service.builder.UserBuilderService;
+import evolution.service.security.UserDetailsServiceImpl;
 import evolution.service.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,12 +33,12 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/admin")
-@SessionAttributes({"servletName", "role", "productList", "userProfile"})
+@SessionAttributes({"servletName", "role", "productList", "user"})
 public class AdminController {
 
     @RequestMapping (value = "/remove-user/{id}", method = RequestMethod.GET)
-    public String remove (@PathVariable long id, HttpServletRequest request) {
-        userDao.deleteById(id);
+    public String remove (@PathVariable Long id, HttpServletRequest request) {
+        userDao.delete(new User(id));
 
         String servletName;
         try {
@@ -83,59 +85,6 @@ public class AdminController {
         model.addAttribute("role", role);
         model.addAttribute("page_url", "/admin/form-all/" + role);
         return "admin/admin-form-search";
-    }
-
-    @RequestMapping(value = "/form-create-user", method = RequestMethod.GET)
-    public String formCreateUser(){
-        return "admin/form-create-user";
-    }
-
-
-    @RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
-    public String userData(@PathVariable Long id,
-                           @SessionAttribute User authUser,
-                           Model model) {
-        if (id.equals(authUser.getId())) {
-            model.addAttribute("userProfile", authUser);
-        } else {
-            model.addAttribute("userProfile", userDao.findById(id));
-        }
-        return "admin/admin-form-profile";
-    }
-
-    @ResponseBody @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public void userDataEdit(@SessionAttribute User userProfile,
-                               @SessionAttribute User authUser,
-                               @RequestParam String role,
-                               HttpServletRequest request) {
-        User result;
-        result = userBuilderService.requestBuild(false, UserRoleEnum.valueOf(role).getId(), userProfile, request);
-        if (validator.userValidator(result)) {
-            userDao.update(result);
-            if (userProfile.getId().equals(authUser.getId())){
-                authUser.updateFields(result);
-            }
-        }
-    }
-
-
-
-
-    @ResponseBody @RequestMapping(value = "/create-user", method = RequestMethod.POST)
-    public String userSave (@RequestParam String role,
-                            @RequestParam String login,
-                            HttpServletRequest request) {
-
-        try {
-            userDao.findByLogin(login);
-            return "info, User " + login + " is exist. Try again";
-        } catch (NoResultException e){}
-
-
-        User result = userBuilderService.requestBuild(true, UserRoleEnum.valueOf(role).getId(), null, request);
-        if (validator.userValidator(result))
-            userDao.save(result);
-        return "Success";
     }
 
 

@@ -78,7 +78,7 @@
                                      src="http://www.isu.edu.tw/upload/276e/9/coming-soon.jpg" data-holder-rendered="true">
                             </td>
                             <td style="width: 10%">
-                                <a href="/user/id/${a.getId()}">${a.getFirstName()} ${a.getLastName()}</a>
+                                <a href="/user/id${a.getId()}">${a.getFirstName()} ${a.getLastName()}</a>
                             </td>
                             <td style="width: 2%">
                                 <ul class="menu">
@@ -88,10 +88,11 @@
                                         </a>
                                         <ul class="submenu">
                                             <li class="submenu-item">
-                                                <a href="/admin/profile/${a.id}" >
+                                                <a href="/user/profile/${a.id}" >
                                                     <span class="glyphicon glyphicon-edit text-muted"></span> Edit
                                                 </a>
-                                                <a href="/admin/remove-user/${a.id}" >
+                                                <%--<a href="/admin/remove-user/${a.id}" >--%>
+                                                <a href="#" onclick="alert('coming soon')">
                                                     <span class="glyphicon glyphicon-remove text-danger"></span> Remove
                                                 </a>
                                             </li>

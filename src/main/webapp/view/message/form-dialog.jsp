@@ -10,17 +10,7 @@
 <head>
     <title>Dialog</title>
     <style>
-        .link {
-            width: 450px; /* Ширина слоя */
-            height: 100px; /* Высота слоя */
-            /*background: #fc0; !* Цвет фона *!*/
-        }
-        .link a {
-            display: block; /* Ссылка как блочный элемент */
-            text-align: center; /* Выравнивание по центру */
-            height: 100%; /* Высота на весь слой */
-            /*color: #666; !* Цвет ссылки *!*/
-        }
+
         li {
             list-style-type: none; /* Убираем маркеры */
         }
@@ -30,14 +20,16 @@
 <%@include file="../index/header.jsp" %>
 
 
-<div id="div" class="col-lg-6 col-lg-offset-1 col-md-6 col-md-offset-1">
+<div id="div-message-dialog" class="col-lg-6 col-lg-offset-1 col-md-6 col-md-offset-1">
 
     <h4 class="text-primary">
         <span class="glyphicon glyphicon-th-list"></span>
-        Dialog <a href="/user/id/${authUser.getId()}">${authUser.getFirstName()} ${authUser.getLastName()}</a>
+        Dialog
+        <a href="/user/id${authUser.getId()}">${authUser.getFirstName()} ${authUser.getLastName()}</a>
     </h4>
 
-    <div class="col-md-12 col-sm-10">
+    <div class="col-md-12 col-sm-10 block-sms">
+
         <table class="table table-hover">
             <thead>
             <tr>
@@ -53,13 +45,14 @@
                              src="http://www.isu.edu.tw/upload/276e/9/coming-soon.jpg" data-holder-rendered="true">
                     </td>
                     <td style="width: 10%">
-                        <li class="link">
-                            <a href="/im/dialog?sel=${a.getDialogPK().getSecond().getId()}">
-                                <p class="text text-primary">
+                        <li>
+                            <a href="/im/${a.dialog.second.id}">
+                                <p> ${a.dialog.second.firstName} ${a.dialog.second.lastName}</p>
                                 <hr/>
-                                    ${a.getDialogPK().getSecond().getFirstName()} ${a.getDialogPK().getSecond().getLastName()}
+                                <p class="text-muted"><span class="glyphicon glyphicon-pencil"></span>
+                                        ${a.sender.firstName} ${a.sender.lastName}:
+                                    <br/><br/> <span class="glyphicon glyphicon-envelope"></span> ${a.message} </p>
                                 <hr/>
-                                </p>
                             </a>
                         </li>
                     </td>
@@ -69,6 +62,7 @@
         </table>
     </div>
 </div>
+
 
 
 </body>

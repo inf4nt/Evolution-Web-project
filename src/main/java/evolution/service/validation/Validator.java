@@ -1,8 +1,8 @@
 package evolution.service.validation;
 
 import evolution.common.UserRoleEnum;
-import evolution.model.Message;
-import evolution.model.User;
+import evolution.model.message.Message;
+import evolution.model.user.User;
 import org.springframework.stereotype.Service;
 
 /**

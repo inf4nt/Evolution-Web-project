@@ -1,7 +1,7 @@
 package evolution.dao;
 
-import evolution.model.Dialog;
-import evolution.model.Message;
+import evolution.model.message.Dialog;
+import evolution.model.message.Message;
 
 import java.util.List;
 
@@ -18,11 +18,29 @@ public interface MessageDao {
 
     List<Message> findMessageByDialogAndAuthUserId (long dialogId, long authUserId);
 
-    List<Message> findMessageByUserId (long authUserId, long second);
+    List<Message> findMessageByUserId (long authUserId, long second, int limit, int offset);
 
     void saveMessage (long dialogId, String message, Long senderId);
 
     boolean checkDialog(long authUserId, long second);
+
+    List<Message> lastMessagesFromDialog (long authUserId);
+
+    String LAST_MESSAGES = "select new Message (d.id, m.id, substring(m.message, 0, 40), m.dateDispatch," +
+            " sender.id, sender.firstName, sender.lastName, " +
+            " second.id, second.firstName, second.lastName) " +
+            " from Message m " +
+            " join m.dialog as d " +
+            " join m.sender as sender" +
+            " join d.second as second " +
+            " where m.id in " +
+            " (select max(m.id) from Message m " +
+            " join m.dialog as d " +
+            " where d.first.id = :id " +
+            " group by m.dialog.id) " +
+            " and d.first.id = :id " +
+            " order by m.id desc";
+
 
     String FIND_MY_DIALOG = "select new Dialog (d.dialogPK.id, " +
             " first.id, first.firstName, first.lastName, " +

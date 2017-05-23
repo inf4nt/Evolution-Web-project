@@ -17,75 +17,81 @@
 	<link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
 	<link href="<c:url value="/resources/my_css/my_css.css" />" rel="stylesheet">
 
+	<style>
+		li {
+			list-style-type: none; /* Убираем маркеры */
+		}
+	</style>
+
 </head>
 <body>
 
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-			<a class="navbar-brand">Evolution
-				<span class="glyphicon glyphicon-globe"></span>
-			</a>
-			<div class="callapse navbar-collapse">
+		<a class="navbar-brand">Evolution
+			<span class="glyphicon glyphicon-globe"></span>
+		</a>
+		<div class="callapse navbar-collapse">
 
-				<sec:authorize access="isAuthenticated()">
+			<sec:authorize access="isAuthenticated()">
 
-					<ul class="nav navbar-nav">
-							<li>
-								<a href="/user/id/${authUser.getId()}" methods="get">
-									<span class="glyphicon glyphicon-home"> Home</span>
-								</a>
-							</li>
-						<c:if test="${authUser.getId() > 0}">
-							<li>
-								<a href="/user/form-profile" methods="get">
-									<span class="glyphicon glyphicon-edit"> Profile</span>
-								</a>
-							</li>
-						</c:if>
-					</ul>
-
-					<ul class="nav navbar-nav navbar-right">
-						<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-											${authUser.getLogin()}
-										<span class="glyphicon glyphicon-log-out"></span>
-									</a>
-							<ul class="dropdown-menu">
-								<li><a href="/logout", methods="get">Exit</a></li>
-							</ul>
-						</li>
-					</ul>
-				</sec:authorize>
-
-				<sec:authorize access="!isAuthenticated()">
-					<ul class="nav navbar-nav navbar-right">
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="/user/id${authUser.id}">
+							<span class="glyphicon glyphicon-home"> Home</span>
+						</a>
+					</li>
+					<c:if test="${authUser.id > 0}">
 						<li>
-							<a href="/welcome">Log in
-								<span class="glyphicon glyphicon-log-in"></span>
+								<a href="/user/profile/${authUser.id}">
+								<span class="glyphicon glyphicon-edit"> Profile</span>
 							</a>
 						</li>
+					</c:if>
+				</ul>
 
-					</ul>
-				</sec:authorize>
-			</div>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								${authUser.login}
+							<span class="glyphicon glyphicon-log-out"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="/logout", methods="get">Exit</a></li>
+						</ul>
+					</li>
+				</ul>
+			</sec:authorize>
+
+			<sec:authorize access="!isAuthenticated()">
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a href="/welcome">Log in
+							<span class="glyphicon glyphicon-log-in"></span>
+						</a>
+					</li>
+
+				</ul>
+			</sec:authorize>
+		</div>
 	</div>
 </div>
 
 <sec:authorize access="isAuthenticated()">
-<div class="col-md-3 col-lg-2 col-sm-3 col-xs-3">
-	<div class="col-sm-10 col-md-9 col-lg-12 col-xs-12 sidebar">
+	<div class="col-md-3 col-lg-2 col-sm-3 col-xs-3">
+		<div class="col-sm-10 col-md-9 col-lg-12 col-xs-12 sidebar">
 			<ul class="nav nav-sidebar">
 				<div id="userPanel">
 					<hr/>
 					<li>
-						<a href="/user/search-test">
+						<a href="/user/search">
 							<span class="glyphicon glyphicon-search"></span> Search
 						</a>
 					</li>
 					<br/>
 					<li>
-						<a href="/user/${authUser.getId()}/friend/start">
-							<span class="glyphicon glyphicon-user"></span> Friends
+						<a href="/friend/${authUser.id}"/>
+						<span class="glyphicon glyphicon-user"></span> Friends
 						</a>
 					</li>
 					<br/>
@@ -106,48 +112,25 @@
 						<br/>
 						<li><a href="/admin/form-all/admin/start"><span class="glyphicon glyphicon-king"></span> Show admin</a></li>
 						<br/>
-						<li><a href="/admin/form-create-user"><span class="glyphicon glyphicon-check"></span> Registration</a></li>
+						<li><a href="/user/registration"><span class="glyphicon glyphicon-check"></span> Registration</a></li>
 						<br/>
 						<li><a href="/admin/form-create-sqt" >Create secret question type</a></li>
 					</div>
 					<hr/>
 				</sec:authorize>
 			</ul>
+		</div>
 	</div>
-</div>
 </sec:authorize>
-</body>
-
 <script>
-//	$(document).ready(function () {
-//	    $("#showAdminPanel li a").click(function () {
-//			$("#adminPanel").slideDown(500);
-//            $("#showAdminPanel").slideUp(500);
-//        })
-//		$("#hideAdminPanel").click(function () {
-//            $("#adminPanel").slideUp(500);
-//            $("#showAdminPanel").slideDown(500);
-//        })
-//    })
-
-
-
-	function adminPanel() {
-		var check = $("#adminPanel").css("display");
-		if (check == 'none'){
-		    $("#adminPanel").slideDown(500);
-		} else {
-		    $("#adminPanel").slideUp(500);
-		}
+    function adminPanel() {
+        var check = $("#adminPanel").css("display");
+        if (check == 'none'){
+            $("#adminPanel").slideDown(500);
+        } else {
+            $("#adminPanel").slideUp(500);
+        }
     }
-
-
-
-
 </script>
-
-
-
+</body>
 </html>
-
-

@@ -2,7 +2,7 @@ package evolution.dao.impl;
 
 import evolution.dao.AdminDao;
 import evolution.dao.MyQuery;
-import evolution.model.User;
+import evolution.model.user.User;
 import lombok.NoArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -27,26 +27,24 @@ public class AdminDaoImpl
     }
 
     @Override
-    public List<User> findLikeLogin(String like) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createSQLQuery(MyQuery.FIND_USER_LIKE_LOGIN);
-        query.setParameter("like", like);
-        return query.list();
-    }
-
-    @Override
     public List<User> findAllUser() {
-        hibernateSession = sessionFactory.getCurrentSession();
-        return hibernateSession.createQuery(MyQuery.FIND_USER_BY_ROLE_USER).list();
+        return session().createQuery(FIND_USER_BY_ROLE_USER).list();
     }
 
     @Override
     public List<User> findAllAdmin() {
-        hibernateSession = sessionFactory.getCurrentSession();
-        return hibernateSession.createQuery(MyQuery.FIND_USER_BY_ROLE_ADMIN).list();
+        return session().createQuery(FIND_USER_BY_ROLE_ADMIN).list();
     }
 
-    private Session hibernateSession;
+    @Override
+    public List<User> findAllFieldsAll() {
+        return session().createQuery("from User").list();
+    }
+
+    public Session session(){
+        return sessionFactory.getCurrentSession();
+    }
+
     @Autowired
     private SessionFactory sessionFactory;
 }

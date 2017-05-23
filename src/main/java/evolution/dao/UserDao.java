@@ -1,8 +1,8 @@
 package evolution.dao;
 
-import evolution.model.SecretQuestionType;
-import evolution.model.User;
-import evolution.model.UserFriend;
+import evolution.common.UserRoleEnum;
+import evolution.model.secretQuestionType.SecretQuestionType;
+import evolution.model.user.User;
 
 
 import java.util.List;
@@ -22,8 +22,6 @@ public interface UserDao {
 
     User findByLogin (String login);
 
-    void deleteById (long id);
-
     void delete (User user);
 
     List<User> findUserByFirstLastName(String p1, String p2);
@@ -34,20 +32,19 @@ public interface UserDao {
 
     List<User> findUserByFirstOrLastName(String p1, int limit);
 
-    User findBySecretQuestionAndSecretQuestionType (long id, String secretQuestion, long sqtId);
-
     User findBySecretQuestionAndSecretQuestionType (String username, String secretQuestion, long sqtId);
 
     User selectFirstLastName (long id);
 
     User selectIdFirstLastName (long id);
 
-    UserFriend findUserAndFriendStatus(long myId, long secondId);
+
+    String FIND_USER_BY_USERNAME = "from User where login = :l";
 
     String UPDATE_FORGOT_PASSWORD = "update User u set u.password = :password " +
             " where u.login = :login and u.secretQuestionType.id = :sqtId and u.secretQuestion = :sq  ";
 
-    String FIND_USER_AND_FRIEND_STATUS = "select new UserFriend (u.id, u.firstName, u.lastName, f.status ) from UserFriend u" +
+    String FIND_USER_AND_FRIEND_STATUS = "select new UserFriend2 (u.id, u.firstName, u.lastName, f.status ) from UserFriend2 u" +
             " left join Friends f on u.id = f.friendId.id and f.userId.id = :authUserId" +
             " where u.id = :userId";
 
@@ -61,5 +58,8 @@ public interface UserDao {
     String UPDATE_USER = "update User u" +
             " set u.firstName = :fn, u.lastName = :ln, u.password = :p, u.roleId = :r " +
             " where u.id = :id";
+
+    String FIND_ALL_USER_ID_FIRST_LAST_NAME = "select new User(u.id, u.firstName, u.lastName) " +
+            "from User u where u.roleId = " + UserRoleEnum.USER.getId();
 
 }

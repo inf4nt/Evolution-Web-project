@@ -38,7 +38,7 @@
 <body>
 <%@include file="../index/header.jsp" %>
 <div class="col-lg-6 col-lg-offset-2" >
-    <a href="/user/id/${im.getId()}" >
+    <a href="/user/id${im.getId()}" >
         <h1 class="text-center text-primary">${im.getFirstName()} ${im.getLastName()}</h1>
     </a>
     <hr/>
@@ -58,7 +58,7 @@
                 <tr>
                     <td>
                         <p>
-                            <a href="/user/id/${a.getSender().getId()}">${a.getSender().getFirstName()} ${a.getSender().getLastName()} </a>
+                            <a href="/user/id${a.getSender().getId()}">${a.getSender().getFirstName()} ${a.getSender().getLastName()} </a>
                         </p>
                         <p>${a.getMessage()}</p>
                     </td>
@@ -106,7 +106,7 @@
             for (var i = jsonData.length - 1; i >= 0; i--) {
                 var element = jsonData[i];
                 var user = element.sender;
-                var table = ' <tr><td><p><a href="/user/id/' + user.userId + '">'
+                var table = ' <tr><td><p><a href="/user/id' + user.userId + '">'
                     + user.firstName +
                     ' ' + user.lastName +
                     '</a>' +
@@ -122,13 +122,14 @@
 
     $(document).ready(function () {
         $("#formMessage").submit(function () {
-            var message;
+            var message = $("#formMessage #inputMessage").val();
+            if (message.length == 0)
+                return false;
             $.ajax({
-                url: "/im/save",
+                url: "/im/",
                 type: "POST",
                 data: $("#formMessage").serialize(),
                 beforeSend: function () {
-                    message = $("#formMessage #inputMessage").val();
                     $("#inputMessage").val("");
                 },
                 success: function () {
@@ -145,7 +146,7 @@
     });
 
     function writeMessage(sel, first, last, message) {
-        var table = ' <tr><td><p><a href="/user/id/' + sel + '">'
+        var table = ' <tr><td><p><a href="/user/id' + sel + '">'
             + first +
             ' ' + last +
             '</a>' +

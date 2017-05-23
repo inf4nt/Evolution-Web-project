@@ -1,7 +1,7 @@
 package evolution.service.builder;
 
 
-import evolution.model.SecretQuestionType;
+import evolution.model.secretQuestionType.SecretQuestionType;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;

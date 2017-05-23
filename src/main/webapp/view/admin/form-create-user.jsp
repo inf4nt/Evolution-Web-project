@@ -116,12 +116,28 @@
                 'div_last_name_registrationPageForm', 'div_secret_question_registrationPageForm');
             if (check == false)
                 return false;
+
+            var sqtId = $("#registrationPageForm select[name=sqtId]").val();
+            var sq = $("#registrationPageForm input[name=secretQuestion]").val();
+
+            var login = $("#registrationPageForm input[name=login]").val();
+            var password = $("#registrationPageForm input[name=password]").val();
+            var firstName = $("#registrationPageForm input[name=firstName]").val();
+            var lastName = $("#registrationPageForm input[name=lastName]").val();
+            var role = $("#registrationPageForm select[name=role]").val();
+
+            var json = JSON.stringify({"secretQuestionType":{"id":sqtId},
+                "secretQuestion":sq,
+                "login":login, "password":password,
+                "lastName":lastName, "firstName":firstName});
+
             $("#submit_registrationPageForm").hide();
             setTimeout(function () {
                 $.ajax({
-                    url: "/admin/create-user",
+                    url:"/user/?role="+role,
                     type: "POST",
-                    data: $("#registrationPageForm").serialize(),
+                    data: json,
+                    contentType: "application/json; charset=UTF-8",
                     success: function (data) {
                         if (data == 'Success'){
                             $("#registrationPageForm div input").val("");

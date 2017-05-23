@@ -1,6 +1,6 @@
 package evolution.dao;
 
-import evolution.model.SecretQuestionType;
+import evolution.model.secretQuestionType.SecretQuestionType;
 
 import java.util.List;
 

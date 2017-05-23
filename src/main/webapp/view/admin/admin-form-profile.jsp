@@ -13,7 +13,6 @@
     <title>Profile</title>
     <script src="<c:url value="/resources/js/pageJS.js" />"></script>
     <script src="<c:url value="/resources/js/validator.js" />"></script>
-    <c:set var="user" value="${userProfile}"/>
 </head>
 <body>
 <%@include file="../index/header.jsp" %>
@@ -78,17 +77,17 @@
                     <span class="span-validator-error" aria-hidden="true" style="display: none"></span>
                 </div>
 
-                <div class="form-group">
+                <div id="role" class="form-group">
                     <label class="control-label">Role</label>
                     <select name="role" class="form-control">
                         <c:choose>
                             <c:when test="${user.getRole() == 'USER'}">
-                                <option value="USER">User</option>
-                                <option value="ADMIN">Admin</option>
+                                <option value="1">User</option>
+                                <option value="2">Admin</option>
                             </c:when>
                             <c:otherwise>
-                                <option value="ADMIN">Admin</option>
-                                <option value="USER">User</option>
+                                <option value="2">Admin</option>
+                                <option value="1">User</option>
                             </c:otherwise>
                         </c:choose>
                     </select>
@@ -146,12 +145,19 @@
                     'div_last_name_formAdminProfile') == false)
                 return false;
 
+
+            var login = $("#formAdminProfile input[name=login]").val();
+            var password = $("#formAdminProfile input[name=password]").val();
+            var firstName = $("#formAdminProfile input[name=firstName]").val();
+            var lastName = $("#formAdminProfile input[name=lastName]").val();
+            var role = $("#formAdminProfile select[name=role]").val();
+
             $("#submit_formAdminProfile").hide();
             setTimeout(function () {
                 $.ajax({
-                    url: "/admin/edit",
-                    type: "POST",
-                    data: $("#formAdminProfile").serialize(),
+                    url: "/user/${user.id}",
+                    type: "PUT",
+                    data:JSON.stringify({"login":login, "password":password, "firstName":firstName, "lastName":lastName, "roleId": role}),
                     success: function () {
                         $("#submit_formAdminProfile").slideDown(1000);
                     },
@@ -164,6 +170,7 @@
             }, 2000);
             return false;
         });
+
 
     })
 

@@ -1,10 +1,11 @@
-package evolution.model;
+package evolution.model.message;
 
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import evolution.model.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,6 +41,12 @@ public class Message
         sender.setFirstName(senderFirstName);
         sender.setLastName(senderLastName);
     }
+
+    public Message(String message, Long secondId, String secondFirstName, String secondLastName){
+        this.dialog.second = new User(secondId, secondFirstName, secondLastName);
+        this.message = message;
+    }
+
 
     public Message(Long dialog, User sender, String message, Date dateDispatch) {
         MessageDialog messageDialog = new MessageDialog(dialog);

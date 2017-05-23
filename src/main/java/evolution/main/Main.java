@@ -4,25 +4,26 @@ package evolution.main;
 
 
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import evolution.common.FriendStatusEnum;
-import evolution.dao.*;
-import evolution.dao.impl.*;
-import evolution.model.*;
+import evolution.dao.FriendsDao;
+import evolution.dao.impl.FriendsDaoImpl;
+import evolution.model.friend.Friends;
+import evolution.model.user.User;
+
 import org.hibernate.*;
 
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
+import javax.persistence.NoResultException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -31,35 +32,57 @@ import java.util.List;
 public class Main {
 
 
-    public static void main(String[] args) {
-        SessionFactory sessionFactory = null;
-        try {
-            sessionFactory = getSessionFactory();
-            Session session = sessionFactory.getCurrentSession();
-            session.beginTransaction();
+    public static void main(String[] args) throws IOException {
+//        SessionFactory sessionFactory = null;
+//        try {
+//            sessionFactory = getSessionFactory();
+//            Session session = sessionFactory.getCurrentSession();
+//            session.beginTransaction();
+//
+//
+//            System.out.println("===============");
+//            System.out.println("===============");
+//            List list;
+//            Map map;
+//            Query query;
+//
+//
+//
+//
+//            query  = session.createQuery("select 1 from Friends f " +
+//                    " where (f.friend.id = :id1 and f.user.id = :id2)" +
+//                    " or (f.friend.id = :id2 and f.user.id =:id1)");
+//            query.setParameter("id1", 226l);
+//            query.setParameter("id2", 216l);
+//
+//
+//            if (query.list().size() > 0)
+//                System.out.println(true);
+//            else
+//                System.out.println(false);
+//
+//            System.out.println(query.list().size());
+//
+//
+//
+//
+//
+//
+//
+//            session.getTransaction().commit();
+//            sessionFactory.close();
+//        } catch (Exception e){
+//            e.printStackTrace();
+//            if (sessionFactory != null)
+//                sessionFactory.close();
+//        }
 
 
-            System.out.println("===============");
-            System.out.println("===============");
-            List list;
-            Query query;
 
 
+        String json = "{\"login\":\"com.infant@gmail.com\"}";
 
-
-
-
-            session.getTransaction().commit();
-            sessionFactory.close();
-
-        } catch (Exception e){
-            e.printStackTrace();
-            if (sessionFactory != null)
-                sessionFactory.close();
-        }
-
-
-
+        System.out.println(objectToJson(jsonToObject(json, User.class)));
 
 
 

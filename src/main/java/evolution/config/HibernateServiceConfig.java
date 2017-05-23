@@ -1,7 +1,12 @@
 package evolution.config;
 
 
-import evolution.model.*;
+
+import evolution.model.friend.Friends;
+import evolution.model.message.Dialog;
+import evolution.model.message.Message;
+import evolution.model.secretQuestionType.SecretQuestionType;
+import evolution.model.user.User;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,7 +18,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
 import javax.sql.DataSource;
 
 /**
@@ -54,7 +58,8 @@ public class HibernateServiceConfig
                 .addAnnotatedClasses(Dialog.class)
                 .addAnnotatedClasses(Message.class)
                 .addAnnotatedClasses(Message.MessageDialog.class)
-                .addAnnotatedClasses(UserFriend.class)
+
+
                 .setProperty("hibernate.show_sql", "true")
                 .setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory")
                 .setProperty("hibernate.cache.use_query_cache", "true")

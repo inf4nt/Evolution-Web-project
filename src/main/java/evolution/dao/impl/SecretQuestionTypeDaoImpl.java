@@ -1,7 +1,7 @@
 package evolution.dao.impl;
 
 import evolution.dao.SecretQuestionTypeDao;
-import evolution.model.SecretQuestionType;
+import evolution.model.secretQuestionType.SecretQuestionType;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;

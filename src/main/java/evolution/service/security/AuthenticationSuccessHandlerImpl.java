@@ -29,23 +29,18 @@ public class AuthenticationSuccessHandlerImpl
 
 
         HttpSession httpSession = httpServletRequest.getSession();
-        UserDetailsServiceImpl.CustomUser authUser = (UserDetailsServiceImpl.CustomUser) SecurityContextHolder
+        UserDetailsServiceImpl.CustomUser customUser = (UserDetailsServiceImpl.CustomUser) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getPrincipal();
         httpSession.setAttribute("authorities", authentication.getAuthorities());
 
-        httpSession.setAttribute("authUser", userDao.findById(authUser.getId()));
+        httpSession.setAttribute("authUser", customUser.getUser());
 
-        //set our response to OK status
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 
-        //since we have created our custom success handler, its up to us to where
-        //we will redirect the user after successfully login
 
-        httpServletResponse.sendRedirect("/user/id/" + authUser.getId());
+        httpServletResponse.sendRedirect("/user/id" + customUser.getUser().getId());
+//        httpServletResponse.sendRedirect("/user/id/" + customUser.getUser().getId());
     }
-
-    @Autowired
-    private UserDao userDao;
 }

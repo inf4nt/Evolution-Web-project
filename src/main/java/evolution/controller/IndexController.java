@@ -3,7 +3,7 @@ package evolution.controller;
 import evolution.common.UserRoleEnum;
 import evolution.dao.SecretQuestionTypeDao;
 import evolution.dao.UserDao;
-import evolution.model.User;
+import evolution.model.user.User;
 import evolution.service.builder.UserBuilderService;
 import evolution.service.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +32,7 @@ public class IndexController {
         return "redirect:/welcome";
     }
 
+
     @RequestMapping (value = "/welcome", method = RequestMethod.GET)
     public String welcome (
             Authentication authentication,
@@ -39,7 +40,7 @@ public class IndexController {
 
         if (authentication != null)
             if (authentication.isAuthenticated()) {
-                return "redirect:/user/id/" + ((User)request.getSession().getAttribute("authUser")).getId();
+                return "redirect:/user/id" + ((User)request.getSession().getAttribute("authUser")).getId();
             }
         sessionStatus.setComplete();
         return "index/login-page";
@@ -52,33 +53,6 @@ public class IndexController {
             return "index/login-page";
         }
         return "index/login-page";
-    }
-
-    @RequestMapping (value = "/form-create-user", method = RequestMethod.GET)
-    public String createUserForm (Model model) {
-        model.addAttribute("sqt", sqtDao.findAll());
-        return "old/form-create-user";
-    }
-
-    @ResponseBody @RequestMapping(value = "/create-user", method = RequestMethod.POST)
-    public String createUser(HttpServletRequest request) {
-        User result;
-        try {
-            result = userDao.findByLogin(request.getParameter("login"));
-            return "info, User " + result.getLogin() + " is exist. Try again";
-        } catch (NoResultException e){}
-
-        try {
-            result = userBuilderService.requestBuild(true, UserRoleEnum.USER.getId(),null, request);
-            if (!validator.userValidator(result)) {
-                return "validator";
-            }
-        } catch (Exception e){
-            return "error " + e;
-        }
-
-        userDao.save(result);
-        return "Success";
     }
 
 

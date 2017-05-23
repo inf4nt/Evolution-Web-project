@@ -35,11 +35,10 @@ public interface MyQuery {
 
     String FIND_ALL_USER = "from User";
 
-    String DELETE_USER_BY_ID = "delete from User \n where id = :i";
 
-    String FIND_USER_BY_LOGIN = "select new User(id, roleId, login, password) " + FIND_ALL_USER + "\n where login = :l";
+//    String FIND_ALL_USER_ID_FIRST_LAST = "select new User(id, login, firstName, lastName) \n from User";
 
-    String FIND_ALL_USER_ID_FIRST_LAST = "select new User(id, login, firstName, lastName) \n from User";
+    String FIND_ALL_USER_ID_FIRST_LAST = "select new User(id, firstName, lastName) \n from User";
 
     String FIND_USER_BY_ROLE_ADMIN = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.ADMIN.getId() +
             " order by registrationDate desc";
@@ -68,9 +67,6 @@ public interface MyQuery {
 
     String SELECT_ID_FIRST_LAST_NAME = "select new User(id, firstName, lastName) " + FIND_ALL_USER + " where id = :id";
 
-    String SET_STATUS_FRIEND = "update Friends \nset status = :status \nwhere userId.id = :u \nand friendId.id = :f \nand status =:s";
 
-    String DELETE_REQUEST_FRIEND = "delete from Friends where (userId.id = :u and friendId.id = :f) \n" +
-            "or (userId.id = :f and friendId.id = :u)";
 
 }

@@ -1,9 +1,9 @@
 package evolution.dao.impl;
 
 import evolution.dao.MessageDao;
-import evolution.model.Dialog;
-import evolution.model.Message;
-import evolution.model.User;
+import evolution.model.message.Dialog;
+import evolution.model.message.Message;
+import evolution.model.user.User;
 import lombok.NoArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -77,10 +77,11 @@ public class MessageDaoImpl
     }
 
     @Override
-    public List<Message> findMessageByUserId(long authUserId, long second) {
+    public List<Message> findMessageByUserId(long authUserId, long second, int limit, int offset) {
         hibernateSession = sessionFactory.getCurrentSession();
         Query query = hibernateSession.createQuery(FIND_MY_MESSAGE_BY_USER_ID);
-        query.setMaxResults(7);
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
         query.setParameter("authUser", authUserId);
         query.setParameter("second", second);
         return query.list();
@@ -107,6 +108,16 @@ public class MessageDaoImpl
         }
     }
 
+    @Override
+    public List<Message> lastMessagesFromDialog (long authUserId) {
+        Query query = session().createQuery(LAST_MESSAGES);
+        query.setParameter("id", authUserId);
+        return query.list();
+    }
+
+    public Session session() {
+        return sessionFactory.getCurrentSession();
+    }
 
     private Session hibernateSession;
     @Autowired
