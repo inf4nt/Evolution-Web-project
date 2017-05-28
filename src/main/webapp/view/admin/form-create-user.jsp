@@ -7,7 +7,7 @@
 <html>
 <head>
     <title>Registration</title>
-    <script src="<c:url value="/resources/js/validator.js" />"></script>
+    <script src="<c:url value="/resources/js/validators.js" />"></script>
     <script src="<c:url value="/resources/js/pageJS.js" />"></script>
 </head>
 <body>

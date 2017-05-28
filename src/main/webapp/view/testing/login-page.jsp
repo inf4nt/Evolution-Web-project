@@ -14,7 +14,7 @@
     html { height: 100%; }
     body {
       margin: 0;
-      height: 100%;
+      height: 95%;
       background: url(http://daleki-zori.com.ua/wp-content/uploads/2016/05/maxresdefault.jpg);
       background-size: cover;
     }
@@ -39,6 +39,7 @@
 
 
 <body>
+
 
 
 
@@ -201,7 +202,7 @@
 
           <div id="div_email_registrationPageForm"  class="form-group has-feedback">
             <label class="control-label ">Email</label>
-            <input autocomplete="off"  type="text" onblur="loginValid('div_email_registrationPageForm')" name="login" class="form-control text-center"/>
+            <input type="text" onblur="loginValid('div_email_registrationPageForm')" name="login" class="form-control text-center"/>
             <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
             <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
           </div>
@@ -343,16 +344,32 @@
 
         $("label, a, h3, h1").css("color", "#fbfff9");
 
+        // LOGIN
+        $('#formLogin').on('submit', function () {
+            if (validLoginPage('div_email_formLogin', 'div_password_formLogin') == false)
+                return false;
+            var form = this;
+            $("#div_button_formLogin").hide();
+            $("#loginPage").slideUp(2000);
+            $("#loader").slideDown(2000);
+            setTimeout(function () {
+                form.submit();
+            }, 2000);
+            return false;
+        });
+
         // forgot step one
         $("#div_email_formForgotPassword input").blur(function () {
             if (loginValid('div_email_formForgotPassword') == false) {
                 $("#div_email_formForgotPassword label").html('Email: Pattern error');
                 $("#forgotPassword_step_one").hide();
             } else {
+                var login = $("#formForgotPassword input[name=login]").val();
+                var json = JSON.stringify({"login":login});
                 $.ajax({
-                    url: "/service/forgot-password-step-one",
+                    url: "/service/forgot-password/one?json="+json,
                     type: "GET",
-                    data: "login=" + $("#div_email_formForgotPassword input").val(),
+                    contentType: "application/json; charset=UTF-8",
                     beforeSend: function () {
                         $("#stepOne").hide();
                         $("#loader").show();
@@ -367,6 +384,10 @@
                             $("#div_email_formForgotPassword label").html('Email: This email not found');
                             $("#forgotPassword_step_one").hide();
                         }
+                    },
+                    error:function () {
+                        $("#loader").hide();
+                        $("#stepOne").show();
                     }
                 });
             }
@@ -378,12 +399,18 @@
                 $("#div_secret_question_formForgotPassword label").html('Secret question: Pattern error');
                 $("#forgotPassword_step_final").hide();
             } else {
-                var login = $("#div_email_formForgotPassword input").val();
-                var sq = $("#div_secret_question_formForgotPassword input").val();
-                var sqtId = $("#sqtId option:selected").val();
+                var login = $("#formForgotPassword input[name=login]").val();
+                var sq = $("#formForgotPassword input[name=secretQuestion]").val();
+                var sqtId = $("#formForgotPassword select[name=sqtId]").val();
+
+                var json = JSON.stringify({"secretQuestionType":{"id":sqtId},
+                    "secretQuestion":sq,
+                    "login":login});
+
                 $.ajax({
-                    url: "/service/forgot-password-step-two?login=" + login + "&sq=" + sq + "&sqtId=" + sqtId,
+                    url:"/service/forgot-password/two?json="+json,
                     type: "GET",
+                    contentType: "application/json; charset=UTF-8",
                     beforeSend: function () {
                         $("#stepTwo").hide();
                         $("#loader").show();
@@ -401,20 +428,6 @@
                     }
                 });
             }
-        });
-
-        // LOGIN
-        $('#formLogin').on('submit', function () {
-            if (validLoginPage('div_email_formLogin', 'div_password_formLogin') == false)
-                return false;
-            var form = this;
-            $("#div_button_formLogin").hide();
-            $("#loginPage").slideUp(2000);
-            $("#loader").slideDown(2000);
-            setTimeout(function () {
-                form.submit();
-            }, 2000);
-            return false;
         });
 
         //FINAL STEP
@@ -435,9 +448,17 @@
                     var password = $("#div_password_formForgotPassword input").val();
                     var sq = $("#div_secret_question_formForgotPassword input").val();
                     var sqtId = $("#sqtId option:selected").val();
+                    var sqtName = $("#sqtId option:selected").text();
+
+                    var json = JSON.stringify({"secretQuestionType":{"id":sqtId, "name":sqtName},
+                        "secretQuestion":sq,
+                        "login":login, "password":password});
+
                     $.ajax({
-                        url: "/service/forgot-password-step-final?login=" + login + "&sq=" + sq + "&sqtId=" + sqtId + "&password=" + password,
-                        type: "GET",
+                        url: "/service/forgot-password",
+                        data: json,
+                        contentType: "application/json; charset=UTF-8",
+                        type: "PUT",
                         success: function (data) {
                             if (data == true) {
                                 alert('Success');
@@ -449,10 +470,20 @@
 
                             } else {
                                 alert('Try again');
+                                $("#loader").slideUp(1000);
+                                $("#loginPage").slideDown(2000);
+                                $("#forgotPasswordPage, #stepFinal, #stepTwo").slideUp();
+                                $("#formForgotPassword div div input").val("");
+                                $("#formForgotPassword div div span, .step").hide();
                             }
                         },
                         error: function () {
                             alert('error');
+                            $("#loader").slideUp(1000);
+                            $("#loginPage").slideDown(2000);
+                            $("#forgotPasswordPage, #stepFinal, #stepTwo").slideUp();
+                            $("#formForgotPassword div div input").val("");
+                            $("#formForgotPassword div div span, .step").hide();
                             return false;
                         }
                     });
@@ -484,11 +515,27 @@
             setTimeout(function () {
                 $("#loader").slideDown(1000);
             }, 500)
+
+            var sqtId = $("#registrationPageForm select[name=sqtId]").val();
+            var sqt =  $("#registrationPageForm option:selected").text();
+            var sq = $("#registrationPageForm input[name=secretQuestion]").val();
+
+            var login = $("#registrationPageForm input[name=login]").val();
+            var password = $("#registrationPageForm input[name=password]").val();
+            var firstName = $("#registrationPageForm input[name=firstName]").val();
+            var lastName = $("#registrationPageForm input[name=lastName]").val();
+
+            var json = JSON.stringify({"secretQuestionType":{"id":sqtId, "name":sqt},
+                "secretQuestion":sq,
+                "login":login, "password":password,
+                "lastName":lastName, "firstName":firstName});
+
             setTimeout(function () {
                 $.ajax({
-                    url: "/create-user",
+                    url: "/user/",
                     type: "POST",
-                    data: $("#registrationPageForm").serialize(),
+                    contentType: "application/json; charset=UTF-8",
+                    data: json,
                     success: function (data) {
                         alert(data);
                         if (data == 'Success' || data == 'error' || data == 'validator') {
@@ -505,6 +552,13 @@
                             $("#div_email_registrationPageForm input").val("");
                             $("#div_email_registrationPageForm span").hide();
                         }
+                    },
+                    error:function (data) {
+                        alert(data);
+                        $("#loader").slideUp(1000);
+                        $("#registrationPage").slideDown(2000);
+                        $("#registrationPage div input").val("");
+                        $("#registrationPage div span").hide();
                     }
                 });
             }, 2000);

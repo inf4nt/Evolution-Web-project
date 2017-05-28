@@ -1,32 +1,17 @@
 package evolution.controller;
 
-import evolution.common.UserRoleEnum;
 import evolution.dao.AdminDao;
 import evolution.dao.SecretQuestionTypeDao;
 import evolution.dao.UserDao;
-import evolution.model.secretQuestionType.SecretQuestionType;
 import evolution.model.user.User;
-import evolution.model.form.SecretQuestionTypeForm;
 import evolution.service.builder.PaginationService;
 import evolution.service.builder.SecretQuestionTypeBuilderService;
-import evolution.service.builder.UserBuilderService;
-import evolution.service.security.UserDetailsServiceImpl;
-import evolution.service.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
-
-
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.List;
 
 /**
  * Created by Admin on 05.03.2017.
@@ -91,10 +76,6 @@ public class AdminController {
     @Autowired
     private UserDao userDao;
     @Autowired
-    private UserBuilderService userBuilderService;
-    @Autowired
-    private Validator validator;
-    @Autowired
     private AdminDao adminDao;
     @Autowired
     private SecretQuestionTypeDao sqtDao;
@@ -102,34 +83,4 @@ public class AdminController {
     private SecretQuestionTypeBuilderService secretQuestionTypeBuilderService;
     @Autowired
     private PaginationService paginationService;
-
-
-    @RequestMapping (value = "/form-create-sqt", method = RequestMethod.GET)
-    public String formCreateSqt (Model model) {
-        model.addAttribute("form", new SecretQuestionTypeForm());
-        return "admin/form-create-sqt";
-    }
-
-    @RequestMapping (value = "/create-sqt", method = RequestMethod.POST)
-    public String createSqt (@Valid @ModelAttribute("form") SecretQuestionTypeForm form,
-                             BindingResult bindingResult, HttpServletRequest request, Model model) {
-        if (bindingResult.hasErrors())
-            return "admin/form-create-sqt";
-        SecretQuestionType secretQuestionType = secretQuestionTypeBuilderService.build(null, request);
-        try {
-            sqtDao.save(secretQuestionType);
-        } catch (DataIntegrityViolationException e) {
-            model.addAttribute("error", request.getParameter("sqt") + " is already exist");
-            return "admin/form-create-sqt";
-        }
-        model.addAttribute("error", request.getParameter("sqt") + " create successful");
-        return "admin/form-create-sqt";
-    }
-
-    @RequestMapping (value = "/form-all-sqt", method = RequestMethod.GET)
-    public String allSqt (Model model) {
-        List<SecretQuestionType> list = sqtDao.findAll();
-        model.addAttribute("list", list);
-        return "admin/form-all-sqt";
-    }
 }

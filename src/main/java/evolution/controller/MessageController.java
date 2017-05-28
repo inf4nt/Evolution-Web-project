@@ -94,35 +94,3 @@ public class MessageController {
     private UserDao userDao;
 
 }
-
-
-//    @RequestMapping(value = "/im", method = RequestMethod.GET)
-//    public String imLast(@AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-//                         Model model) {
-//        List<Message> list = messageDao.lastMessagesFromDialog (customUser.getUser().getId());
-//        model.addAttribute("list", list);
-//        return "message/dialog-message";
-//    }
-//
-//    @ResponseBody @RequestMapping(value = "/im/{authUserId}/{userId}", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)
-//    public String messageFromDialog(@AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-//                                    HttpServletRequest request,
-//                                    @PathVariable Long authUserId,
-//                                    @PathVariable Long userId) throws JsonProcessingException {
-//        if (request.isUserInRole("ROLE_ADMIN") || customUser.getUser().getId().equals(authUserId)) {
-//            List result = messageDao.findMessageByUserId(authUserId, userId);
-//            return jacksonService.objectToJson(result);
-//        } else {
-//            return null;
-//        }
-//    }
-
-
-
-
-
-
-
-
-
-

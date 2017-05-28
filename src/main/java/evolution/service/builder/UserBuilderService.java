@@ -23,15 +23,15 @@ public class UserBuilderService {
         if (newUser) {
             SecretQuestionType sqt = new SecretQuestionType();
             sqt.setId(Long.parseLong(request.getParameter("sqtId")));
-            result.setSecretQuestionType(sqt);
-            result.setSecretQuestion(request.getParameter("secretQuestion"));
+//            result.setSecretQuestionType(sqt);
+//            result.setSecretQuestion(request.getParameter("secretQuestion"));
             result.setRegistrationDate(new Date());
 
         } else {
             result.setId(authUser.getId());
             result.setRegistrationDate(authUser.getRegistrationDate());
-            result.setSecretQuestionType(authUser.getSecretQuestionType());
-            result.setSecretQuestion(authUser.getSecretQuestion());
+//            result.setSecretQuestionType(authUser.getSecretQuestionType());
+//            result.setSecretQuestion(authUser.getSecretQuestion());
         }
 
         result.setRoleId(role);
@@ -48,8 +48,8 @@ public class UserBuilderService {
         User result = new User();
         SecretQuestionType sqt = new SecretQuestionType();
         sqt.setId(Long.parseLong(request.getParameter("sqtId")));
-        result.setSecretQuestionType(sqt);
-        result.setSecretQuestion(request.getParameter("secretQuestion"));
+//        result.setSecretQuestionType(sqt);
+//        result.setSecretQuestion(request.getParameter("secretQuestion"));
         result.setRegistrationDate(new Date());
 
         result.setRoleId(UserRoleEnum.USER.getId());
@@ -72,8 +72,8 @@ public class UserBuilderService {
 
         result.setId(authUser.getId());
         result.setRegistrationDate(authUser.getRegistrationDate());
-        result.setSecretQuestionType(authUser.getSecretQuestionType());
-        result.setSecretQuestion(authUser.getSecretQuestion());
+//        result.setSecretQuestionType(authUser.getSecretQuestionType());
+//        result.setSecretQuestion(authUser.getSecretQuestion());
         result.setRoleId(authUser.getRoleId());
 
 

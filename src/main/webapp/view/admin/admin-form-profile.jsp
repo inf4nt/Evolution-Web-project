@@ -12,7 +12,7 @@
 <head>
     <title>Profile</title>
     <script src="<c:url value="/resources/js/pageJS.js" />"></script>
-    <script src="<c:url value="/resources/js/validator.js" />"></script>
+    <script src="<c:url value="/resources/js/validators.js" />"></script>
 </head>
 <body>
 <%@include file="../index/header.jsp" %>
@@ -23,6 +23,10 @@
 
             <form id="formAdminProfile">
 
+                <a href="/user/id${user.id}">
+                    <h4 class="text-center">${user.firstName} ${user.lastName}</h4>
+                </a>
+
                 <fieldset disabled>
                     <div class="form-group">
                         <label for="disabledTextInputId">Id</label>
@@ -30,13 +34,19 @@
                     </div>
                 </fieldset>
 
-                <div id="div_email_formAdminProfile" class="form-group has-feedback">
-                    <label class="control-label" >Email</label>
-                    <input type="text" onblur="loginValid('div_email_formAdminProfile')" value="${user.login}" name="login" class="form-control text-center"/>
-                    <span class="span-validator-success" aria-hidden="true" style="display: none"></span>
-                    <span class="span-validator-error" aria-hidden="true" style="display: none"></span>
-                </div>
+                <fieldset disabled>
+                    <div class="form-group">
+                        <label for="disabledTextInputEmail">Email</label>
+                        <input type="text" id="disabledTextInputEmail" class="form-control" placeholder="${user.login}">
+                    </div>
+                </fieldset>
 
+                <%--<div id="div_email_formAdminProfile" class="form-group has-feedback">--%>
+                    <%--<label class="control-label" >Email</label>--%>
+                    <%--<input type="text" onblur="loginValid('div_email_formAdminProfile')" value="${user.login}" name="login" class="form-control text-center"/>--%>
+                    <%--<span class="span-validator-success" aria-hidden="true" style="display: none"></span>--%>
+                    <%--<span class="span-validator-error" aria-hidden="true" style="display: none"></span>--%>
+                <%--</div>--%>
 
                 <div id="div_password_formAdminProfile" class="form-group has-feedback">
                     <label class="control-label">Password</label>
@@ -93,17 +103,18 @@
                     </select>
                 </div>
 
+                <%--ТУТ  МЕНЯТЬ ГОРОД И СТРАНУ, КНОПКА ОТКРОЕТ ВЫБОР--%>
                 <fieldset disabled>
                     <div class="form-group">
-                        <label for="disabledTextInputId">Secret question type</label>
-                        <input name="secretQuestionType" type="text" class="form-control" placeholder="${user.secretQuestionType.name}">
+                        <label for="disabledTextInputCountry">Country</label>
+                        <input type="text" id="disabledTextInputCountry" class="form-control" placeholder="${user.country}">
                     </div>
                 </fieldset>
 
                 <fieldset disabled>
                     <div class="form-group">
-                        <label for="disabledTextInputId">Secret question</label>
-                        <input name="secretQuestion" type="text" class="form-control" placeholder="${user.secretQuestion}">
+                        <label for="disabledTextInputState">State</label>
+                        <input type="text" id="disabledTextInputState" class="form-control" placeholder="${user.state}">
                     </div>
                 </fieldset>
 
@@ -138,8 +149,7 @@
         $(".span-validator-error").addClass("glyphicon glyphicon-remove form-control-feedback text-danger");
 
         $('#formAdminProfile').on('submit', function () {
-            if (validProfileForm('div_email_formAdminProfile',
-                    'div_password_formAdminProfile',
+            if (validProfileForm('div_password_formAdminProfile',
                     'div_password_confirm_formAdminProfile',
                     'div_first_name_formAdminProfile',
                     'div_last_name_formAdminProfile') == false)

@@ -7,6 +7,7 @@ import evolution.model.message.Dialog;
 import evolution.model.message.Message;
 import evolution.model.secretQuestionType.SecretQuestionType;
 import evolution.model.user.User;
+import evolution.model.userToken.UserToken;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -58,8 +59,6 @@ public class HibernateServiceConfig
                 .addAnnotatedClasses(Dialog.class)
                 .addAnnotatedClasses(Message.class)
                 .addAnnotatedClasses(Message.MessageDialog.class)
-
-
                 .setProperty("hibernate.show_sql", "true")
                 .setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory")
                 .setProperty("hibernate.cache.use_query_cache", "true")

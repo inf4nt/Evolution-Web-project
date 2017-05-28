@@ -70,7 +70,6 @@
 							<span class="glyphicon glyphicon-log-in"></span>
 						</a>
 					</li>
-
 				</ul>
 			</sec:authorize>
 		</div>
@@ -111,10 +110,10 @@
 						<li><a href="/admin/form-all/user/start"><span class="glyphicon glyphicon-pawn"></span> Show users</a></li>
 						<br/>
 						<li><a href="/admin/form-all/admin/start"><span class="glyphicon glyphicon-king"></span> Show admin</a></li>
-						<br/>
-						<li><a href="/user/registration"><span class="glyphicon glyphicon-check"></span> Registration</a></li>
-						<br/>
-						<li><a href="/admin/form-create-sqt" >Create secret question type</a></li>
+						<%--<br/>--%>
+						<%--<li><a href="/user/registration"><span class="glyphicon glyphicon-check"></span> Registration</a></li>--%>
+						<%--<br/>--%>
+						<%--<li><a href="/admin/form-create-sqt" >Create secret question type</a></li>--%>
 					</div>
 					<hr/>
 				</sec:authorize>

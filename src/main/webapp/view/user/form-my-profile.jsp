@@ -8,7 +8,7 @@
     <title>Profile</title>
 
     <script src="<c:url value="/resources/js/pageJS.js" />"></script>
-    <script src="<c:url value="/resources/js/validator.js" />"></script>
+    <script src="<c:url value="/resources/js/validators.js" />"></script>
 </head>
 <body>
 
@@ -28,12 +28,13 @@
                         </div>
                     </fieldset>
 
-                    <div id="div_email_registrationPageForm"  class="form-group has-feedback">
-                        <label class="control-label ">Email</label>
-                        <input value="${user.login}" autocomplete="off" type="text" onblur="loginValid('div_email_registrationPageForm')" name="login" class="form-control text-center"/>
-                        <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
-                        <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
-                    </div>
+                    <fieldset disabled>
+                        <div class="form-group">
+                            <label for="disabledTextInputEmail">Email</label>
+                            <input type="text" id="disabledTextInputEmail" class="form-control" placeholder="${user.login}">
+                        </div>
+                    </fieldset>
+
 
                     <div id="div_first_name_registrationPageForm"  class="form-group has-feedback">
                         <label class="control-label" for="firstName">First name</label>
@@ -67,24 +68,25 @@
                        onclick="showHidePassword('hrefShowHidePassword_profilePageForm',
             'div_password_registrationPageForm',
             'div_password_confirm_registrationPageForm')"
-                       href="#">Show password and confirm password</a>
+                       href="#/">Show password and confirm password</a>
 
                     <br/> <br/>
 
+                    <%--ТУТ  МЕНЯТЬ ГОРОД И СТРАНУ, КНОПКА ОТКРОЕТ ВЫБОР--%>
                     <fieldset disabled>
                         <div class="form-group">
-                            <label for="disabledTextInputId">Secret question type</label>
-                            <input name="secretQuestionType" type="text" class="form-control" placeholder="${user.secretQuestionType.name}">
+                            <label for="disabledTextInputCountry">Country</label>
+                            <input type="text" id="disabledTextInputCountry" class="form-control" placeholder="${user.country}">
                         </div>
                     </fieldset>
 
-
                     <fieldset disabled>
                         <div class="form-group">
-                            <label for="disabledTextInputId">Secret question</label>
-                            <input name="secretQuestion" type="text" class="form-control" placeholder="${user.secretQuestion}">
+                            <label for="disabledTextInputState">State</label>
+                            <input type="text" id="disabledTextInputState" class="form-control" placeholder="${user.state}">
                         </div>
                     </fieldset>
+
 
                     <hr/>
                     <div id="submit_profilePageForm" class="text-center">
@@ -109,28 +111,30 @@
         $("#div-self-profile").fadeToggle(1000);
 
         $('#profilePageForm').on('submit', function () {
-            if (validProfileForm('div_email_registrationPageForm',
-                    'div_password_registrationPageForm',
+
+            if (validProfileForm('div_password_registrationPageForm',
                     'div_password_confirm_registrationPageForm',
                     'div_first_name_registrationPageForm',
                     'div_last_name_registrationPageForm') == false)
                 return false;
 
 
-            var login = $("#profilePageForm input[name=login]").val();
             var password = $("#profilePageForm input[name=password]").val();
             var firstName = $("#profilePageForm input[name=firstName]").val();
             var lastName = $("#profilePageForm input[name=lastName]").val();
+            var json = JSON.stringify({"password":password, "firstName":firstName, "lastName":lastName});
+
 
 
             $("#submit_profilePageForm").hide();
             setTimeout(function () {
                 $.ajax({
-                    url:"/user/${user.id}",
+                    url: "/user/${user.id}",
                     type: "PUT",
-                    data:JSON.stringify({"login":login, "password":password, "firstName":firstName, "lastName":lastName}),
+                    data: json,
+                    contentType: "application/json; charset=UTF-8",
                     success: function (data) {
-                        if (data == true)
+                        if (data.info == true)
                             $("#submit_profilePageForm").slideDown(1000);
                         else {
                             alert('validator or id');
@@ -141,7 +145,8 @@
                     error:function () {
                         $("#profilePageForm div input").val("");
                         $("#profilePageForm div span").hide();
-                    }
+                    },
+                    timeout: 15000
                 });
             }, 2000);
             return false;
@@ -149,6 +154,12 @@
 
 
     })
+
+
+
+
+
+
 
 </script>
 

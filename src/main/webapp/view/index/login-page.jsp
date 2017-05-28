@@ -8,8 +8,9 @@
   <script src="<c:url value="/resources/JQuery/jquery-3.2.1.min.js" />"></script>
   <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
   <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
-  <script src="<c:url value="/resources/js/validator.js" />"></script>
+  <script src="<c:url value="/resources/js/validators.js" />"></script>
   <script src="<c:url value="/resources/js/pageJS.js" />"></script>
+  <script src="<c:url value="/resources/js/country.js" />"></script>
   <style>
     html { height: 100%; }
     body {
@@ -40,7 +41,7 @@
 
 <body>
 
-<h1 class="text-center" id="info"></h1>
+
 
 
 <div id="loader" style="display: none" class="centerLayer">
@@ -52,7 +53,7 @@
 
 <div id="firstPage">
 
-  <div id="loginPage" style="display: none;">
+  <div class="form-action" id="loginPage" style="display: none;">
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center" style="margin-top: 15%">
@@ -71,13 +72,13 @@
             <form id ="formLogin" method="POST" action="${pageContext.request.contextPath}/j_spring_security_check">
               <div id="div_email_formLogin"  class="form-group has-feedback">
                 <label class="control-label" style="color: #ffffff">Email</label>
-                <input onblur="loginValid('div_email_formLogin')" type="text" name="username" value="com.infant@gmail.com" class="form-control text-center"/>
+                <input onblur="loginValid('div_email_formLogin')" type="text" name="username"  class="form-control text-center"/>
                 <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
                 <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
               </div>
               <div id="div_password_formLogin"  class="form-group has-feedback">
                 <label class="control-label" style="color: #ffffff">Password</label>
-                <input autocomplete="off" onblur="firstPasswordValid('div_password_formLogin')" type="password" value="77788877"  name="password" class="form-control text-center"/>
+                <input autocomplete="off" onblur="firstPasswordValid('div_password_formLogin')" type="password"   name="password" class="form-control text-center"/>
                 <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
                 <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
               </div>
@@ -102,177 +103,153 @@
     </div>
   </div>
 
-  <div id="forgotPasswordPage" style="display: none;">
-    <div style="height: 150px"
+  <div class="form-action" id="forgotPasswordPage" style="display: none;">
+    <div style="height: 100px"
          class="col-lg-5 col-lg-offset-2 col-md-5 col-md-offset-1 col-sm-4 col-sm-offset-1 col-xs-5 col-xs-offset-2">
     </div>
+
     <div class="col-lg-6 col-lg-offset-3 col-md-5 col-md-offset-4 col-sm-6 col-sm-offset-4 col-xs-5 col-xs-offset-2">
 
-      <form id="formForgotPassword">
-        <div id="stepOne" class="step">
-          <h3 class="text-center">Step one</h3>
-          <hr/>
-          <div id="div_email_formForgotPassword" class="form-group has-feedback">
-            <label id="email_error" class="control-label" >Email</label>
-            <input autocomplete="off"  type="text" name="login" class="form-control text-center"/>
-            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
-            <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
+      <br/>
+      <hr/>
+      <h1 class="text-center">Forgot password</h1>
+      <hr/>
+
+      <form id="form-forgot">
+        <h4 id="info-forgot" class="text-center"></h4>
+        <div id="div-user-forgot">
+          <div id="div_email_form-user-forgot"  class="form-group has-feedback ">
+            <label class="control-label">Email:</label>
+            <input type="text" onblur="loginValid('div_email_form-user-forgot')" name="login" class="form-control text-center"/>
+            <span class="span-validator glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
+            <span class="span-validator glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
           </div>
+
           <div class="text-center">
-            <a class="okey" style="color: white; display: none" href="#"><p><span class="glyphicon glyphicon-ok"></span> Confirm value  </p></a>
-            <a class="step" id="forgotPassword_step_one" style="color: white; display: none" href="#"><p><span class="glyphicon glyphicon-share-alt"></span> Next step</p></a>
-          </div>
-        </div>
-
-        <div id="stepTwo" class="step" style="display: none">
-          <h3 class="text-center">Step two</h3>
-          <hr/>
-          <div class="form-group">
-            <label class="control-label">Secret question type</label>
-            <select id="sqtId" name="sqtId" class="form-control">
-              <option value ="1"> Your house number</option>
-            </select>
-          </div>
-
-          <div id="div_secret_question_formForgotPassword"  class="form-group has-feedback">
-            <label id="secret_question_error" class="control-label">Secret question</label>
-            <input autocomplete="off" type="text" name="secretQuestion" class="form-control text-center"/>
-            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
-            <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
-          </div>
-
-          <a id="forgotPassword_return_step_one" class="pull-left" href="#"><p><span class="glyphicon glyphicon-menu-left"></span>Return to step one</p></a>
-          <a id="forgotPassword_step_final" style="display: none" class="step pull-right" href="#"><p>  Next step<span class="glyphicon glyphicon-menu-right"></span></p></a>
-          <a style="display: none" class="okey text-center" href="#"><p><span class="glyphicon glyphicon-ok"></span> Confirm value  </p></a>
-        </div>
-
-        <div id="stepFinal" class="step" style="display: none">
-          <h3 class="text-center">Final step</h3>
-          <hr/>
-          <div id="div_password_formForgotPassword"  class="form-group has-feedback">
-            <label class="control-label" >Password</label>
-            <input autocomplete="off" onblur="firstPasswordValid('div_password_formForgotPassword')" type="password"  name="password" class="form-control text-center"/>
-            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
-            <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
-          </div>
-
-          <div id="div_password_confirm_formForgotPassword"  class="form-group has-feedback">
-            <label class="control-label" >Confirm password</label>
-            <input autocomplete="off" onblur="confirmPassword('div_password_formForgotPassword', 'div_password_confirm_formForgotPassword')" type="password" name="passwordConfirm" class="form-control text-center"/>
-            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
-            <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
-          </div>
-
-          <a id="hrefShowHidePassword"
-             onclick="showHidePassword('hrefShowHidePassword', 'div_password_formForgotPassword', 'div_password_confirm_formForgotPassword')"
-             href="#">Show password and confirm password</a>
-          <br/>
-          <br/>
-          <a class="pull-left" href="#" id="forgotPassword_return_step_two" ><p><span class="glyphicon glyphicon-menu-left"></span>Return to step two</p></a>
-          <br/>
-
-
-          <hr/>
-          <div id="div_button_formForgotPassword" >
-            <button form="formForgotPassword" class="btn btn-info center-block">
-              Confirm <span class="glyphicon glyphicon-ok"></span>
+            <button id="submit-form-forgot" name="submit-form-forgot" class="btn btn-success"
+                    style="width: 100%">
+              Next step <span class="glyphicon glyphicon-check"/>
             </button>
           </div>
         </div>
-
       </form>
+
     </div>
 
-    <div style="height: 150px"
+
+    <div id="div-returnToLogin" style="height: 150px"
          class="col-lg-4 col-lg-offset-4 col-md-5 col-md-offset-1 col-sm-4 col-sm-offset-1 col-xs-5 col-xs-offset-2">
-      <a id="returnToLogin" style="color: #fbfff9" href="#"><h1 class="text-center"><span class="glyphicon glyphicon-share"></span> Return to login</h1></a>
+      <a name="return-login" style="color: #fbfff9;" href="#/">
+        <h1 class="text-center">
+          <div id="div-return-login-br" style="display: none">
+            <br/><br/><br/><br/>
+          </div>
+          <span class="glyphicon glyphicon-share"></span>
+          Return to login
+        </h1>
+      </a>
     </div>
 
   </div>
 
-  <div id="registrationPage" style="display: none">
-    <div class="col-lg-10 col-lg-offset-1 wordwrap">
+  <div class="form-action" id="registrationPage" style="display: none">
+    <div class="col-lg-6 col-lg-offset-3 col-md-5 col-md-offset-4 col-sm-6 col-sm-offset-4 col-xs-5 col-xs-offset-2">
 
-      <div class="col-lg-6 col-lg-offset-3">
         <br/>
         <hr/>
         <h1 class="text-center">Registration</h1>
         <hr/>
-        <form id="registrationPageForm" class="text text-center">
 
-          <div id="div_email_registrationPageForm"  class="form-group has-feedback">
-            <label class="control-label ">Email</label>
-            <input type="text" onblur="loginValid('div_email_registrationPageForm')" name="login" class="form-control text-center"/>
-            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
-            <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
+        <form id="form-user-data">
+
+          <h4 id="info" class="text-center"></h4>
+
+          <div id="div-first-user-data">
+            <div id="div_email_form-user-data"  class="form-group has-feedback ">
+              <label class="control-label">Email:</label>
+              <input type="text" onblur="loginValid('div_email_form-user-data')" name="login" class="form-control text-center"/>
+              <span class="span-validator glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
+              <span class="span-validator glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
+            </div>
+
+            <div class="text-center">
+              <button name="submit-first-user-data" class="btn btn-success"
+                      style="width: 100%">
+                Next step <span class="glyphicon glyphicon-check"/>
+              </button>
+            </div>
           </div>
 
-          <div id="div_password_registrationPageForm"  class="form-group has-feedback">
-            <label class="control-label" >Password</label>
-            <input autocomplete="off"  onblur="firstPasswordValid('div_password_registrationPageForm')" type="password"  name="password" class="form-control text-center"/>
-            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
-            <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
+          <div  id="div-second-user-data" style="display: none;">
+
+            <div id="div_password_form-user-data"  class="form-group has-feedback">
+              <label class="control-label" >Password</label>
+              <input onblur="firstPasswordValid('div_password_form-user-data')" type="password"  name="password" class="form-control text-center"/>
+              <span class="span-validator glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
+              <span class="span-validator glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
+            </div>
+
+
+            <div id="div_password_confirm_form-user-data"  class="form-group has-feedback">
+              <label class="control-label" >Confirm password</label>
+              <input onblur="confirmPassword('div_password_form-user-data', 'div_password_confirm_form-user-data')"  type="password" name="passwordConfirm" class="form-control text-center"/>
+              <span class="span-validator glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
+              <span class="span-validator glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
+
+            </div>
+            <a id ="hrefShowHidePassword_form-user-data"
+               onclick="showHidePassword('hrefShowHidePassword_form-user-data',
+                          'div_password_form-user-data',
+                          'div_password_confirm_form-user-data')"
+               href="#/">Show password and confirm password</a>
+
+            <br/><br/>
+
+            <div id="div_first_name_form-user-data"  class="form-group has-feedback">
+              <label class="control-label" for="firstName">First name</label>
+              <input onblur="firstNameValid('div_first_name_form-user-data')" id="firstName" type="text"  name="firstName" class="form-control text-center"/>
+              <span class="span-validator glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
+              <span class="span-validator glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
+            </div>
+
+            <div id="div_last_name_form-user-data"  class="form-group has-feedback">
+              <label class="control-label">Last name</label>
+              <input onblur="lastNameValid('div_last_name_form-user-data')" type="text"  name="lastName" class="form-control text-center"/>
+              <span class="span-validator glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
+              <span class="span-validator glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
+            </div>
+
+            <div id="country-city">
+              <label class="control-label">Country</label>
+              <select class="form-control" id="country" name="country"></select>
+              <br/>
+              <label class="control-label">State</label>
+              <select class="form-control" name="state" id="state"></select>
+            </div>
+
+            <br/><br/>
+            <div class="text-center">
+              <button name="submit-user-email" class="btn btn-success"
+                      style="width: 100%">
+                Registration <span class="glyphicon glyphicon-check"/>
+              </button>
+            </div>
+
           </div>
 
-          <div id="div_password_confirm_registrationPageForm"  class="form-group has-feedback">
-            <label class="control-label" >Confirm password</label>
-            <input autocomplete="off"  onblur="confirmPassword('div_password_registrationPageForm', 'div_password_confirm_registrationPageForm')"  type="password" name="passwordConfirm" class="form-control text-center"/>
-            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
-            <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
-
-          </div>
-          <a id ="hrefShowHidePassword_registrationPageForm"
-             onclick="showHidePassword('hrefShowHidePassword_registrationPageForm',
-                        'div_password_registrationPageForm',
-                        'div_password_confirm_registrationPageForm')"
-             href="#">Show password and confirm password</a>
-          <br/>
-          <br/>
-
-          <div id="div_first_name_registrationPageForm"  class="form-group has-feedback">
-            <label class="control-label" for="firstName">First name</label>
-            <input autocomplete="off"  onblur="firstNameValid('div_first_name_registrationPageForm')" id="firstName" type="text"  name="firstName" class="form-control text-center"/>
-            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
-            <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
-          </div>
-
-          <div id="div_last_name_registrationPageForm"  class="form-group has-feedback">
-            <label class="control-label">Last name</label>
-            <input autocomplete="off"  onblur="lastNameValid('div_last_name_registrationPageForm')" type="text" name="lastName" class="form-control text-center"/>
-            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
-            <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
-          </div>
-
-          <div class="form-group">
-            <label class="control-label">Secret question type</label>
-            <select name="sqtId" class="form-control">
-              <option value ="1"> Your house number</option>
-            </select>
-          </div>
-
-          <div id="div_secret_question_registrationPageForm"  class="form-group has-feedback">
-            <label class="control-label" >Secret question</label>
-            <input autocomplete="off"  onblur="sqValid('div_secret_question_registrationPageForm')" name="secretQuestion" type="text" class="form-control text-center"/>
-            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
-            <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
-          </div>
-
-          <br/>
-          <div class="text-center">
-            <button class="btn btn-success"
-                    style="width: 100%">
-              Registration <span class="glyphicon glyphicon-check"/>
-            </button>
-          </div>
         </form>
 
-        <a onclick="returnToLogin_registrationPageForm()" href="#">
+      <div id="return-login-registrationPage">
+        <a name="return-login" href="#/">
           <h1 class="text-center"><span class="glyphicon glyphicon-share"></span> Return to login</h1>
         </a>
+      </div>
+
 
       </div>
     </div>
-  </div>
+
+</div>
 
   <address style="color: white" class="down">
     <strong>Evolution</strong><br>
@@ -286,12 +263,59 @@
 
 <script>
 
-    function returnToLogin_registrationPageForm() {
-        $('#registrationPage').slideUp(1000);
-        $("#loginPage").slideDown(2000);
-        $("#registrationPageForm div input").val("");
-        $("#registrationPageForm div span").hide();
-    }
+    $(document).ready(function () {
+        $("#form-forgot button[name=submit-form-forgot]").click(function () {
+            if (loginValid('div_email_form-user-forgot') == false)
+                return false;
+            var login = $("#form-forgot input[name=login]").val();
+            var json = JSON.stringify({"login":login});
+
+            $("#form-forgot").hide();
+            $("#loader, #div-return-login-br").fadeToggle("slow");
+
+
+            setTimeout(function () {
+                $.ajax({
+                    url: "/service/user-action/createForgotToken",
+                    type: "POST",
+                    data: json,
+                    contentType: "application/json; charset=UTF-8",
+                    success: function (response) {
+                        if (response.info == false) {
+                            $("#info-forgot").html("User not found").delay(3000).fadeToggle("slow");
+                            complete();
+                        }
+                        if (response.info == true) {
+                            $("#info-forgot").html(response.message).delay(3000).fadeToggle("slow");
+                            complete();
+                        }
+                    },
+                    error: function () {
+                        $("#info-forgot").html("Sorry, server is not responded").delay(3000).fadeToggle("slow");
+                        complete();
+                    },
+                    timeout: 15000
+                })
+            }, 1500)
+
+            function complete() {
+                $("#loader, #div-return-login-br, .span-validator").hide();
+                $("#form-forgot").fadeToggle("slow");
+                $("#form-forgot input[name=login]").val("");
+            }
+
+            return false;
+        })
+    })
+
+    $(document).ready(function () {
+        $("#firstPage a[name=return-login]").click(function () {
+            $(".form-action, #div-return-login-br, #loader, .span-validator-danger, .span-validator-success").hide();
+            $("#loginPage").fadeToggle("slow");
+            $(".form-action :input").val("");
+        })
+    })
+
 
     function getRegistrationPage() {
         $('#registrationPage').slideDown(2000);
@@ -299,50 +323,24 @@
     }
 
     function getForgotPage() {
+      $("#form-forgot").show();
+      $("#div-return-login-br, .span-validator").hide();
+      $("#form-forgot :input").val();
       $("#loginPage").slideUp(1000);
-      $("#forgotPasswordPage, #stepOne").slideDown(2000);
-      $("#stepFinal, #stepTwo").hide();
+      $("#forgotPasswordPage").slideDown(2000);
     }
 
 
     $(document).ready(function () {
-
-        $("#forgotPassword_return_step_one").click(function () {
-            $("#stepTwo").slideUp(1000);
-            $("#stepOne").slideDown(2000);
-        });
-
-        $("#forgotPassword_return_step_two").click(function () {
-            $("#stepFinal").slideUp(1000);
-            $("#stepTwo").slideDown(2000);
-        });
-
-        $("#forgotPassword_step_one").click(function () {
-            $("#stepOne").slideUp(1000);
-            $("#stepTwo").slideDown(2000);
-        });
-
-        $("#forgotPassword_step_final").click(function () {
-            $("#stepTwo").slideUp(1000);
-            $("#stepFinal").slideDown(2000);
-        });
 
         $("#returnToLogin").click(function () {
             $("#forgotPasswordPage").slideUp(1000);
             $("#loginPage").slideDown(2000);
         });
 
-        $("#formForgotPassword div div input").focus(function () {
-            $(".okey").show();
-        });
-
-        $("#formForgotPassword div div input").blur(function () {
-            $(".okey").hide();
-        });
-
         $("#loginPage").slideDown(1000);
 
-        $("label, a, h3, h1").css("color", "#fbfff9");
+        $("label, a, h3, h1, h4").css("color", "#fbfff9");
 
         // LOGIN
         $('#formLogin').on('submit', function () {
@@ -358,214 +356,120 @@
             return false;
         });
 
-        // forgot step one
-        $("#div_email_formForgotPassword input").blur(function () {
-            if (loginValid('div_email_formForgotPassword') == false) {
-                $("#div_email_formForgotPassword label").html('Email: Pattern error');
-                $("#forgotPassword_step_one").hide();
-            } else {
-                var login = $("#formForgotPassword input[name=login]").val();
+
+
+        $("#div-first-user-data button[name=submit-first-user-data]").click(function () {
+            if (loginValid('div_email_form-user-data') == false)
+                return false;
+
+            $("#div-first-user-data, #return-login-registrationPage").hide();
+            $("#loader").fadeToggle("slow");
+            $("#info").html("");
+
+////             ТУТ АЯКСОМ ПРОВЕРИМ СВОБОДЕН ЛИ
+            setTimeout(function () {
+                var login = $("#form-user-data input[name=login]").val();
                 var json = JSON.stringify({"login":login});
+
                 $.ajax({
-                    url: "/service/forgot-password/one?json="+json,
-                    type: "GET",
+                    url: "/service/user-action/check",
+                    type:"POST",
+                    data:json,
                     contentType: "application/json; charset=UTF-8",
-                    beforeSend: function () {
-                        $("#stepOne").hide();
-                        $("#loader").show();
-                    },
-                    success: function (data) {
-                        $("#stepOne").show();
-                        $("#loader").hide();
-                        if (data == true) {
-                            $("#div_email_formForgotPassword label").html('Email: Success');
-                            $("#forgotPassword_step_one").show();
-                        } else {
-                            $("#div_email_formForgotPassword label").html('Email: This email not found');
-                            $("#forgotPassword_step_one").hide();
+                    success:function (dataJson) {
+                        if (dataJson.info == true) {
+                            $("#loader").hide();
+                            $("#div-first-user-data, #return-login-registrationPage").fadeToggle("slow");
+                            $("#info").html("This user " + login + " is exist").delay(3000).fadeToggle("slow");
+                            $("#form-user-data input[name=login]").val("");
+                            $("#div_email_form-user-data span").hide();
+                            return false;
+                        }
+                        if (dataJson.info == false) {
+                            // ТУТ ОТКРЫВАЕМ СЛЕД ФОРМУ
+                            $("#loader").hide();
+                            $("#div-second-user-data, #return-login-registrationPage").fadeToggle("slow");
                         }
                     },
                     error:function () {
+                        alert('Sorry, server is not responded');
                         $("#loader").hide();
-                        $("#stepOne").show();
-                    }
-                });
-            }
-        });
-
-        // FORGOT STEP TWO
-        $("#div_secret_question_formForgotPassword input").blur(function () {
-            if (sqValid('div_secret_question_formForgotPassword') == false) {
-                $("#div_secret_question_formForgotPassword label").html('Secret question: Pattern error');
-                $("#forgotPassword_step_final").hide();
-            } else {
-                var login = $("#formForgotPassword input[name=login]").val();
-                var sq = $("#formForgotPassword input[name=secretQuestion]").val();
-                var sqtId = $("#formForgotPassword select[name=sqtId]").val();
-
-                var json = JSON.stringify({"secretQuestionType":{"id":sqtId},
-                    "secretQuestion":sq,
-                    "login":login});
-
-                $.ajax({
-                    url:"/service/forgot-password/two?json="+json,
-                    type: "GET",
-                    contentType: "application/json; charset=UTF-8",
-                    beforeSend: function () {
-                        $("#stepTwo").hide();
-                        $("#loader").show();
+                        $("#div-second-user-data").hide();
+                        $("#div-first-user-data, #return-login-registrationPage").fadeToggle("slow");
                     },
-                    success: function (data) {
-                        $("#stepTwo").show();
-                        $("#loader").hide();
-                        if (data == true) {
-                            $("#div_secret_question_formForgotPassword label").html('Secret question: Success');
-                            $("#forgotPassword_step_final").show();
-                        } else {
-                            $("#div_secret_question_formForgotPassword label").html('Secret question: Sorry, the parameters do not match');
-                            $("#forgotPassword_step_final").hide();
-                        }
-                    }
-                });
-            }
-        });
+                    timeout: 15000
+                })
 
-        //FINAL STEP
-        $("#formForgotPassword").on("submit", function () {
-            var p = firstPasswordValid('div_password_formForgotPassword');
-            var c = confirmPassword('div_password_formForgotPassword', 'div_password_confirm_formForgotPassword');
-            if (c == true && p == true) {
-                $("#div_password_formForgotPassword label").html("Password:");
-                $("#div_password_confirm_formForgotPassword label").html("Confirm password:");
+            },1500)
 
-                $("#forgotPasswordPage").slideUp(2000);
-                setTimeout(function () {
-                    $("#loader").slideDown(2000);
-                }, 500)
-
-                setTimeout(function () {
-                    var login = $("#div_email_formForgotPassword input").val();
-                    var password = $("#div_password_formForgotPassword input").val();
-                    var sq = $("#div_secret_question_formForgotPassword input").val();
-                    var sqtId = $("#sqtId option:selected").val();
-                    var sqtName = $("#sqtId option:selected").text();
-
-                    var json = JSON.stringify({"secretQuestionType":{"id":sqtId, "name":sqtName},
-                        "secretQuestion":sq,
-                        "login":login, "password":password});
-
-                    $.ajax({
-                        url: "/service/forgot-password",
-                        data: json,
-                        contentType: "application/json; charset=UTF-8",
-                        type: "PUT",
-                        success: function (data) {
-                            if (data == true) {
-                                alert('Success');
-                                $("#loader").slideUp(1000);
-                                $("#loginPage").slideDown(2000);
-                                $("#forgotPasswordPage, #stepFinal, #stepTwo").slideUp();
-                                $("#formForgotPassword div div input").val("");
-                                $("#formForgotPassword div div span, .step").hide();
-
-                            } else {
-                                alert('Try again');
-                                $("#loader").slideUp(1000);
-                                $("#loginPage").slideDown(2000);
-                                $("#forgotPasswordPage, #stepFinal, #stepTwo").slideUp();
-                                $("#formForgotPassword div div input").val("");
-                                $("#formForgotPassword div div span, .step").hide();
-                            }
-                        },
-                        error: function () {
-                            alert('error');
-                            $("#loader").slideUp(1000);
-                            $("#loginPage").slideDown(2000);
-                            $("#forgotPasswordPage, #stepFinal, #stepTwo").slideUp();
-                            $("#formForgotPassword div div input").val("");
-                            $("#formForgotPassword div div span, .step").hide();
-                            return false;
-                        }
-                    });
-                }, 2000)
-            }
-            else {
-                if (p == false)
-                    $("#div_password_formForgotPassword label").html("Password: Pattern error");
-                else
-                    $("#div_password_formForgotPassword label").html("Password");
-                if (c == false)
-                    $("#div_password_confirm_formForgotPassword label").html("Confirm password: Password and confirm password not equals");
-                else
-                    $("#div_password_confirm_formForgotPassword label").html("Confirm password");
-            }
             return false;
         })
 
-        // REGISTRATION
-        $('#registrationPageForm').on('submit', function () {
-            var check = validRegistrationForm('div_email_registrationPageForm',
-                'div_password_registrationPageForm',
-                'div_password_confirm_registrationPageForm',
-                'div_first_name_registrationPageForm',
-                'div_last_name_registrationPageForm', 'div_secret_question_registrationPageForm');
-            if (check == false)
+        $("#form-user-data button[name=submit-user-email]").click(function () {
+            var valid = validProfileForm('div_password_form-user-data',
+                'div_password_confirm_form-user-data',
+                'div_first_name_form-user-data',
+                'div_last_name_form-user-data')
+            if (valid == false)
                 return false;
-            $("#registrationPage").slideUp(1000);
-            setTimeout(function () {
-                $("#loader").slideDown(1000);
-            }, 500)
 
-            var sqtId = $("#registrationPageForm select[name=sqtId]").val();
-            var sqt =  $("#registrationPageForm option:selected").text();
-            var sq = $("#registrationPageForm input[name=secretQuestion]").val();
 
-            var login = $("#registrationPageForm input[name=login]").val();
-            var password = $("#registrationPageForm input[name=password]").val();
-            var firstName = $("#registrationPageForm input[name=firstName]").val();
-            var lastName = $("#registrationPageForm input[name=lastName]").val();
+            var login = $("#form-user-data input[name=login]").val();
+            var password = $("#form-user-data input[name=password]").val();
+            var firstName = $("#form-user-data input[name=firstName]").val();
+            var lastName = $("#form-user-data input[name=lastName]").val();
 
-            var json = JSON.stringify({"secretQuestionType":{"id":sqtId, "name":sqt},
-                "secretQuestion":sq,
-                "login":login, "password":password,
-                "lastName":lastName, "firstName":firstName});
+
+            // ТУТ СОБЕРУ ГДЕ ОН ЖИВЕТ
+            var countryCheck = $("#country").val();
+            var stateCheck = $("#state").val();
+            var country; var state;
+            if (stateCheck != null && stateCheck.length > 0)
+                state = stateCheck;
+            if (countryCheck != -1)
+                country = countryCheck;
+
+            var json = JSON.stringify({"login":login, "password":password,
+                "firstName":firstName, "lastName":lastName,
+                "country":country, "state":state});
+
+            $("#div-second-user-data, #return-login-registrationPage").hide();
+            $("#loader").fadeToggle("slow");
+            $("#info").html("");
 
             setTimeout(function () {
                 $.ajax({
-                    url: "/user/",
+                    url: "/service/user-action/createRegistrationToken",
                     type: "POST",
-                    contentType: "application/json; charset=UTF-8",
                     data: json,
-                    success: function (data) {
-                        alert(data);
-                        if (data == 'Success' || data == 'error' || data == 'validator') {
-                            $("#loader").slideUp(1000);
-                            $("#loginPage").slideDown(1000);
-                            $("#registrationPage div input").val("");
-                            $("#registrationPage div span").hide();
-                        }
-                        else {
-                            $("#loader").slideUp(1000);
-                            setTimeout(function () {
-                                $("#registrationPage").slideDown(1000);
-                            }, 500)
-                            $("#div_email_registrationPageForm input").val("");
-                            $("#div_email_registrationPageForm span").hide();
-                        }
+                    contentType: "application/json; charset=UTF-8",
+                    success:function (data) {
+                        $("#info").html(data.message).delay(5000).fadeToggle("slow");
+                        $("#form-user-data :input").val("");
+                        $("#loader, #div-second-user-data, #div_email_form-user-data span, #div-second-user-data div span").hide();
+                        $("#div-first-user-data, #return-login-registrationPage").fadeToggle("slow");
                     },
-                    error:function (data) {
-                        alert(data);
-                        $("#loader").slideUp(1000);
-                        $("#registrationPage").slideDown(2000);
-                        $("#registrationPage div input").val("");
-                        $("#registrationPage div span").hide();
-                    }
-                });
-            }, 2000);
+                    error:function () {
+                        alert('Sorry, server is not responded');
+                        $("#loader, #div-first-user-data").hide();
+                        $("#div-second-user-data, #return-login-registrationPage").fadeToggle("slow");
+                    },
+                    timeout: 15000
+                })
+            }, 1000);
+
             return false;
-        });
+
+        })
+
+        populateCountries("country", "state");
+        populateCountries("country2");
     })
 
+
 </script>
+
+
+
 </body>
 </html>

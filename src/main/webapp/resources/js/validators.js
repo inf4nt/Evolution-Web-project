@@ -1,18 +1,4 @@
-/**
- * Created by Admin on 13.05.2017.
- */
 
-function validRegistrationForm(divLogin, divPassword, divConfirmPassword, divFirstName, divLastName,divSq) {
-    if (loginValid(divLogin) == false ||
-        firstPasswordValid(divPassword) == false ||
-        confirmPassword(divPassword, divConfirmPassword) == false ||
-        firstNameValid(divFirstName) == false ||
-        lastNameValid(divLastName) == false ||
-        sqValid(divSq) == false)
-        return false;
-    else
-        return true;
-}
 
 function validLoginPage(divEmail, divPassword) {
     if (loginValid(divEmail) === false ||
@@ -21,10 +7,11 @@ function validLoginPage(divEmail, divPassword) {
     return true;
 }
 
-function sqValid(divSq) {
-    var pattern = /^[a-zA-Z0-9-/]{1,32}$/;
-    return testPattern(divSq, pattern);
+function loginValid(divEmail) {
+    var emailPattern = /^[a-zA-Z0-9._-]{1,40}@[a-zA-Z0-9.-]{1,40}\.[a-zA-Z]{2,6}$/;
+    return testPattern(divEmail, emailPattern);
 }
+
 
 function error(error, divId) {
     if (error == true) {
@@ -34,11 +21,6 @@ function error(error, divId) {
         $("#" + divId + " input").next().show();
         $("#" + divId + " span:last-child").hide();
     }
-}
-
-function loginValid(divEmail) {
-    var emailPattern = /^[a-zA-Z0-9._-]{1,40}@[a-zA-Z0-9.-]{1,40}\.[a-zA-Z]{2,6}$/;
-    return testPattern(divEmail, emailPattern);
 }
 
 function firstPasswordValid(divPassword) {
@@ -86,9 +68,8 @@ function lastNameValid(divLastName) {
     return firstNameValid(divLastName);
 }
 
-function validProfileForm(divLogin, divPassword, divConfirmPassword, divFirstName, divLastName) {
-    if (loginValid(divLogin) == false ||
-        firstPasswordValid(divPassword) == false ||
+function validProfileForm(divPassword, divConfirmPassword, divFirstName, divLastName) {
+    if (firstPasswordValid(divPassword) == false ||
         confirmPassword(divPassword, divConfirmPassword) == false ||
         firstNameValid(divFirstName) == false ||
         lastNameValid(divLastName) == false)

@@ -12,22 +12,19 @@ import evolution.model.friend.Friends;
 import evolution.model.user.User;
 import evolution.service.MyJacksonService;
 import evolution.service.SearchService;
-import evolution.service.builder.PaginationService;
-import evolution.service.builder.UserBuilderService;
+import evolution.service.builder.JsonInformationBuilder;
 import evolution.service.security.UserDetailsServiceImpl;
 import evolution.service.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Date;
 
 
 /**
@@ -35,7 +32,7 @@ import java.util.Date;
  */
 @Controller
 @RequestMapping ("/user")
-@SessionAttributes(value = {"role", "productList", "sqt", "user"})
+@SessionAttributes(value = {"role", "productList", "user"})
 public class UserController {
 
     @RequestMapping (value = "/id{id}", method = RequestMethod.GET)
@@ -61,8 +58,8 @@ public class UserController {
     }
 
     // EDIT
-    @ResponseBody @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public boolean edit(@RequestBody String json,
+    @ResponseBody @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces={"application/json; charset=UTF-8"})
+    public String edit(@RequestBody String json,
                         @PathVariable Long id,
                         @SessionAttribute User user,
                         @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
@@ -72,55 +69,44 @@ public class UserController {
         // self update
         if (customUser.getUser().getId().equals(id)) {
             userRequest.setId(customUser.getUser().getId());
-            userRequest.setSecretQuestionType(customUser.getUser().getSecretQuestionType());
-            userRequest.setSecretQuestion(customUser.getUser().getSecretQuestion());
+            userRequest.setLogin(customUser.getUser().getLogin());
             userRequest.setRegistrationDate(customUser.getUser().getRegistrationDate());
             userRequest.setRoleId(customUser.getUser().getRoleId());
         }
         //other update
         else if (request.isUserInRole("ROLE_ADMIN")) {
             userRequest.setId(user.getId());
-            userRequest.setSecretQuestionType(user.getSecretQuestionType());
-            userRequest.setSecretQuestion(user.getSecretQuestion());
             userRequest.setRegistrationDate(user.getRegistrationDate());
 
-        } else
-            return false;
+            // МОЖНО БУДЕТ МЕНЯТЬ И ОТПРАВИТЬ ПИСЬМО О СМЕНЕ ПОЧТЫ
+            userRequest.setLogin(user.getLogin());
+        }
 
         if (validator.userValidator(userRequest)) {
             userDao.update(userRequest);
             if (customUser.getUser().getId().equals(id))
                 customUser.getUser().updateFields(userRequest);
-            return true;
+            return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), null, true);
         }
 
-        return false;
+        return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), null, false);
     }
 
-    //REGISTRATION USER
-    @ResponseBody @RequestMapping(value = "/", method = RequestMethod.POST)
-    public String userPOST(@RequestBody String json, HttpServletRequest request) throws IOException {
+
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    public void userPut(@RequestBody String json) throws IOException {
         User user = (User) jacksonService.jsonToObject(json, User.class);
-
-        user.setRegistrationDate(new Date());
-
-        if (request.isUserInRole("ROLE_ADMIN")) {
-            user.setRoleId(UserRoleEnum.valueOf(request.getParameter("role")).getId());
-        } else {
-            user.setRoleId(UserRoleEnum.USER.getId());
-        }
-
-        if (validator.userValidator(user)){
-            try {
-                userDao.findByLogin(user.getLogin());
-                return "This user " + user.getLogin() + " is exist";
-            }catch (NoResultException e){}
-            userDao.save(user);
-            return "Success";
-        } else {
-            return "validator";
-        }
+        userDao.update(user);
     }
+
+
+
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public void userPost(@RequestBody String json) throws IOException {
+        User user = (User) jacksonService.jsonToObject(json, User.class);
+        userDao.save(user);
+    }
+
 
     // DELETE
     @ResponseBody @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -168,6 +154,8 @@ public class UserController {
     }
 
 
+    @Autowired
+    private JsonInformationBuilder jsonInformationBuilder;
     @Autowired
     private UserDao userDao;
     @Autowired

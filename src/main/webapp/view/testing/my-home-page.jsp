@@ -22,7 +22,7 @@
     <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/my_css/my_css.css" />" rel="stylesheet">
     <script src="<c:url value="/resources/js/pageJS.js" />"></script>
-    <script src="<c:url value="/resources/js/validator.js" />"></script>
+    <script src="<c:url value="/resources/js/validators.js" />"></script>
     <c:set value="${authUser}" var="user"/>
 </head>
 <body>

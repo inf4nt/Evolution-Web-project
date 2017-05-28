@@ -32,6 +32,15 @@ public class User extends UserDefaultData{
         this.lastName = lastName;
     }
 
+    public User (String login, String password, String firstName, String lastName) {
+        this.login = login;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+
+
     @JsonIgnore
     public void updateFields(User user) {
         this.id = user.id;
@@ -39,8 +48,6 @@ public class User extends UserDefaultData{
         this.password = user.password;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
-        this.secretQuestionType = user.secretQuestionType;
-        this.secretQuestion = user.secretQuestion;
         this.roleId = user.roleId;
         this.registrationDate = user.registrationDate;
     }
@@ -61,13 +68,10 @@ public class User extends UserDefaultData{
         return DateFormat.getInstance().format(registrationDate);
     }
 
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "secret_question_type_id")
+    @Column
     @JsonProperty
-    private SecretQuestionType secretQuestionType;
-
-    @Column(name = "secret_question")
+    private String country;
+    @Column
     @JsonProperty
-    private String secretQuestion;
+    private String state;
 }

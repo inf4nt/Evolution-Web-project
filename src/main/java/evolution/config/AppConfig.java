@@ -10,6 +10,8 @@ import org.springframework.context.annotation.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -21,6 +23,7 @@ import org.springframework.web.servlet.view.JstlView;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 
 @Configuration
@@ -54,4 +57,25 @@ public class AppConfig
         mapper.registerModule(hbm);
         return mapper;
     }
+
+
+    @Bean
+    public JavaMailSender javaMailSender() {
+        Properties mailProperties = new Properties();
+        mailProperties.put("mail.smtp.auth", "true");
+        mailProperties.put("mail.smtp.starttls.enable", "true");
+        mailProperties.put("mail.debug", "true");
+
+        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+        javaMailSender.setHost("smtp.gmail.com");
+        javaMailSender.setPort(587);
+        javaMailSender.setUsername("notification.evolution@gmail.com");
+        javaMailSender.setPassword("77788877");
+        javaMailSender.setProtocol("smtp");
+        javaMailSender.setJavaMailProperties(mailProperties);
+
+        return javaMailSender;
+    }
+
+
 }
