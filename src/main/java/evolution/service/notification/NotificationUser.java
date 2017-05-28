@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 public class NotificationUser {
 
     public void sendTokenUserRegistration(UserToken userToken) {
-        String tokenRegistrationUrl = "http://localhost:8585/service/user-registration/" + userToken.getToken();
+//        String tokenRegistrationUrl = "http://localhost:8585/service/user-registration/" + userToken.getToken();
+        String tokenRegistrationUrl = "https://evolution-web.herokuapp.com/service/user-registration/" + userToken.getToken();
         subject = "Registration on the site evolution-web.herokuapp.com";
         message = "<html>" +
                 "\n<img src=\"" + pathLogo + "\"/>" +
@@ -39,7 +40,8 @@ public class NotificationUser {
 
 
     public void forgotPassword(UserToken userToken) {
-        String tokenForgotUrl = "http://localhost:8585/service/user-forgot/" + userToken.getToken();
+//        String tokenForgotUrl = "http://localhost:8585/service/user-forgot/" + userToken.getToken();
+        String tokenForgotUrl = "https://evolution-web.herokuapp.com/service/user-forgot/" + userToken.getToken();
         subject = "Forgot password on the site evolution-web.herokuapp.com";
         message = "<html>" +
                 "\n<img src=\"" + pathLogo + "\"/>" +
