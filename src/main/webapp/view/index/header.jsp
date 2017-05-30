@@ -36,8 +36,8 @@
 
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							${authUser.login.substring(0, 20)}
+						<a href="#/" class="dropdown-toggle" data-toggle="dropdown">
+							${authUser.login}
 							<span class="glyphicon glyphicon-log-out"></span>
 						</a>
 						<ul class="dropdown-menu">

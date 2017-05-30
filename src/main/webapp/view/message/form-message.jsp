@@ -117,6 +117,7 @@
             }
             $("#scroll #tbodyMessage")
                 .html(result);
+            $("a").css("color", "white");
         }
     }
 
