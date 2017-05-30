@@ -5,7 +5,6 @@ package evolution.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import evolution.common.UserRoleEnum;
 import evolution.dao.FriendsDao;
 import evolution.dao.UserDao;
 import evolution.model.friend.Friends;
@@ -99,14 +98,11 @@ public class UserController {
         userDao.update(user);
     }
 
-
-
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public void userPost(@RequestBody String json) throws IOException {
         User user = (User) jacksonService.jsonToObject(json, User.class);
         userDao.save(user);
     }
-
 
     // DELETE
     @ResponseBody @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -139,7 +135,7 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String adminFormRegistration() {
-        return "admin/form-create-user";
+        return "testing/form-create-user";
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)

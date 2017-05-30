@@ -9,7 +9,7 @@
   <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
   <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
   <script src="<c:url value="/resources/js/validators.js" />"></script>
-  <script src="<c:url value="/resources/js/pageJS.js" />"></script>
+  <script src="<c:url value="/resources/js/other-js.js" />"></script>
   <script src="<c:url value="/resources/js/country.js" />"></script>
   <style>
     html { height: 100%; }
@@ -79,8 +79,8 @@
               <div id="div_password_formLogin"  class="form-group has-feedback">
                 <label class="control-label" style="color: #ffffff">Password</label>
                 <input autocomplete="off" onblur="firstPasswordValid('div_password_formLogin')" type="password"   name="password" class="form-control text-center"/>
-                <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
-                <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
+                <span class="span-validator glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
+                <span class="span-validator glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
               </div>
               <div class="form-group text-center">
                 <td><a onclick="getForgotPage()" style="color: #fbfff9" href="#">Forgot password</a></td>
@@ -180,7 +180,7 @@
             </div>
           </div>
 
-          <div  id="div-second-user-data" style="display: none;">
+          <div id="div-second-user-data" style="display: none;">
 
             <div id="div_password_form-user-data"  class="form-group has-feedback">
               <label class="control-label" >Password</label>
@@ -239,7 +239,7 @@
 
         </form>
 
-      <div id="return-login-registrationPage">
+      <div>
         <a name="return-login" href="#/">
           <h1 class="text-center"><span class="glyphicon glyphicon-share"></span> Return to login</h1>
         </a>
@@ -248,6 +248,7 @@
 
       </div>
     </div>
+
 
 </div>
 
@@ -310,16 +311,18 @@
 
     $(document).ready(function () {
         $("#firstPage a[name=return-login]").click(function () {
-            $(".form-action, #div-return-login-br, #loader, .span-validator-danger, .span-validator-success").hide();
-            $("#loginPage").fadeToggle("slow");
+            $(".form-action, #div-return-login-br, #loader, .span-validator, #div-second-user-data").hide();
             $(".form-action :input").val("");
+            $("#loginPage").fadeToggle("slow");
         })
     })
 
 
     function getRegistrationPage() {
-        $('#registrationPage').slideDown(2000);
+        $(".form :input").val("");
+        $('#registrationPage, #div-first-user-data').slideDown(2000);
         $("#loginPage").slideUp(1000);
+        $("#div-second-user-data, .span-validator").hide();
     }
 
     function getForgotPage() {

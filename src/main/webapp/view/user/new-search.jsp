@@ -16,10 +16,14 @@
 <body>
 <%@include file="../index/header.jsp" %>
 
+<br/>
+<br/>
+
+
 <div id="searchBox" class="input-group col-lg-7 col-lg-offset-3">
     <input maxlength="32" autocomplete="off" type="text" class="form-control input-xs" name="like">
     <div class="input-group-btn">
-        <button id="button_searchBox" class="btn btn-search btn-info">
+        <button id="button_searchBox" class="btn btn-search btn-muted">
             <span class="glyphicon glyphicon-search"></span>
             <span class="label-icon">Search</span>
         </button>
@@ -30,7 +34,7 @@
     <div class="col-md-9">
         <div class="row">
             <div class="col-md-14">
-                <table class="table table-hover">
+                <table class="table">
                     <thead>
                     <tr>
                         <td></td>
@@ -112,6 +116,7 @@
             }
             $("#headSearchResult #tbodySearchResult")
                 .html(result);
+            $("a").css("color", "white");
         }
     }
 

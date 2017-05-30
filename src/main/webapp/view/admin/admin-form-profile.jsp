@@ -67,7 +67,7 @@
                    onclick="showHidePassword('hrefShowHidePassword_formAdminProfile',
                    'div_password_formAdminProfile',
                    'div_password_confirm_formAdminProfile')"
-                   href="#">Show password and confirm password</a>
+                   href="#/">Show password and confirm password</a>
 
                 <br/> <br/>
 

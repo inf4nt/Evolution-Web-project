@@ -6,15 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Dialog</title>
-    <style>
-
-        li {
-            list-style-type: none; /* Убираем маркеры */
-        }
-    </style>
 </head>
 <body>
 <%@include file="../index/header.jsp" %>
@@ -22,7 +17,7 @@
 
 <div id="div-message-dialog" class="col-lg-6 col-lg-offset-1 col-md-6 col-md-offset-1">
 
-    <h4 class="text-primary">
+    <h4>
         <span class="glyphicon glyphicon-th-list"></span>
         Dialog
         <a href="/user/id${authUser.getId()}">${authUser.getFirstName()} ${authUser.getLastName()}</a>
@@ -30,7 +25,7 @@
 
     <div class="col-md-12 col-sm-10 block-sms">
 
-        <table class="table table-hover">
+        <table class="table">
             <thead>
             <tr>
                 <td></td>

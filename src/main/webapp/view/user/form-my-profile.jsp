@@ -7,7 +7,7 @@
 <head>
     <title>Profile</title>
 
-    <script src="<c:url value="/resources/js/pageJS.js" />"></script>
+    <script src="<c:url value="/resources/js/other-js.js" />"></script>
     <script src="<c:url value="/resources/js/validators.js" />"></script>
 </head>
 <body>

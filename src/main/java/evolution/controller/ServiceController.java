@@ -1,9 +1,7 @@
 package evolution.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.common.UserRoleEnum;
 import evolution.dao.UserDao;
-import evolution.model.jsonModel.JsonInformation;
 import evolution.model.user.User;
 import evolution.model.userToken.UserToken;
 import evolution.service.MyJacksonService;
@@ -18,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import javax.persistence.NoResultException;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
@@ -128,15 +125,26 @@ public class ServiceController {
 
 
 
-    @ResponseBody @RequestMapping(value = "/response/{responseType}", method = RequestMethod.POST, produces={"application/json; charset=UTF-8"})
+    @ResponseBody @RequestMapping(value = "/response/{responseType}", method = RequestMethod.GET, produces={"application/json; charset=UTF-8"})
     public String responseAction(@RequestBody String json, @PathVariable String responseType) {
+
+
+
+
+
+
         return null;
     }
 
     @RequestMapping(value = "/request/{requestType}/{token}", method = RequestMethod.GET)
     public String requestAction(@PathVariable String requestType, @PathVariable String token){
+
+
         return null;
     }
+
+
+
 
 
     @Autowired

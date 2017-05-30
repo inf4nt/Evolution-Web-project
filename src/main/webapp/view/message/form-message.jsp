@@ -44,7 +44,7 @@
     <hr/>
     <div id="scroll" class="form-group block-sms scroll-down">
 
-        <table class="table table-hover">
+        <table class="table">
             <thead>
             <tr>
                 <td></td>

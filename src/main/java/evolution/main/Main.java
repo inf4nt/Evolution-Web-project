@@ -10,8 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import evolution.model.user.User;
 
-import evolution.model.userToken.UserToken;
-import org.apache.commons.lang.RandomStringUtils;
 import org.hibernate.*;
 
 import org.hibernate.cfg.Configuration;
@@ -54,10 +52,10 @@ public class Main {
 
 
 
+        String a = "dasdasdasdaeqw312";
 
-        String a = RandomStringUtils.randomAlphanumeric(20);
+        System.out.println(a.substring(0, 5));
 
-        System.out.println(a);
 
 
 

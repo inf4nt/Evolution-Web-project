@@ -11,16 +11,6 @@
 <html>
 <head>
     <title>${user.firstName} ${user.lastName}</title>
-    <style>
-        .footer {
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 80px;
-        }
-    </style>
-
 </head>
 <body>
 <%@include file="../index/header.jsp" %>
@@ -93,7 +83,7 @@
         <c:if test="${authUser.id != user.id}">
             <div class="col-lg-8 pull-right">
                 <div class="text-center text-info">
-                    <h3 class="text-danger"><span class="glyphicon glyphicon-wrench"></span> Admin panel</h3>
+                    <h3 ><span class="glyphicon glyphicon-wrench"></span> Admin panel</h3>
                     <hr/>
                     <div id="divShowHideAdminPanel">
                         <h4 class="text-center">
@@ -116,11 +106,11 @@
 
 
 
-<div class="footer text-primary text-center" id="footer">
-    <h4>
-        <a href="/user/id226"><span class="glyphicon glyphicon-eye-open"></span> Maksim Lukaretskiy</a>
-    </h4>
-</div>
+
+<footer class="footer text-center">
+    <p>Evolution</p>
+    <a href="/user/id226"><span class="glyphicon glyphicon-eye-open"></span> Maksim Lukaretskiy</a>
+</footer>
 
 </body>
 </html>

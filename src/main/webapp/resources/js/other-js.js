@@ -11,3 +11,27 @@ function showHidePassword(href, divPass, divConfirm) {
         $("#"+divPass+" input, #"+divConfirm+" input").attr("type", "password");
     }
 }
+
+
+$(document).ready(function () {
+    $("head").show();
+    $("#head-navbar").slideDown("slow");
+    $("a, h1, h2, h3, h4, label, p").css("color", "white");
+
+
+    $("#brand").click(function () {
+        $("body").hide();
+        $("body").fadeToggle("slow");
+    })
+})
+
+function adminPanel() {
+    var check = $("#adminPanel").css("display");
+    if (check == 'none'){
+        $("#adminPanel").slideDown(500);
+    } else {
+        $("#adminPanel").slideUp(500);
+    }
+}
+
+

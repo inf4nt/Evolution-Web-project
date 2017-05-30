@@ -14,11 +14,13 @@
 <html>
 <head>
     <c:set value="${limit}" var="limit"/>
-
 </head>
 <body>
 <%@include file="../index/header.jsp" %>
 
+
+
+<br/><br/>
 <div class="col-md-9">
 
     <div class="col-md-3 pull-right">
@@ -46,7 +48,7 @@
             <div class="col-md-8">
                 <p class="pull-left">Friends</p>
                 <br/>
-                <table id="table-friend" class="table table-hover">
+                <table id="table-friend" class="table">
                     <thead>
                     <tr>
                         <td></td>
@@ -84,7 +86,7 @@
             <div class="col-md-8">
                 <p class="pull-left">Followers</p>
                 <br/>
-                <table id="table-follower" class="table table-hover">
+                <table id="table-follower" class="table">
                     <thead>
                     <tr>
                         <td></td>
@@ -122,7 +124,7 @@
             <div class="col-md-8">
                 <p class="pull-left">Request</p>
                 <br/>
-                <table id="table-request" class="table table-hover">
+                <table id="table-request" class="table">
                     <thead>
                     <tr>
                         <td></td>
@@ -170,8 +172,9 @@
 
     $(document).ready(function () {
 
-        $("#div-friend").fadeToggle(1000);
+        $("span").css("color", "white");
 
+        $("#div-friend").fadeToggle(1000);
 
         $("#more-friend a").click(function () {
             countFriend = countFriend + 1;
@@ -246,6 +249,7 @@
             }
             $("#"+tableId +" > tbody:last")
                 .append(result);
+            $("a").css("color", "white");
         }
     }
 

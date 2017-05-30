@@ -33,7 +33,7 @@ public class FriendController {
                           HttpServletRequest request){
 
 
-        int limit = 1;
+        int limit = 20;
         model.addAttribute("limit", limit);
 
         Map<String, List<Friends>> map;
