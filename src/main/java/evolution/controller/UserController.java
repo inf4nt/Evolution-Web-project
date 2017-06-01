@@ -162,5 +162,4 @@ public class UserController {
     private Validator validator;
     @Autowired
     private SearchService searchService;
-
 }

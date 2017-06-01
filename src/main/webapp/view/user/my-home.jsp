@@ -37,7 +37,6 @@
 
         <c:if test="${authUser.id != user.id}">
             <div id="divFriendPanel">
-                <br/>
                 <h4 class="text-center">
                     <c:if test="${status == null}">
                         <a href="/friend/friend-action/request-friend/${user.getId()}">
@@ -63,7 +62,6 @@
                     </c:if>
                 </h4>
             </div>
-            <br/>
         </c:if>
 
     </div>

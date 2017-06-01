@@ -24,7 +24,7 @@
         </c:otherwise>
     </c:choose>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"\>
-    <title>${im.getFirstName()} ${im.getLastName()}</title>
+    <title>Message ${im.getFirstName()} ${im.getLastName()}</title>
     <style>
         .block-sms {
             height: 500px;

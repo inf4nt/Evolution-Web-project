@@ -9,7 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Dialog</title>
+    <title>Dialog ${authUser.firstName} ${authUser.lastName}</title>
 </head>
 <body>
 <%@include file="../index/header.jsp" %>

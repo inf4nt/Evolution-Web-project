@@ -22,6 +22,8 @@ public interface MessageDao {
 
     void saveMessage (long dialogId, String message, Long senderId);
 
+    void save(Message message);
+
     boolean checkDialog(long authUserId, long second);
 
     List<Message> lastMessagesFromDialog (long authUserId);

@@ -4,8 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.dao.MessageDao;
 import evolution.dao.UserDao;
 import evolution.model.message.Message;
+import evolution.model.user.User;
 import evolution.service.MyJacksonService;
 import evolution.service.security.UserDetailsServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,13 +71,18 @@ public class MessageController {
             @SessionAttribute Long sel,
             @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
             HttpServletResponse response) throws IOException {
+        Message m;
         if (dialogId == -1) {
             long nextId = messageDao.saveDialog(customUser.getUser().getId(), sel);
-            messageDao.saveMessage(nextId, message, customUser.getUser().getId());
+            logger.info("create new dialog");
+            m = new Message(customUser.getUser(), message, new Date(), new Message.MessageDialog(nextId));
+            messageDao.save(m);
             response.sendRedirect("/im/" + sel);
         } else {
-            messageDao.saveMessage(dialogId, message, customUser.getUser().getId());
+            m = new Message(customUser.getUser(), message, new Date(), new Message.MessageDialog(dialogId));
+            messageDao.save(m);
         }
+        logger.info("save message | " + m);
     }
 
     @ResponseBody @RequestMapping(value = "/getMessage", method = RequestMethod.GET, produces={"application/json; charset=UTF-8"})
@@ -82,6 +91,7 @@ public class MessageController {
             @RequestParam Long sel
     ) throws JsonProcessingException {
         List result = messageDao.findMessageByUserId(customUser.getUser().getId(), sel, 7, 0);
+        logger.info("interval message");
         return jacksonService.objectToJson(result);
     }
 
@@ -92,5 +102,5 @@ public class MessageController {
     private MessageDao messageDao;
     @Autowired
     private UserDao userDao;
-
+    private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 }

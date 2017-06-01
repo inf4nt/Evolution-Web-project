@@ -14,6 +14,7 @@
 <html>
 <head>
     <c:set value="${limit}" var="limit"/>
+    <title>Friends ${user.firstName} ${user.lastName}</title>
 </head>
 <body>
 <%@include file="../index/header.jsp" %>

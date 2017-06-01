@@ -6,10 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import evolution.model.user.User;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -47,7 +45,6 @@ public class Message
         this.message = message;
     }
 
-
     public Message(Long dialog, User sender, String message, Date dateDispatch) {
         MessageDialog messageDialog = new MessageDialog(dialog);
         this.dialog = messageDialog;
@@ -65,6 +62,13 @@ public class Message
         this.message = message;
         this.dateDispatch = dateDispatch;
         this.dialog.second = new User(imId, imFirstName, imLastName);
+    }
+
+    public Message (User sender, String message, Date date, MessageDialog dialog){
+        this.sender = sender;
+        this.message = message;
+        this.dateDispatch = date;
+        this.dialog = dialog;
     }
 
     @JsonIgnore

@@ -24,11 +24,6 @@ public class IndexController {
         return "redirect:/welcome";
     }
 
-    @RequestMapping(value = "/form-user-registration", method = RequestMethod.GET)
-    public String getFormRegistration(){
-        return "testing/form-registration";
-    }
-
     @RequestMapping (value = "/welcome", method = RequestMethod.GET)
     public String welcome (
             Authentication authentication,

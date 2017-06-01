@@ -32,40 +32,36 @@ public class MessageDaoImpl
 
     @Override
     public List<Dialog> findMyDialog(long userid) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createQuery(FIND_MY_DIALOG);
+        Query query = session().createQuery(FIND_MY_DIALOG);
         query.setParameter("id", userid);
         return query.list();
     }
 
     @Override
     public Long saveDialog(long firstId, long secondId) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        long nextval = ((BigInteger) hibernateSession.createNativeQuery(MessageDao.NEXT_VAL_FROM_DIALOG).uniqueResult()).longValue();
+        long nextval = ((BigInteger) session().createNativeQuery(MessageDao.NEXT_VAL_FROM_DIALOG).uniqueResult()).longValue();
         User first = new User(firstId);
         User second = new User(secondId);
         Dialog d1 = new Dialog(nextval, first, second);
         Dialog d2 = new Dialog(nextval, second, first);
-        hibernateSession.save(d1);
-        hibernateSession.save(d2);
+        session().save(d1);
+        session().save(d2);
         return nextval;
     }
 
     @Override
     public void deleteDialog(long dialogId) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createQuery(DELETE_DIALOG);
+        Query query = session().createQuery(DELETE_DIALOG);
         query.setParameter("id", dialogId);
         query.executeUpdate();
     }
 
     @Override
     public List<Message> findMessageByDialogAndAuthUserId(long dialogId, long authUserId) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query queryCount = hibernateSession.createQuery(COUNT_MESSAGE);
+        Query queryCount = session().createQuery(COUNT_MESSAGE);
         queryCount.setParameter("dialog", dialogId);
         int count = Math.toIntExact((Long) queryCount.uniqueResult());
-        Query query = hibernateSession.createQuery(FIND_MY_MESSAGE_BY_DIALOG_AND_AUTH_USER_ID);
+        Query query = session().createQuery(FIND_MY_MESSAGE_BY_DIALOG_AND_AUTH_USER_ID);
         if (count > 10) {
             query.setFirstResult(count - 10);
         }
@@ -78,8 +74,7 @@ public class MessageDaoImpl
 
     @Override
     public List<Message> findMessageByUserId(long authUserId, long second, int limit, int offset) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createQuery(FIND_MY_MESSAGE_BY_USER_ID);
+        Query query = session().createQuery(FIND_MY_MESSAGE_BY_USER_ID);
         query.setMaxResults(limit);
         query.setFirstResult(offset);
         query.setParameter("authUser", authUserId);
@@ -89,15 +84,18 @@ public class MessageDaoImpl
 
     @Override
     public void saveMessage(long dialogId, String message, Long senderId) {
-        hibernateSession = sessionFactory.getCurrentSession();
         Message m = new Message(dialogId, new User(senderId), message, new Date());
-        hibernateSession.save(m);
+        session().save(m);
+    }
+
+    @Override
+    public void save(Message message) {
+        session().save(message);
     }
 
     @Override
     public boolean checkDialog(long authUserId, long second) {
-        hibernateSession = sessionFactory.getCurrentSession();
-        Query query = hibernateSession.createQuery(CHECK_DIALOG_BY_USER_ID);
+        Query query = session().createQuery(CHECK_DIALOG_BY_USER_ID);
         query.setParameter("first", authUserId);
         query.setParameter("second", second);
         try {
@@ -119,7 +117,6 @@ public class MessageDaoImpl
         return sessionFactory.getCurrentSession();
     }
 
-    private Session hibernateSession;
     @Autowired
     private SessionFactory sessionFactory;
 }
