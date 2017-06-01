@@ -72,13 +72,13 @@
             <form id ="formLogin" method="POST" action="${pageContext.request.contextPath}/j_spring_security_check">
               <div id="div_email_formLogin"  class="form-group has-feedback">
                 <label class="control-label" style="color: #ffffff">Email</label>
-                <input onblur="loginValid('div_email_formLogin')" type="text" name="username"  class="form-control text-center"/>
+                <input onblur="loginValid('div_email_formLogin')" type="text" value="com.infant@gmail.com" name="username"  class="form-control text-center"/>
                 <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
                 <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
               </div>
               <div id="div_password_formLogin"  class="form-group has-feedback">
                 <label class="control-label" style="color: #ffffff">Password</label>
-                <input autocomplete="off" onblur="firstPasswordValid('div_password_formLogin')" type="password"   name="password" class="form-control text-center"/>
+                <input autocomplete="off" onblur="firstPasswordValid('div_password_formLogin')" type="password" value="77788877"  name="password" class="form-control text-center"/>
                 <span class="span-validator glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" style="display: none"></span>
                 <span class="span-validator glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
               </div>

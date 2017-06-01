@@ -22,6 +22,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
@@ -46,9 +48,13 @@ public class UserController {
             if (authUser.getId().equals(id)) {
                 model.addAttribute("user", authUser);
             } else {
-                Friends friends = friendsDao.findUserAndFriendStatus(authUser.getId(), id);
-                model.addAttribute("user", friends.getUser());
-                model.addAttribute("status", friends.getStatus());
+                try {
+                    Friends friends = friendsDao.findUserAndFriendStatus(authUser.getId(), id);
+                    model.addAttribute("user", friends.getUser());
+                    model.addAttribute("status", friends.getStatus());
+                } catch (NoResultException e) {
+                    return "redirect:/user/id" + authUser.getId();
+                }
             }
             return "user/my-home";
         } catch (Exception e){

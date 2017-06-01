@@ -1,20 +1,27 @@
 package evolution.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import evolution.common.FriendActionEnum;
 import evolution.common.FriendStatusEnum;
 import evolution.dao.FriendsDao;
 import evolution.dao.UserDao;
 import evolution.model.friend.Friends;
+import evolution.model.jsonModel.JsonInformation;
 import evolution.model.user.User;
 import evolution.service.MyJacksonService;
+import evolution.service.builder.JsonInformationBuilder;
 import evolution.service.security.UserDetailsServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -84,35 +91,64 @@ public class FriendController {
     }
 
 
-    @RequestMapping(value = "/friend-action/{action}/{friendId}", method = RequestMethod.GET)
-    public String servletFriend(
-            @PathVariable Long friendId,
-            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-            @PathVariable String action) {
-        Long authUserId = customUser.getUser().getId();
+    @ResponseBody @RequestMapping(value = "/", method = RequestMethod.PUT,
+            produces={"application/json; charset=UTF-8"})
+    public String friendAction (@RequestBody String json,
+                                @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws IOException {
 
-        if (action.equals("accept-friend"))
-            friendsDao.acceptFriend(authUserId, friendId);
+        JsonInformation jsonInformation = (JsonInformation) jacksonService.jsonToObject(json, JsonInformation.class);
+        logger.info("PARSE JSON SUCCESS | " + jsonInformation);
 
-        if (action.equals("delete-friend"))
-            friendsDao.deleteFriend(authUserId, friendId);
 
-        if (action.equals("delete-request"))
-            friendsDao.deleteRequest(authUserId, friendId);
+        if (jsonInformation.getMessage().equals(FriendActionEnum.DELETE_FRIEND.toString())) {
+            logger.info("START DAO METHOD DELETE FRIEND");
+            friendsDao.deleteFriend(customUser.getUser().getId(), Long.parseLong(jsonInformation.getInfo().toString()));
 
-        if (action.equals("request-friend")) {
-            if (!friendsDao.checkFriends(authUserId, friendId)) {
-                friendsDao.friendRequest(authUserId, friendId);
-            }
+            String responseJson = jsonBuilder.buildJson(HttpStatus.OK.toString(), FriendActionEnum.ACCEPT_REQUEST.toString(), true);
+            logger.info("RESPONSE JSON | " + responseJson);
+            return responseJson;
+        } else if (jsonInformation.getMessage().equals(FriendActionEnum.ACCEPT_REQUEST.toString())) {
+            logger.info("START DAO METHOD ACCEPT FRIEND");
+            friendsDao.acceptFriend(customUser.getUser().getId(), Long.parseLong(jsonInformation.getInfo().toString()));
+
+            String responseJson = jsonBuilder.buildJson(HttpStatus.OK.toString(), FriendActionEnum.DELETE_FRIEND.toString(), true);
+            logger.info("RESPONSE JSON | " + responseJson);
+            return responseJson;
+        } else if (jsonInformation.getMessage().equals(FriendActionEnum.ADD_FRIEND.toString())) {
+            logger.info("START DAO METHOD ACCEPT FRIEND");
+            friendsDao.friendRequest(customUser.getUser().getId(), Long.parseLong(jsonInformation.getInfo().toString()));
+
+            String responseJson = jsonBuilder.buildJson(HttpStatus.OK.toString(), FriendActionEnum.DELETE_REQUEST.toString(), true);
+            logger.info("RESPONSE JSON | " + responseJson);
+            return responseJson;
+        } else if (jsonInformation.getMessage().equals(FriendActionEnum.DELETE_REQUEST.toString())) {
+            logger.info("START DAO METHOD ACCEPT FRIEND");
+            friendsDao.deleteRequest(customUser.getUser().getId(), Long.parseLong(jsonInformation.getInfo().toString()));
+
+            String responseJson = jsonBuilder.buildJson(HttpStatus.OK.toString(), FriendActionEnum.ADD_FRIEND.toString(), true);
+            logger.info("RESPONSE JSON | " + responseJson);
+            return responseJson;
         }
 
-        return "redirect:/user/id" + friendId;
+
+        return null;
     }
+
+
+
+
+
+
+
+
 
     @Autowired
     private FriendsDao friendsDao;
     @Autowired
+    private JsonInformationBuilder jsonBuilder;
+    @Autowired
     private MyJacksonService jacksonService;
     @Autowired
     private UserDao userDao;
+    private static final Logger logger = LoggerFactory.getLogger(FriendController.class);
 }

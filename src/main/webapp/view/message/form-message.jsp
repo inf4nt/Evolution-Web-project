@@ -39,7 +39,7 @@
 <%@include file="../index/header.jsp" %>
 <div class="col-lg-6 col-lg-offset-2" >
     <a href="/user/id${im.getId()}" >
-        <h1 class="text-center text-primary">${im.getFirstName()} ${im.getLastName()}</h1>
+        <h1 class="text-center">${im.getFirstName()} ${im.getLastName()}</h1>
     </a>
     <hr/>
     <div id="scroll" class="form-group block-sms scroll-down">

@@ -8,14 +8,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import evolution.model.jsonModel.JsonInformation;
 import evolution.model.user.User;
 
 import org.hibernate.*;
 
 import org.hibernate.cfg.Configuration;
-
 import java.io.IOException;
 import java.util.*;
+
 
 
 /**
@@ -52,9 +53,13 @@ public class Main {
 
 
 
-        String a = "dasdasdasdaeqw312";
+        String str = "ACCEPT_REQUEST";
 
-        System.out.println(a.substring(0, 5));
+        System.out.println(str.replaceAll("_", " ").toLowerCase());
+
+
+
+
 
 
 
