@@ -10,24 +10,6 @@ import java.util.List;
  */
 public interface MessageDao {
 
-    List<Dialog> findMyDialog(long userid);
-
-    Long saveDialog (long firstId, long secondId);
-
-    void deleteDialog (long dialogId);
-
-    List<Message> findMessageByDialogAndAuthUserId (long dialogId, long authUserId);
-
-    List<Message> findMessageByUserId (long authUserId, long second, int limit, int offset);
-
-    void saveMessage (long dialogId, String message, Long senderId);
-
-    void save(Message message);
-
-    boolean checkDialog(long authUserId, long second);
-
-    List<Message> lastMessagesFromDialog (long authUserId);
-
     String LAST_MESSAGES = "select new Message (d.id, m.id, substring(m.message, 0, 40), m.dateDispatch," +
             " sender.id, sender.firstName, sender.lastName, " +
             " second.id, second.firstName, second.lastName) " +
@@ -58,15 +40,15 @@ public interface MessageDao {
     String NEXT_VAL_FROM_DIALOG = "SELECT nextval('seq_dialog_id') as nextval";
 
     String FIND_MY_MESSAGE_BY_DIALOG_AND_AUTH_USER_ID = " select new Message ( d.id, " +
-             " m.id, m.message, m.dateDispatch," +
-             " sender.id, sender.firstName, sender.lastName," +
-             " im.id, im.firstName, im.lastName )" +
-             " from Message m " +
-             " join m.sender as sender " +
-             " join m.dialog as d " +
-             " join d.second as im" +
-             " where d.first.id = :authUser and d.id = :dialog " +
-             " order by m.dateDispatch asc ";
+            " m.id, m.message, m.dateDispatch," +
+            " sender.id, sender.firstName, sender.lastName," +
+            " im.id, im.firstName, im.lastName )" +
+            " from Message m " +
+            " join m.sender as sender " +
+            " join m.dialog as d " +
+            " join d.second as im" +
+            " where d.first.id = :authUser and d.id = :dialog " +
+            " order by m.dateDispatch asc ";
 
     String FIND_MY_MESSAGE_BY_USER_ID =  " select new Message ( d.id , " +
             " m.id, m.message, m.dateDispatch," +
@@ -82,4 +64,22 @@ public interface MessageDao {
     String CHECK_DIALOG_BY_USER_ID =  " from Dialog d " +
             " where d.dialogPK.first.id = :first " +
             " and d.dialogPK.second.id = :second ";
+
+    List<Dialog> findMyDialog(long userid);
+
+    Long saveDialog (long firstId, long secondId);
+
+    void deleteDialog (long dialogId);
+
+    List<Message> findMessageByDialogAndAuthUserId (long dialogId, long authUserId);
+
+    List<Message> findMessageByUserId (long authUserId, long second, int limit, int offset);
+
+    void saveMessage (long dialogId, String message, Long senderId);
+
+    void save(Message message);
+
+    boolean checkDialog(long authUserId, long second);
+
+    List<Message> lastMessagesFromDialog (long authUserId);
 }

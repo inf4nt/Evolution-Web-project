@@ -8,6 +8,8 @@ public enum UserRoleEnum {
     USER(1),
     ADMIN(2);
 
+    public final long id;
+
     UserRoleEnum(long i) {
         this.id = i;
     }
@@ -20,5 +22,4 @@ public enum UserRoleEnum {
         return id;
     }
 
-    public final long id;
 }

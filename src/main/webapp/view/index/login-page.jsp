@@ -277,7 +277,7 @@
 
             setTimeout(function () {
                 $.ajax({
-                    url: "/service/user-action/createForgotToken",
+                    url: "/service/user-forgot/CREATE_FORGOT_TOKEN",
                     type: "POST",
                     data: json,
                     contentType: "application/json; charset=UTF-8",
@@ -326,11 +326,11 @@
     }
 
     function getForgotPage() {
-      $("#form-forgot").show();
-      $("#div-return-login-br, .span-validator").hide();
-      $("#form-forgot :input").val();
-      $("#loginPage").slideUp(1000);
-      $("#forgotPasswordPage").slideDown(2000);
+        $("#form-forgot").show();
+        $("#div-return-login-br, .span-validator").hide();
+        $("#form-forgot :input").val();
+        $("#loginPage").slideUp(1000);
+        $("#forgotPasswordPage").slideDown(2000);
     }
 
 
@@ -375,7 +375,7 @@
                 var json = JSON.stringify({"login":login});
 
                 $.ajax({
-                    url: "/service/user-action/check",
+                    url: "/service/user-registration/CHECK_EXIST_USER",
                     type:"POST",
                     data:json,
                     contentType: "application/json; charset=UTF-8",
@@ -442,7 +442,7 @@
 
             setTimeout(function () {
                 $.ajax({
-                    url: "/service/user-action/createRegistrationToken",
+                    url: "/service/user-registration/CREATE_REGISTRATION_TOKEN",
                     type: "POST",
                     data: json,
                     contentType: "application/json; charset=UTF-8",

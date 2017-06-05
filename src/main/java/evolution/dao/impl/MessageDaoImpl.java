@@ -26,6 +26,9 @@ import java.util.List;
 public class MessageDaoImpl
         implements MessageDao {
 
+    @Autowired
+    private SessionFactory sessionFactory;
+
     public MessageDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -116,7 +119,4 @@ public class MessageDaoImpl
     public Session session() {
         return sessionFactory.getCurrentSession();
     }
-
-    @Autowired
-    private SessionFactory sessionFactory;
 }

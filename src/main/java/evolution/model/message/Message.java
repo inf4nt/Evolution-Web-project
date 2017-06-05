@@ -25,6 +25,32 @@ import java.util.Date;
 public class Message
         implements Serializable{
 
+    @Id
+    @Column(name = "message_id", unique = true, nullable = false)
+    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "seq_message")
+    @SequenceGenerator(name = "seq_message", sequenceName = "seq_message_id", allocationSize = 1)
+    @JsonProperty(value = "messageId")
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "sender_id")
+    @JsonProperty
+    private User sender;
+
+    @Column
+    @JsonProperty
+    private String message;
+
+    @Column(name = "date_dispatch")
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonProperty
+    private Date dateDispatch;
+
+    @ManyToOne
+    @JoinColumn(name = "dialog_id")
+    @JsonProperty
+    private MessageDialog dialog;
+
     public Message(Long id){
         this.id = id;
     }
@@ -76,37 +102,11 @@ public class Message
         return DateFormat.getInstance().format(dateDispatch);
     }
 
-    @Id
-    @Column(name = "message_id", unique = true, nullable = false)
-    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "seq_message")
-    @SequenceGenerator(name = "seq_message", sequenceName = "seq_message_id", allocationSize = 1)
-    @JsonProperty(value = "messageId")
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    @JsonProperty
-    private User sender;
-
-    @Column
-    @JsonProperty
-    private String message;
-
-    @Column(name = "date_dispatch")
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonProperty
-    private Date dateDispatch;
-
-    @ManyToOne
-    @JoinColumn(name = "dialog_id")
-    @JsonProperty
-    private MessageDialog dialog;
-
     @Entity
     @Table(name = "dialog")
     @ToString @NoArgsConstructor @Getter @Setter
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class MessageDialog {
+    public static class MessageDialog implements Serializable{
 
         public MessageDialog(Long id){
             this.id = id;

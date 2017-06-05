@@ -18,33 +18,16 @@ import java.util.List;
 @Service
 public class MyJacksonService {
 
+    @Autowired
+    private ObjectMapper mapper;
+
     public String objectToJson(Object obj) throws JsonProcessingException {
         if (obj == null)
             return null;
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonObject = mapper.writeValueAsString(obj);
-        return jsonObject;
+        return mapper.writeValueAsString(obj);
     }
 
     public Object jsonToObject(String json, Class clazz) throws IOException {
-        Object obj = mapper.readValue(json, clazz);
-        return obj;
+        return mapper.readValue(json, clazz);
     }
-
-    public List jsonToListUser(String json) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        TypeReference<List<User>> mapType = new TypeReference<List<User>>() {};
-        List<User> jsonToPersonList = mapper.readValue(json, mapType);
-        return jsonToPersonList;
-    }
-
-    public List jsonToListMessage(String json) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        TypeReference<List<Message>> mapType = new TypeReference<List<Message>>() {};
-        List<Message> jsonToPersonList = mapper.readValue(json, mapType);
-        return jsonToPersonList;
-    }
-
-    @Autowired
-    private ObjectMapper mapper;
 }

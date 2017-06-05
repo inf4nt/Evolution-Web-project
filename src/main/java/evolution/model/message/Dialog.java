@@ -18,6 +18,10 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Dialog implements Serializable{
 
+    @EmbeddedId
+    @JsonProperty
+    private Dialog.DialogPK dialogPK;
+
     public Dialog(Long id, User first, User second) {
         this.dialogPK = new DialogPK();
         this.dialogPK.id = id;
@@ -32,10 +36,6 @@ public class Dialog implements Serializable{
                 , new User(secondId, secondFirstName, secondLastName));
 
     }
-
-    @EmbeddedId
-    @JsonProperty
-    private Dialog.DialogPK dialogPK;
 
     @Embeddable
     @ToString @NoArgsConstructor @AllArgsConstructor @Getter @Setter

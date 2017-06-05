@@ -1,6 +1,5 @@
 package evolution.service.notification;
 
-import evolution.model.user.User;
 import evolution.model.userToken.UserToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,8 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationUser {
 
+    private String subject;
+    private String message;
+    private String pathLogo = "https://s8.hostingkartinok.com/uploads/images/2017/05/4d404fbf78d4a6c8c9d09417a2f4ae4b.png";
+    @Autowired
+    private MailService mailService;
+
     public void sendTokenUserRegistration(UserToken userToken) {
-//        String tokenRegistrationUrl = "http://localhost:8585/service/user-registration/" + userToken.getToken();
         String tokenRegistrationUrl = "https://evolution-web.herokuapp.com/service/user-registration/" + userToken.getToken();
         subject = "Registration on the site evolution-web.herokuapp.com";
         message = "<html>" +
@@ -27,7 +31,6 @@ public class NotificationUser {
     }
 
     public void successUserRegistration(UserToken userToken) {
-
         subject = "Registration on the site evolution-web.herokuapp.com";
         message = "<html>" +
                 "\n<img src=\"" + pathLogo + "\"/>" +
@@ -40,7 +43,6 @@ public class NotificationUser {
 
 
     public void forgotPassword(UserToken userToken) {
-//        String tokenForgotUrl = "http://localhost:8585/service/user-forgot/" + userToken.getToken();
         String tokenForgotUrl = "https://evolution-web.herokuapp.com/service/user-forgot/" + userToken.getToken();
         subject = "Forgot password on the site evolution-web.herokuapp.com";
         message = "<html>" +
@@ -68,28 +70,4 @@ public class NotificationUser {
                 "\n</html>";
         mailService.send(userToken.getUser().getLogin(), subject, message);
     }
-
-
-
-
-
-
-    public void setUserName(User userNew, User userOld){
-        subject = "Change email on the site evolution-web.herokuapp.com";
-        message = "<html>" +
-                "\n<img src=\"" + pathLogo + "\"/>" +
-                "\n<h3>Hello " + userOld.getFirstName() + " " + userOld.getLastName() +  " ! Your email address has been changed</h3>" +
-                "\n<br/><p>Your data. Visit the site and enjoy</p><br/>" +
-                "\n<b>Your new email address: " + userNew.getLogin() + "</b>" +
-                "\n</html>";
-        mailService.send(userOld.getLogin(), subject, message);
-
-    }
-
-
-    private String subject;
-    private String message;
-    private String pathLogo = "https://s8.hostingkartinok.com/uploads/images/2017/05/4d404fbf78d4a6c8c9d09417a2f4ae4b.png";
-    @Autowired
-    private MailService mailService;
 }

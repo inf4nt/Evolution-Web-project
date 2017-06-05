@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import evolution.common.UserRoleEnum;
-import evolution.model.secretQuestionType.SecretQuestionType;
 import lombok.*;
 
 
@@ -22,6 +21,13 @@ import java.text.DateFormat;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User extends UserDefaultData{
 
+    @Column
+    @JsonProperty
+    private String country;
+    @Column
+    @JsonProperty
+    private String state;
+
     public User(Long id){
         this.id = id;
     }
@@ -38,7 +44,6 @@ public class User extends UserDefaultData{
         this.firstName = firstName;
         this.lastName = lastName;
     }
-
 
 
     @JsonIgnore
@@ -67,11 +72,4 @@ public class User extends UserDefaultData{
     public String getDateFormatRegistrationDate() {
         return DateFormat.getInstance().format(registrationDate);
     }
-
-    @Column
-    @JsonProperty
-    private String country;
-    @Column
-    @JsonProperty
-    private String state;
 }

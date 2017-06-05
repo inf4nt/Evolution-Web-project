@@ -25,6 +25,13 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    private UserDetailsService myUserDetailsService;
+    private static final String LOGIN_PAGE = "/welcome";
+
+    @Autowired
+    private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
+
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailsService);
     }
@@ -40,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable();
 
         httpSecurity.authorizeRequests()
-                .antMatchers("/", "/logout", "/user/**", "/welcome")
+                .antMatchers("/", "/logout", "/user/**", LOGIN_PAGE)
                 .permitAll();
 
         httpSecurity
@@ -48,22 +55,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**")
                 .access("hasRole('ROLE_ADMIN')");
 
-
         httpSecurity.authorizeRequests().and().formLogin()//
                 .loginProcessingUrl("/j_spring_security_check")
-                .loginPage("/login")
+                .loginPage(LOGIN_PAGE)
                 .successHandler(myAuthenticationSuccessHandler)
-                .failureUrl("/login?error=true")//
+                .failureUrl("/welcome?error=true")//
                 .usernameParameter("username")//
                 .passwordParameter("password")
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/welcome").deleteCookies("JSESSIONID")
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl(LOGIN_PAGE).deleteCookies("JSESSIONID")
                 .and().rememberMe().tokenValiditySeconds(172800);
     }
-
-    @Autowired
-    private UserDetailsService myUserDetailsService;
-
-    @Autowired
-    private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
 }
 

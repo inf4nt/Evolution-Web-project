@@ -2,7 +2,6 @@ package evolution.dao.impl;
 
 import evolution.common.FriendStatusEnum;
 import evolution.dao.FriendsDao;
-import evolution.dao.MyQuery;
 import evolution.model.friend.Friends;
 import evolution.model.user.User;
 import lombok.NoArgsConstructor;
@@ -25,6 +24,9 @@ import java.util.Map;
 @NoArgsConstructor
 public class FriendsDaoImpl
             implements FriendsDao {
+
+    @Autowired
+    private SessionFactory sessionFactory;
 
     public FriendsDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -166,18 +168,13 @@ public class FriendsDaoImpl
         Query query = session().createQuery(CHECK_FRIENDS);
         query.setParameter("id1", authUserId);
         query.setParameter("id2", id2);
+        query.setParameter("status", FriendStatusEnum.PROGRESS.getId());
         if (query.list().size() == 2)
             return true;
         return false;
     }
 
-
-
-
     public Session session(){
         return sessionFactory.getCurrentSession();
     }
-
-    @Autowired
-    private SessionFactory sessionFactory;
 }

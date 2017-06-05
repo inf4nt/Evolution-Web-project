@@ -28,19 +28,10 @@ public class IndexController {
     public String welcome (
             Authentication authentication,
             HttpServletRequest request, SessionStatus sessionStatus) {
-        if (authentication != null)
-            if (authentication.isAuthenticated()) {
-                sessionStatus.setComplete();
-                return "redirect:/user/id" + ((User)request.getSession().getAttribute("authUser")).getId();
 
-            }
-        return "index/login-page";
-    }
-
-    @RequestMapping (value = "/login", method = RequestMethod.GET)
-    public String login (HttpServletRequest request) {
-        if (request == null || request.getParameter("error") == null) {
-            return "index/login-page";
+        if (authentication != null && authentication.isAuthenticated()) {
+            sessionStatus.setComplete();
+            return "redirect:/user/id" + ((User)request.getSession().getAttribute("authUser")).getId();
         }
         return "index/login-page";
     }

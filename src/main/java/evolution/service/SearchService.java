@@ -14,6 +14,9 @@ import java.util.List;
 @Service
 public class SearchService {
 
+    @Autowired
+    private UserDao userDao;
+
     public List<User> searchUser(String string) {
         if (string.matches("^[a-zA-Z]+$")) {
             return userDao.findUserByFirstOrLastName(string);
@@ -24,8 +27,4 @@ public class SearchService {
         }
         throw new NoResultException();
     }
-
-
-    @Autowired
-    private UserDao userDao;
 }

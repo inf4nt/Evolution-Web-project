@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.dao.MessageDao;
 import evolution.dao.UserDao;
 import evolution.model.message.Message;
-import evolution.model.user.User;
 import evolution.service.MyJacksonService;
 import evolution.service.security.UserDetailsServiceImpl;
 import org.slf4j.Logger;
@@ -15,8 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
@@ -31,6 +28,13 @@ import java.util.List;
 @SessionAttributes({"dialogId", "sel"})
 public class MessageController {
 
+    @Autowired
+    private MyJacksonService jacksonService;
+    @Autowired
+    private MessageDao messageDao;
+    @Autowired
+    private UserDao userDao;
+    private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String im(
@@ -53,7 +57,7 @@ public class MessageController {
             list = messageDao.findMessageByUserId(customUser.getUser().getId(), sel, 7, 0);
         } else {
             model.addAttribute("im", userDao.selectIdFirstLastName(sel));
-            model.addAttribute("dialogId", -1l);
+            model.addAttribute("dialogId", -1);
             model.addAttribute("sel", sel);
             return "message/form-message";
         }
@@ -94,13 +98,4 @@ public class MessageController {
         logger.info("interval message");
         return jacksonService.objectToJson(result);
     }
-
-
-    @Autowired
-    private MyJacksonService jacksonService;
-    @Autowired
-    private MessageDao messageDao;
-    @Autowired
-    private UserDao userDao;
-    private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 }

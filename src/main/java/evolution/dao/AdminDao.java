@@ -10,12 +10,6 @@ import java.util.List;
  */
 public interface AdminDao {
 
-    List<User> findAllUser();
-
-    List<User> findAllAdmin();
-
-    List<User> findAllFieldsAll();
-
     String FIND_ALL_USER_ID_FIRST_LAST = "select new User(id, firstName, lastName) \n from User";
 
     String FIND_USER_BY_ROLE_USER = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.USER.getId() +
@@ -24,4 +18,7 @@ public interface AdminDao {
     String FIND_USER_BY_ROLE_ADMIN = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.ADMIN.getId() +
             " order by registrationDate desc";
 
+    List<User> findAllUser();
+
+    List<User> findAllAdmin();
 }

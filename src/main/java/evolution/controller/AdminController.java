@@ -1,11 +1,9 @@
 package evolution.controller;
 
 import evolution.dao.AdminDao;
-import evolution.dao.SecretQuestionTypeDao;
 import evolution.dao.UserDao;
 import evolution.model.user.User;
 import evolution.service.builder.PaginationService;
-import evolution.service.builder.SecretQuestionTypeBuilderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
@@ -21,29 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 @SessionAttributes({"servletName", "role", "productList", "user"})
 public class AdminController {
 
-    @RequestMapping (value = "/remove-user/{id}", method = RequestMethod.GET)
-    public String remove (@PathVariable Long id, HttpServletRequest request) {
-        userDao.delete(new User(id));
-
-        String servletName;
-        try {
-            servletName = request.getSession().getAttribute("servletName").toString();
-        } catch (NullPointerException ne){
-            return "redirect:/welcome";
-        }
-
-        if (servletName.equals("form-all")){
-            int numberPage = ((PagedListHolder) request.getSession().getAttribute("productList")).getPage();
-            ((PagedListHolder) request.getSession().getAttribute("productList")).getPageList().remove(new User(id));
-            String role = request.getSession().getAttribute("role").toString();
-            return "redirect:/admin/form-all/" + role + "/" + numberPage;
-        }
-        if (servletName.equals("")){
-
-        }
-
-        return "redirect:/welcome";
-    }
+    @Autowired
+    private AdminDao adminDao;
+    @Autowired
+    private PaginationService paginationService;
 
     @RequestMapping (value = {"/form-all/{role}/{action}"}, method = RequestMethod.GET)
     public String formAllUser (
@@ -71,16 +50,4 @@ public class AdminController {
         model.addAttribute("page_url", "/admin/form-all/" + role);
         return "admin/admin-form-search";
     }
-
-
-    @Autowired
-    private UserDao userDao;
-    @Autowired
-    private AdminDao adminDao;
-    @Autowired
-    private SecretQuestionTypeDao sqtDao;
-    @Autowired
-    private SecretQuestionTypeBuilderService secretQuestionTypeBuilderService;
-    @Autowired
-    private PaginationService paginationService;
 }

@@ -33,14 +33,10 @@ public class AuthenticationSuccessHandlerImpl
                 .getContext()
                 .getAuthentication()
                 .getPrincipal();
-        httpSession.setAttribute("authorities", authentication.getAuthorities());
-
         httpSession.setAttribute("authUser", customUser.getUser());
 
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 
-
         httpServletResponse.sendRedirect("/user/id" + customUser.getUser().getId());
-//        httpServletResponse.sendRedirect("/user/id/" + customUser.getUser().getId());
     }
 }

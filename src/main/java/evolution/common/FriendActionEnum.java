@@ -15,5 +15,5 @@ public enum FriendActionEnum {
     DELETE_REQUEST(3),
     ADD_FRIEND(4);
 
-    private final Integer id;
+    private final int id;
 }

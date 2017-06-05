@@ -18,6 +18,21 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Friends implements Serializable{
 
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonProperty
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "friend_id")
+    @JsonProperty
+    private User friend;
+
+    @Column(name = "status")
+    @JsonProperty
+    private Long status;
+
     public Friends(Long id, String firstName, String lastName, Long friendStatus) {
         this.user = new User(id, firstName, lastName);
         this.status = friendStatus;
@@ -39,19 +54,4 @@ public class Friends implements Serializable{
         this.friend = new User(friendId, friendFirstName, friendLastName);
     }
 
-
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @JsonProperty
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "friend_id")
-    @JsonProperty
-    private User friend;
-
-    @Column(name = "status")
-    @JsonProperty
-    private Long status;
 }

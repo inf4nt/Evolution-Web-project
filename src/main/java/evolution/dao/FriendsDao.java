@@ -10,37 +10,8 @@ import java.util.Map;
  */
 public interface FriendsDao {
 
-    Friends findUserAndFriendStatus(Long authUserId, Long id);
-
-    List<Friends> findFriend(long authUserId, int limit, int offset);
-
-    List<Friends> findFollower(long authUserId, int limit, int offset);
-
-    List<Friends> findRequest(long authUserId, int limit, int offset);
-
-    List<Friends> moreFriend(long authUserId, int limit, int offset);
-
-    List<Friends> moreFollower(long authUserId, int limit, int offset);
-
-    List<Friends> moreRequest(long authUserId, int limit, int offset);
-
-    Map<String, List<Friends>> friend(long authUserId, int limit, int offset);
-
-    Map<String, List<Friends>> friendFollower(long authUserId, int limit, int offset);
-
-    void acceptFriend (long authUserId, long id2);
-
-    void friendRequest (long authUserId, long id2);
-
-    void deleteFriend(long authUserId, long id2);
-
-    void deleteRequest(long authUserId, long id2);
-
-    boolean checkFriends(long authUserId, long id2);
-
-    String CHECK_FRIENDS = "select 1 from Friends f " +
-            " where (f.friend.id = :id1 and f.user.id = :id2)" +
-            " or (f.friend.id = :id2 and f.user.id =:id1)";
+    String CHECK_FRIENDS = "select 1 from Friends f where (f.user.id =:id1 and f.friend.id =:id2 and f.status =:status) " +
+            "or (f.user.id =:id2 and f.friend.id =:id1 and f.status =:status )";
 
     String FIND_ALL_FRIENDS = "select new Friends " +
             "(uf.id, uf.firstName, uf.lastName," +
@@ -77,4 +48,32 @@ public interface FriendsDao {
     String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status) from Friends f " +
             " right join User u on u.id = f.friend.id and f.user.id = :authUserId " +
             " where u.id = :id";
+
+    Friends findUserAndFriendStatus(Long authUserId, Long id);
+
+    List<Friends> findFriend(long authUserId, int limit, int offset);
+
+    List<Friends> findFollower(long authUserId, int limit, int offset);
+
+    List<Friends> findRequest(long authUserId, int limit, int offset);
+
+    List<Friends> moreFriend(long authUserId, int limit, int offset);
+
+    List<Friends> moreFollower(long authUserId, int limit, int offset);
+
+    List<Friends> moreRequest(long authUserId, int limit, int offset);
+
+    Map<String, List<Friends>> friend(long authUserId, int limit, int offset);
+
+    Map<String, List<Friends>> friendFollower(long authUserId, int limit, int offset);
+
+    void acceptFriend (long authUserId, long id2);
+
+    void friendRequest (long authUserId, long id2);
+
+    void deleteFriend(long authUserId, long id2);
+
+    void deleteRequest(long authUserId, long id2);
+
+    boolean checkFriends(long authUserId, long id2);
 }

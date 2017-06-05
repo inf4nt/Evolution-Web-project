@@ -5,9 +5,7 @@ package evolution.config;
 import evolution.model.friend.Friends;
 import evolution.model.message.Dialog;
 import evolution.model.message.Message;
-import evolution.model.secretQuestionType.SecretQuestionType;
 import evolution.model.user.User;
-import evolution.model.userToken.UserToken;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -53,7 +51,6 @@ public class HibernateServiceConfig
     @Bean
     public SessionFactory sessionFactory() {
         return new LocalSessionFactoryBuilder(dataSource())
-                .addAnnotatedClasses(SecretQuestionType.class)
                 .addAnnotatedClasses(User.class)
                 .addAnnotatedClasses(Friends.class)
                 .addAnnotatedClasses(Dialog.class)

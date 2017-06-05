@@ -9,6 +9,8 @@ public enum FriendStatusEnum {
     FOLLOWER(2),
     REQUEST(3);
 
+    public final long id;
+
     FriendStatusEnum(long i) {
         this.id = i;
     }
@@ -20,6 +22,4 @@ public enum FriendStatusEnum {
     public long getId() {
         return id;
     }
-
-    public final long id;
 }

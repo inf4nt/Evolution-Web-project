@@ -1,14 +1,8 @@
 package evolution.service.builder;
 
-import org.hibernate.query.Query;
+
 import org.springframework.beans.support.PagedListHolder;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.SessionAttributes;
-
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

@@ -33,20 +33,4 @@ public class Validator {
             return false;
         }
     }
-
-    public boolean messageValidator(Message message) {
-        try {
-            if (
-                    message.getDialog().getId().toString().matches("^[0-9]+")
-                    || message.getSender().getId().toString().matches("^[0-9]+")
-                    || message.getSender().getFirstName().matches("^[a-zA-Z]{4,32}")
-                    || message.getSender().getLastName().matches("^[a-zA-Z]{4,32}")
-                    || message.getMessage().matches("[a-zA-Z0-9-]")
-            )
-            return false;
-        } catch (Exception e){
-            return false;
-        }
-       return true;
-    }
 }

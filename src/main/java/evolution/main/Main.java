@@ -8,6 +8,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import evolution.dao.FriendsDao;
+import evolution.dao.impl.FriendsDaoImpl;
 import evolution.model.jsonModel.JsonInformation;
 import evolution.model.user.User;
 
@@ -26,45 +28,37 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-//        SessionFactory sessionFactory = null;
-//        try {
-//            sessionFactory = getSessionFactory();
-//            Session session = sessionFactory.getCurrentSession();
-//            session.beginTransaction();
-//
-//
-//            System.out.println("===============");
-//            System.out.println("===============");
-//            List list;
-//            Map map;
-//            Query query;
-
-//
-//
-//            session.getTransaction().commit();
-//            sessionFactory.close();
-//        } catch (Exception e){
-//            e.printStackTrace();
-//            if (sessionFactory != null)
-//                sessionFactory.close();
-//
-//
-//        }
+        SessionFactory sessionFactory = null;
+        try {
+            sessionFactory = getSessionFactory();
+            Session session = sessionFactory.getCurrentSession();
+            session.beginTransaction();
 
 
+            System.out.println("===============");
+            System.out.println("===============");
+            List list;
+            Map map;
+            Query query;
 
-        String str = "ACCEPT_REQUEST";
 
-        System.out.println(str.replaceAll("_", " ").toLowerCase());
+            FriendsDao friendsDao = new FriendsDaoImpl(sessionFactory);
+            System.out.println(friendsDao.checkFriends(226, 106));
 
 
 
 
 
 
+            session.getTransaction().commit();
+            sessionFactory.close();
+        } catch (Exception e){
+            e.printStackTrace();
+            if (sessionFactory != null)
+                sessionFactory.close();
 
 
-
+        }
 
 
 

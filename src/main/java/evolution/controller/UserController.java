@@ -14,6 +14,8 @@ import evolution.service.SearchService;
 import evolution.service.builder.JsonInformationBuilder;
 import evolution.service.security.UserDetailsServiceImpl;
 import evolution.service.validation.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,15 +38,28 @@ import java.io.IOException;
 @SessionAttributes(value = {"role", "productList", "user"})
 public class UserController {
 
+    @Autowired
+    private JsonInformationBuilder jsonInformationBuilder;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private MyJacksonService jacksonService;
+    @Autowired
+    private FriendsDao friendsDao;
+    @Autowired
+    private Validator validator;
+    @Autowired
+    private SearchService searchService;
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @RequestMapping (value = "/id{id}", method = RequestMethod.GET)
     public String home (
             @PathVariable Long id,
             Model model,
-            SessionStatus sessionStatus,
-            HttpServletRequest request) {
-        try {
-            sessionStatus.setComplete();
-            User authUser = (User) request.getSession().getAttribute("authUser");
+            @SessionAttribute(required = false) User authUser,
+            SessionStatus sessionStatus) {
+
+        if (authUser != null) {
             if (authUser.getId().equals(id)) {
                 model.addAttribute("user", authUser);
             } else {
@@ -53,17 +68,20 @@ public class UserController {
                     model.addAttribute("user", friends.getUser());
                     model.addAttribute("status", friends.getStatus());
                 } catch (NoResultException e) {
+                    logger.info("User by id " + id +", is not exist\n" + e.toString());
                     return "redirect:/user/id" + authUser.getId();
                 }
             }
+            sessionStatus.setComplete();
             return "user/my-home";
-        } catch (Exception e){
-            return "redirect:/logout";
         }
+        return "redirect:/welcome";
     }
 
+
     // EDIT
-    @ResponseBody @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces={"application/json; charset=UTF-8"})
+    @ResponseBody @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
+            produces={"application/json; charset=UTF-8"})
     public String edit(@RequestBody String json,
                         @PathVariable Long id,
                         @SessionAttribute User user,
@@ -100,14 +118,12 @@ public class UserController {
 
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     public void userPut(@RequestBody String json) throws IOException {
-        User user = (User) jacksonService.jsonToObject(json, User.class);
-        userDao.update(user);
+        userDao.update((User) jacksonService.jsonToObject(json, User.class));
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public void userPost(@RequestBody String json) throws IOException {
-        User user = (User) jacksonService.jsonToObject(json, User.class);
-        userDao.save(user);
+        userDao.save((User) jacksonService.jsonToObject(json, User.class));
     }
 
     // DELETE
@@ -115,10 +131,9 @@ public class UserController {
     public void deleteUser(@PathVariable Long id,
                            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser  customUser,
                            HttpServletRequest request) {
-//        if (request.isUserInRole("ROLE_ADMIN") || customUser.getUser().getId().equals(id)){
-//            if (id != 226)
-//                userDao.delete(new User(id));
-//        }
+        if ((request.isUserInRole("ROLE_ADMIN") || customUser.getUser().getId().equals(id))){
+            userDao.delete(new User(id));
+        }
     }
 
     // GET FORM PROFILE
@@ -127,15 +142,16 @@ public class UserController {
                           @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
                           HttpServletRequest request,
                           Model model){
+
         if (id.equals(customUser.getUser().getId())) {
             model.addAttribute("user", customUser.getUser());
             return "user/form-my-profile";
         } else if (request.isUserInRole("ROLE_ADMIN")) {
-            model.addAttribute("user", userDao.findById(id));
+            model.addAttribute("user", userDao.find(id));
             return "admin/admin-form-profile";
         }
 
-        return "redirect:/welcome";
+        throw new NoResultException();
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -154,18 +170,4 @@ public class UserController {
     public String resultSearch(@RequestParam String like) throws JsonProcessingException {
         return jacksonService.objectToJson(searchService.searchUser(like));
     }
-
-
-    @Autowired
-    private JsonInformationBuilder jsonInformationBuilder;
-    @Autowired
-    private UserDao userDao;
-    @Autowired
-    private MyJacksonService jacksonService;
-    @Autowired
-    private FriendsDao friendsDao;
-    @Autowired
-    private Validator validator;
-    @Autowired
-    private SearchService searchService;
 }

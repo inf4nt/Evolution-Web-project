@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class JsonInformationBuilder {
 
+    @Autowired
+    private MyJacksonService jacksonService;
+
     public String buildJson(String httpStatus, String message, Object info) throws JsonProcessingException {
         JsonInformation j = new JsonInformation(httpStatus, message, info);
         return jacksonService.objectToJson(j);
     }
-
-    @Autowired
-    private MyJacksonService jacksonService;
 }
