@@ -360,15 +360,13 @@
             $("#loader").fadeToggle("slow");
             $("#info").html("");
 
-////             ТУТ АЯКСОМ ПРОВЕРИМ СВОБОДЕН ЛИ
+
             setTimeout(function () {
                 var login = $("#form-user-data input[name=login]").val();
-                var json = JSON.stringify({"login":login});
 
                 $.ajax({
-                    url: "/service/user/registration/CHECK_EXIST_USER?json=" + json,
+                    url: "/service/user/registration/CHECK_EXIST_USER/" + login,
                     type:"GET",
-                    contentType: "application/json; charset=UTF-8",
                     success:function (dataJson) {
                         if (dataJson.info == true) {
                             $("#loader").hide();

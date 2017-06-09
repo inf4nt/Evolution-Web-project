@@ -67,13 +67,11 @@ public class ServiceController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/user/registration/CHECK_EXIST_USER", method = RequestMethod.GET,
+    @RequestMapping(value = "/user/registration/CHECK_EXIST_USER/{username}", method = RequestMethod.GET,
             produces={"application/json; charset=UTF-8"})
-    public String userCheckExistUser(@RequestParam String json) throws IOException {
-
-        User user = (User) jacksonService.jsonToObject(json, User.class);
+    public String userCheckExistUser(@PathVariable String username) throws IOException {
         try {
-            userDao.findByLogin(user.getLogin());
+            userDao.findByLogin(username);
             return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), null, true);
         } catch (NoResultException e) {
             LOGGER.info("User is not exist. Next step registration.\n" + e.toString());
