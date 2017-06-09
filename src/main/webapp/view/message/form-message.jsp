@@ -13,18 +13,8 @@
 
 <html>
 <head>
-    <c:choose>
-        <c:when test="${list.size() > 0}">
-            <c:set value="${list.get(0).getDialog().getSecond()}" var="im"/>
-            <c:set value="${list.get(0).getDialog().getId()}" var="dialogId"/>
-        </c:when>
-        <c:otherwise>
-            <c:set value="${im}" var="im"/>
-            <c:set value="${dialogId}" var="dialogId"/>
-        </c:otherwise>
-    </c:choose>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"\>
-    <title>Message ${im.getFirstName()} ${im.getLastName()}</title>
+    <title>Message ${im.firstName} ${im.lastName}</title>
     <style>
         .block-sms {
             height: 500px;
@@ -38,8 +28,8 @@
 <body>
 <%@include file="../index/header.jsp" %>
 <div class="col-lg-6 col-lg-offset-2" >
-    <a href="/user/id${im.getId()}" >
-        <h1 class="text-center">${im.getFirstName()} ${im.getLastName()}</h1>
+    <a href="/user/id${im.id}" >
+        <h1 class="text-center"> ${im.firstName} ${im.lastName}</h1>
     </a>
     <hr/>
     <div id="scroll" class="form-group block-sms scroll-down">
@@ -58,7 +48,9 @@
                 <tr>
                     <td>
                         <p>
-                            <a href="/user/id${a.getSender().getId()}">${a.getSender().getFirstName()} ${a.getSender().getLastName()} </a>
+                            <a href="/user/id${a.getSender().getId()}">
+                                ${a.getSender().getFirstName()} ${a.getSender().getLastName()}
+                            </a>
                         </p>
                         <p>${a.getMessage()}</p>
                     </td>
@@ -93,11 +85,27 @@
             contentType:"application/json; charset=UTF-8",
             dataType: "json",
             success:function (data) {
-                    createTableMessage(data, sel),
+                createTableMessage(data, sel),
                     scrollDown();
-                    }
+            }
         });
     }
+
+
+
+
+    function templateMessageTable(element) {
+        var user = element.sender;
+        var table = ' <tr><td><p><a href="/user/id' + user.userId + '"> '
+            + user.firstName +
+            ' </a> ' +
+            ' </p> ' +
+            ' <p> ' + element.message + '</p> ' +
+            ' </td> </tr> ';
+        return table;
+    }
+
+
 
     function createTableMessage(data) {
         if (data) {
@@ -105,23 +113,19 @@
             var result;
             for (var i = jsonData.length - 1; i >= 0; i--) {
                 var element = jsonData[i];
-                var user = element.sender;
-                var table = ' <tr><td><p><a href="/user/id' + user.userId + '">'
-                    + user.firstName +
-                    ' ' + user.lastName +
-                    '</a>' +
-                    '</p> ' +
-                    '<p>' + element.message + '</p> ' +
-                    '</td> </tr>';
+                var table = templateMessageTable(element);
                 result = result + table;
             }
+
             $("#scroll #tbodyMessage")
                 .html(result);
             $("a").css("color", "white");
         }
+
     }
 
     $(document).ready(function () {
+
         $("#formMessage").submit(function () {
             var message = $("#formMessage #inputMessage").val();
             if (message.length == 0)
@@ -144,6 +148,8 @@
             });
             return false;
         });
+
+        scrollDown();
     });
 
     function writeMessage(sel, first, last, message) {
@@ -163,20 +169,15 @@
         div.scrollTop(div.prop('scrollHeight'));
     }
 
-    $(document).ready(function () {
-            scrollDown();})
-
     <c:if test="${dialogId != -1}">
-        window.setInterval(
-            function () {
-                message(${im.getId()});
-                scrollDown();
-            }, 6000
-        )
+    window.setInterval(
+        function () {
+            message(${im.getId()});
+            scrollDown();
+        }, 6000
+    )
     </c:if>
 </script>
-
-
 
 
 </body>

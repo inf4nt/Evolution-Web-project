@@ -4,6 +4,8 @@ package evolution.service.security;
 import evolution.dao.UserDao;
 import evolution.model.user.User;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,6 +30,7 @@ public class UserDetailsServiceImpl
 
     @Autowired
     private UserDao userDao;
+    private Logger LOGGER = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     @Override
     @Transactional
@@ -37,8 +40,10 @@ public class UserDetailsServiceImpl
         try {
             user = userDao.findByLogin(s);
         } catch (NoResultException e) {
+            LOGGER.info("user y username = " + s + ", not found");
             throw new UsernameNotFoundException("user " + s + " not found");
         }
+
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
         CustomUser customUser = new CustomUser(

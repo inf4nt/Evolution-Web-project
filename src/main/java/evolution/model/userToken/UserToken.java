@@ -7,9 +7,14 @@ import lombok.*;
 /**
  * Created by Admin on 24.05.2017.
  */
-@NoArgsConstructor @AllArgsConstructor @Getter @Setter
-@ToString
-public class UserToken {
-    private String token;
+@NoArgsConstructor @Getter @Setter
+@ToString(callSuper = true)
+public class UserToken extends AbstractToken {
+
+    public UserToken(String token, User user) {
+        super(token);
+        this.user = user;
+    }
+
     private User user;
 }

@@ -91,7 +91,6 @@
                             <a href="/user/profile/${user.id}" >
                                 <span class="glyphicon glyphicon-edit text-muted"></span> Edit
                             </a>
-                            <%--<a href="/admin/remove-user/${user.id}" >--%>
                             <a href="#" onclick="alert('coming soon')" >
                                 <span class="glyphicon glyphicon-remove text-danger"></span> Remove
                             </a>
@@ -109,8 +108,6 @@
 </footer>
 </body>
 <script>
-
-    var friendId = ${user.id};
 
     function actionFriend(actionType) {
         $("#div-friend-panel").hide();
@@ -149,10 +146,9 @@
 
 
     function actionFriendAJAX(actionType, callBackSuccess, callBackError) {
-        var json = JSON.stringify({"info":friendId, "message":actionType});
-        var url = "/friend/";
+        var json = JSON.stringify({"info":${user.id}, "message":actionType});
         $.ajax({
-            url: url,
+            url: "/friend/",
             type: "PUT",
             data: json,
             contentType:"application/json; charset=UTF-8",

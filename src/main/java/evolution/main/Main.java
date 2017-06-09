@@ -5,17 +5,16 @@ package evolution.main;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
-import evolution.dao.FriendsDao;
-import evolution.dao.impl.FriendsDaoImpl;
-import evolution.model.jsonModel.JsonInformation;
-import evolution.model.user.User;
 
+import evolution.service.validation.Validator;
 import org.hibernate.*;
 
 import org.hibernate.cfg.Configuration;
+
+
 import java.io.IOException;
 import java.util.*;
 
@@ -28,7 +27,13 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
+
+
+
+
+
         SessionFactory sessionFactory = null;
+        Validator validator = new Validator();
         try {
             sessionFactory = getSessionFactory();
             Session session = sessionFactory.getCurrentSession();
@@ -38,12 +43,25 @@ public class Main {
             System.out.println("===============");
             System.out.println("===============");
             List list;
+            org.hibernate.query.Query query;
             Map map;
-            Query query;
 
 
-            FriendsDao friendsDao = new FriendsDaoImpl(sessionFactory);
-            System.out.println(friendsDao.checkFriends(226, 106));
+
+
+//            query = session.createQuery("select new MessageDTO(m.id, m.message, m.dateDispatch, " +
+//                    " sender.id, sender.firstName, sender.lastName) " +
+//                    " from MessageDTO m " +
+//                    " join m.dialog as d " +
+//                    " join m.sender as sender " +
+//                    " where (d.first.id =:id1 and d.second.id =:id2 ) " +
+//                    " or (d.first.id =:id2 and d.second.id =:id1 )");
+//
+//
+//            query.setParameter("id1", 226L);
+//            query.setParameter("id2", 217L);
+//
+//            query.list().forEach(System.out::println);
 
 
 
@@ -56,21 +74,11 @@ public class Main {
             e.printStackTrace();
             if (sessionFactory != null)
                 sessionFactory.close();
-
-
         }
-
+//
 
 
     }
-
-    public static boolean check(Class clazz) {
-        if (clazz == User.class)
-            return true;
-        else return false;
-    }
-
-
 
     public static SessionFactory getSessionFactory(){
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
@@ -91,104 +99,4 @@ public class Main {
         Object obj = mapper.readValue(json, clazz);
         return obj;
     }
-
-
-    public static List jsonToListUser(String json) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        TypeReference<List<User>> mapType = new TypeReference<List<User>>() {};
-        List<User> jsonToPersonList = objectMapper.readValue(json, mapType);
-        return jsonToPersonList;
-    }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-//        System.out.println("run");
-//        while (true) {
-//            String console = bufferedReader.readLine();
-//            if (console.matches("\\d+")) {
-//                System.out.println("ok");
-//            } else
-//                System.out.println("false");
-//
-//            if (console.matches("[a-z]+")) {
-//                System.out.println("true");
-//            } else
-//                System.out.println("false");
-//
-//        }
-
-
-
-//        Query query = session.createSQLQuery("select\n" +
-//                "  u.id,\n" +
-//                "  u.FIRST_NAME,\n" +
-//                "  u.LAST_NAME\n" +
-//                "  from friends f\n" +
-//                "  join USER_DATA u on f.friend_id = u.id\n" +
-//                "  join USER_ROLE ur on u.ROLE_ID = ur.ID\n" +
-//                "  join SECRET_QUESTION_TYPE sqt on u.SECRET_QUESTION_TYPE_ID = sqt.ID");
-//
-//        query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-//        list = query.list();
-//
-//        for (Object e: list)
-//            System.out.println(e);
-
-
-
-//        Query query = session.createSQLQuery("select id, login from user_data");
-//        List<Object[]> rows = query.list();
-//
-//        for(Object[] row : rows){
-//            User user = new User();
-//            user.setId(Long.parseLong(row[0].toString()));
-//            System.out.println(user);
-//        }

@@ -67,17 +67,14 @@
 
     <mapping class="evolution.model.user.User"/>
     <mapping class="evolution.model.friend.Friends"/>
-    <mapping class="evolution.model.message.Dialog"/>
+
+
+
+
+
+    <mapping class="evolution.model.dialog.Dialog"/>
+
     <mapping class="evolution.model.message.Message"/>
-    <mapping class="evolution.model.message.Message$MessageDialog"/>
-
-
-
-    <mapping class="evolution.model.userToken.UserToken"/>
-
-
-
-
 
 
 

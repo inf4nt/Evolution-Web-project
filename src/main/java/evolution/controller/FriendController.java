@@ -39,7 +39,7 @@ public class FriendController {
     private MyJacksonService jacksonService;
     @Autowired
     private UserDao userDao;
-    private static final Logger logger = LoggerFactory.getLogger(FriendController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FriendController.class);
     private static String responseJson;
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
@@ -47,7 +47,6 @@ public class FriendController {
                           @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
                           Model model,
                           HttpServletRequest request){
-
 
         int limit = 1;
         model.addAttribute("limit", limit);
@@ -80,7 +79,7 @@ public class FriendController {
 
     @ResponseBody @RequestMapping(value = "/{status}/{userId}", method = RequestMethod.GET,
             produces={"application/json; charset=UTF-8"})
-    public String friend(@PathVariable Long userId,
+    public String moreFriend(@PathVariable Long userId,
                          @PathVariable String status,
                          @RequestParam Integer limit,
                          @RequestParam Integer offset,
@@ -109,12 +108,12 @@ public class FriendController {
                                 @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws IOException {
 
         JsonInformation jsonInformation = (JsonInformation) jacksonService.jsonToObject(json, JsonInformation.class);
-        logger.info("PARSE JSON SUCCESS \n" + jsonInformation + "\n");
+        LOGGER.info("PARSE JSON SUCCESS \n" + jsonInformation + "\n");
 
         Long friendId = Long.parseLong(jsonInformation.getInfo().toString());
         Long userId = customUser.getUser().getId();
 
-        logger.info("START " + jsonInformation.getMessage() + "\n" + "authUserId = " +userId + ", friendId = " + friendId);
+        LOGGER.info("START " + jsonInformation.getMessage() + "\n" + "authUserId = " +userId + ", friendId = " + friendId);
         if (jsonInformation.getMessage().equals(FriendActionEnum.DELETE_FRIEND.toString())) {
 
             friendsDao.deleteFriend(userId, friendId);
@@ -134,7 +133,9 @@ public class FriendController {
             responseJson = jsonBuilder.buildJson(HttpStatus.OK.toString(), FriendActionEnum.ADD_FRIEND.toString(), true);
         }
 
-        logger.info("RESPONSE JSON \n" + responseJson + "\n");
+        LOGGER.info("RESPONSE JSON \n" + responseJson + "\n");
         return responseJson;
     }
+
+
 }

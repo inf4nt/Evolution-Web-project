@@ -1,7 +1,9 @@
 package evolution.dao;
 
+import evolution.common.UserRoleEnum;
 import evolution.model.user.User;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Admin on 09.03.2017.
@@ -23,15 +25,24 @@ public interface UserDao {
     String FIND_USER_BY_FIRST_OR_LAST_NAME = " select new User(u.id, u.firstName, u.lastName )from User u " +
             " where (lower(u.firstName) like lower (concat('%', :p1, '%'))) or (lower(u.lastName) like lower(concat('%', :p1, '%')))";
 
+    String FIND_ALL_USER_ID_FIRST_LAST = "select new User(id, firstName, lastName) \n " + FIND_ALL_USER;
+
+    String FIND_USER_BY_ROLE_USER = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.USER.getId() +
+            " order by id desc";
+
+    String FIND_USER_BY_ROLE_ADMIN = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.ADMIN.getId() +
+            " order by id desc";
+
+
     void save(User user);
 
-    void update (User user);
+    void update(User user);
+
+    void delete(User user);
 
     User find(Long id);
 
-    User findByLogin (String login);
-
-    void delete (User user);
+    User findByLogin (String username);
 
     List<User> findUserByFirstLastName(String p1, String p2);
 
@@ -44,4 +55,10 @@ public interface UserDao {
     User selectFirstLastName (long id);
 
     User selectIdFirstLastName (long id);
+
+    List<User> findAllUser(int limit, int offset);
+
+    List<User> findAllAdmin(int limit, int offset);
+
+    Map<String, List<User>> findAll(int limit, int offset);
 }

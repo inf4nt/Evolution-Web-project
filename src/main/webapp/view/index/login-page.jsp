@@ -58,10 +58,7 @@
       <div class="row">
         <div class="col-lg-12 text-center" style="margin-top: 15%">
           <h1 style="color: #fbfff9">Login</h1>
-          <c:if test="${param.error == 'true'}">
-            <h3 style="color: #fbfff9">Login Failed!
-            </h3>
-          </c:if>
+          <h3>${param.info}</h3>
         </div>
       </div>
       <div class="row">
@@ -277,19 +274,13 @@
 
             setTimeout(function () {
                 $.ajax({
-                    url: "/service/user-forgot/CREATE_FORGOT_TOKEN",
+                    url: "/service/user/forgot/CREATE_FORGOT_TOKEN",
                     type: "POST",
                     data: json,
                     contentType: "application/json; charset=UTF-8",
                     success: function (response) {
-                        if (response.info == false) {
-                            $("#info-forgot").html("User not found").delay(3000).fadeToggle("slow");
-                            complete();
-                        }
-                        if (response.info == true) {
-                            $("#info-forgot").html(response.message).delay(3000).fadeToggle("slow");
-                            complete();
-                        }
+                        $("#info-forgot").html(response.message);
+                        complete();
                     },
                     error: function () {
                         $("#info-forgot").html("Sorry, server is not responded").delay(3000).fadeToggle("slow");
@@ -375,15 +366,14 @@
                 var json = JSON.stringify({"login":login});
 
                 $.ajax({
-                    url: "/service/user-registration/CHECK_EXIST_USER",
-                    type:"POST",
-                    data:json,
+                    url: "/service/user/registration/CHECK_EXIST_USER?json=" + json,
+                    type:"GET",
                     contentType: "application/json; charset=UTF-8",
                     success:function (dataJson) {
                         if (dataJson.info == true) {
                             $("#loader").hide();
                             $("#div-first-user-data, #return-login-registrationPage").fadeToggle("slow");
-                            $("#info").html("This user " + login + " is exist").delay(3000).fadeToggle("slow");
+                            $("#info").html("This user " + login + " is exist");
                             $("#form-user-data input[name=login]").val("");
                             $("#div_email_form-user-data span").hide();
                             return false;
@@ -440,11 +430,12 @@
             $("#loader").fadeToggle("slow");
             $("#info").html("");
 
+
             setTimeout(function () {
                 $.ajax({
-                    url: "/service/user-registration/CREATE_REGISTRATION_TOKEN",
+                    url: "/service/user/registration/CREATE_REGISTRATION_TOKEN",
                     type: "POST",
-                    data: json,
+                    data:json,
                     contentType: "application/json; charset=UTF-8",
                     success:function (data) {
                         $("#info").html(data.message).delay(5000).fadeToggle("slow");
@@ -469,6 +460,12 @@
         populateCountries("country2");
     })
 
+
+
+
+    $(document).ready(function () {
+
+    })
 
 </script>
 

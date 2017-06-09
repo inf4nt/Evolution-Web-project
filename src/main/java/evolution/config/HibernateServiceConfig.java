@@ -2,8 +2,8 @@ package evolution.config;
 
 
 
+import evolution.model.dialog.Dialog;
 import evolution.model.friend.Friends;
-import evolution.model.message.Dialog;
 import evolution.model.message.Message;
 import evolution.model.user.User;
 import org.hibernate.SessionFactory;
@@ -53,9 +53,11 @@ public class HibernateServiceConfig
         return new LocalSessionFactoryBuilder(dataSource())
                 .addAnnotatedClasses(User.class)
                 .addAnnotatedClasses(Friends.class)
-                .addAnnotatedClasses(Dialog.class)
+
+
                 .addAnnotatedClasses(Message.class)
-                .addAnnotatedClasses(Message.MessageDialog.class)
+                .addAnnotatedClasses(Dialog.class)
+
                 .setProperty("hibernate.show_sql", "true")
                 .setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory")
                 .setProperty("hibernate.cache.use_query_cache", "true")

@@ -1,29 +1,24 @@
 package evolution.model.message;
 
-
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import evolution.model.dialog.Dialog;
 import evolution.model.user.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.text.DateFormat;
 import java.util.Date;
 
-
 /**
- * Created by Admin on 18.04.2017.
+ * Created by Admin on 09.06.2017.
  */
 
 @Entity
 @Table(name = "message")
-@ToString @NoArgsConstructor @Getter @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Message
-        implements Serializable{
+@NoArgsConstructor @AllArgsConstructor
+@ToString @Getter @Setter
+public class Message {
 
     @Id
     @Column(name = "message_id", unique = true, nullable = false)
@@ -32,12 +27,17 @@ public class Message
     @JsonProperty(value = "messageId")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dialog_id", updatable = false)
+    @JsonProperty
+    private Dialog dialog;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
     @JsonProperty
     private User sender;
 
-    @Column
+    @Column(name = "message")
     @JsonProperty
     private String message;
 
@@ -46,35 +46,11 @@ public class Message
     @JsonProperty
     private Date dateDispatch;
 
-    @ManyToOne
-    @JoinColumn(name = "dialog_id")
-    @JsonProperty
-    private MessageDialog dialog;
-
-    public Message(Long id){
-        this.id = id;
-    }
-
     public Message(Long messageId, String message, Date dateDispatch,
-                   Long senderId, String senderFirstName, String senderLastName) {
-        this.sender = new User();
+                   Long senderId, String senderFirstName, String senderLastName, Long dialogId) {
+        this.dialog = new Dialog(dialogId);
+        this.sender = new User(senderId, senderFirstName, senderLastName);
         this.id = messageId;
-        this.message = message;
-        this.dateDispatch = dateDispatch;
-        sender.setId(senderId);
-        sender.setFirstName(senderFirstName);
-        sender.setLastName(senderLastName);
-    }
-
-    public Message(String message, Long secondId, String secondFirstName, String secondLastName){
-        this.dialog.second = new User(secondId, secondFirstName, secondLastName);
-        this.message = message;
-    }
-
-    public Message(Long dialog, User sender, String message, Date dateDispatch) {
-        MessageDialog messageDialog = new MessageDialog(dialog);
-        this.dialog = messageDialog;
-        this.sender = sender;
         this.message = message;
         this.dateDispatch = dateDispatch;
     }
@@ -82,48 +58,36 @@ public class Message
     public Message(Long dialogId, Long messageId, String message, Date dateDispatch,
                    Long senderId, String senderFirstName, String senderLastName,
                    Long imId, String imFirstName, String imLastName) {
-        this.dialog = new MessageDialog(dialogId);
+        this.dialog = new Dialog(dialogId, new User(imId, imFirstName, imLastName));
         this.sender = new User(senderId, senderFirstName, senderLastName);
         this.id = messageId;
         this.message = message;
         this.dateDispatch = dateDispatch;
-        this.dialog.second = new User(imId, imFirstName, imLastName);
     }
 
-    public Message (User sender, String message, Date date, MessageDialog dialog){
+    public Message(Long senderId, String message, Date dateDispatch, Long dialogId) {
+        this.dialog = new Dialog(dialogId);
+        this.sender = new User(senderId);
+        this.message = message;
+        this.dateDispatch = dateDispatch;
+    }
+    public Message(User sender, String message, Date dateDispatch, Dialog dialog) {
+        this.dialog = dialog;
         this.sender = sender;
         this.message = message;
-        this.dateDispatch = date;
-        this.dialog = dialog;
+        this.dateDispatch = dateDispatch;
     }
 
-    @JsonIgnore
-    public String getDateFormatDispatch() {
-        return DateFormat.getInstance().format(dateDispatch);
+    public Message(Long dialogId, User sender, String message, Date dateDispatch) {
+        this.dialog = new Dialog(dialogId);
+        this.sender = sender;
+        this.message = message;
+        this.dateDispatch = dateDispatch;
+
     }
 
-    @Entity
-    @Table(name = "dialog")
-    @ToString @NoArgsConstructor @Getter @Setter
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class MessageDialog implements Serializable{
-
-        public MessageDialog(Long id){
-            this.id = id;
-        }
-
-        @Id
-        @GeneratedValue
-        @Column
-        @JsonProperty(value = "dialogId")
-        private Long id;
-        @ManyToOne
-        @JoinColumn(name = "first")
-        @JsonIgnore
-        private User first;
-        @ManyToOne
-        @JoinColumn(name = "second")
-        @JsonProperty
-        private User second;
+    public Message(Long id){
+        this.id = id;
     }
 }
+

@@ -18,6 +18,7 @@ public interface AdminDao {
     String FIND_USER_BY_ROLE_ADMIN = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.ADMIN.getId() +
             " order by registrationDate desc";
 
+
     List<User> findAllUser();
 
     List<User> findAllAdmin();

@@ -1,16 +1,19 @@
 package evolution.dao.impl;
 
 
+import evolution.common.UserRoleEnum;
 import evolution.dao.UserDao;
 import evolution.model.user.User;
-import lombok.NoArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Admin on 09.03.2017.
@@ -19,13 +22,11 @@ import java.util.List;
 
 @Repository
 @Transactional
-@NoArgsConstructor
-public class UserDaoImpl
-        implements UserDao {
+public class UserDaoImpl implements UserDao {
 
-    @Autowired
     private SessionFactory sessionFactory;
 
+    @Autowired
     public UserDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -41,6 +42,11 @@ public class UserDaoImpl
     }
 
     @Override
+    public void delete(User user) {
+        session().delete(user);
+    }
+
+    @Override
     public User find(Long id) {
         return session().find(User.class, id);
     }
@@ -50,11 +56,6 @@ public class UserDaoImpl
         Query query = session().createQuery(FIND_USER_BY_USERNAME);
         query.setParameter("l", login);
         return (User) query.getSingleResult();
-    }
-
-    @Override
-    public void delete(User user) {
-        session().delete(user);
     }
 
     @Override
@@ -101,6 +102,32 @@ public class UserDaoImpl
         Query query = session().createQuery(SELECT_ID_FIRST_LAST_NAME);
         query.setParameter("id", id);
         return (User) query.getSingleResult();
+    }
+
+    @Override
+    public List<User> findAllUser(int limit, int offset) {
+        Query query = session().createQuery(FIND_USER_BY_ROLE_USER);
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
+        return query.list();
+    }
+
+    @Override
+    public List<User> findAllAdmin(int limit, int offset) {
+        Query query = session().createQuery(FIND_USER_BY_ROLE_ADMIN);
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
+        return query.list();
+    }
+
+    @Override
+    public Map<String, List<User>> findAll(int limit, int offset) {
+        Map<String, List<User>> map = new HashMap<>();
+
+        map.put(UserRoleEnum.USER.toString().toLowerCase(), findAllUser(limit, offset));
+        map.put(UserRoleEnum.ADMIN.toString().toLowerCase(), findAllAdmin(limit, offset));
+
+        return map;
     }
 
     public Session session(){

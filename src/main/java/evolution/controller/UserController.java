@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +34,7 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping ("/user")
-@SessionAttributes(value = {"role", "productList", "user"})
+@SessionAttributes(value = {"user"})
 public class UserController {
 
     @Autowired
@@ -50,7 +49,7 @@ public class UserController {
     private Validator validator;
     @Autowired
     private SearchService searchService;
-    private Logger logger = LoggerFactory.getLogger(UserController.class);
+    private Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @RequestMapping (value = "/id{id}", method = RequestMethod.GET)
     public String home (
@@ -62,13 +61,15 @@ public class UserController {
         if (authUser != null) {
             if (authUser.getId().equals(id)) {
                 model.addAttribute("user", authUser);
+                LOGGER.info("My home. User id = " + id);
             } else {
                 try {
                     Friends friends = friendsDao.findUserAndFriendStatus(authUser.getId(), id);
                     model.addAttribute("user", friends.getUser());
                     model.addAttribute("status", friends.getStatus());
+                    LOGGER.info("Other user id = " + friends.getUser().getId());
                 } catch (NoResultException e) {
-                    logger.info("User by id " + id +", is not exist\n" + e.toString());
+                    LOGGER.info("User by id " + id +", is not exist\n" + e.toString());
                     return "redirect:/user/id" + authUser.getId();
                 }
             }
@@ -77,7 +78,6 @@ public class UserController {
         }
         return "redirect:/welcome";
     }
-
 
     // EDIT
     @ResponseBody @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
@@ -101,7 +101,7 @@ public class UserController {
             userRequest.setId(user.getId());
             userRequest.setRegistrationDate(user.getRegistrationDate());
 
-            // МОЖНО БУДЕТ МЕНЯТЬ И ОТПРАВИТЬ ПИСЬМО О СМЕНЕ ПОЧТЫ
+            // in future change login
             userRequest.setLogin(user.getLogin());
         }
 
@@ -113,17 +113,6 @@ public class UserController {
         }
 
         return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), null, false);
-    }
-
-
-    @RequestMapping(value = "/", method = RequestMethod.PUT)
-    public void userPut(@RequestBody String json) throws IOException {
-        userDao.update((User) jacksonService.jsonToObject(json, User.class));
-    }
-
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    public void userPost(@RequestBody String json) throws IOException {
-        userDao.save((User) jacksonService.jsonToObject(json, User.class));
     }
 
     // DELETE
@@ -141,7 +130,7 @@ public class UserController {
     public String profile(@PathVariable Long id,
                           @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
                           HttpServletRequest request,
-                          Model model){
+                          Model model) {
 
         if (id.equals(customUser.getUser().getId())) {
             model.addAttribute("user", customUser.getUser());
@@ -151,20 +140,13 @@ public class UserController {
             return "admin/admin-form-profile";
         }
 
-        throw new NoResultException();
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
-    public String adminFormRegistration() {
-        return "testing/form-create-user";
+        return "redirect:/user/id" + customUser.getUser().getId();
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String viewSearch(){
         return "user/new-search";
     }
-
 
     @ResponseBody @RequestMapping(value = "/search-result", method = RequestMethod.GET, produces={"application/json; charset=UTF-8"})
     public String resultSearch(@RequestParam String like) throws JsonProcessingException {
