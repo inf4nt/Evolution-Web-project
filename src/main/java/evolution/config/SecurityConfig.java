@@ -1,7 +1,10 @@
 package evolution.config;
 
 
+
+import evolution.web.handler.CustomAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -11,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 
@@ -31,6 +35,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new CustomAccessDeniedHandler();
+    }
+
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailsService);
@@ -47,8 +56,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable();
 
         httpSecurity.authorizeRequests()
-                .antMatchers("/", "/logout", "/user/**", LOGIN_PAGE)
+                .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+
+        httpSecurity.authorizeRequests()
+                .antMatchers("/logout")
                 .permitAll();
+
+        httpSecurity
+                .authorizeRequests()
+                .antMatchers("/", "/welcome", "/service/**")
+                .anonymous();
+
+        httpSecurity.authorizeRequests()
+                .antMatchers("/user/**", "/im/**", "/friend/**")
+                .authenticated();
 
         httpSecurity
                 .authorizeRequests()

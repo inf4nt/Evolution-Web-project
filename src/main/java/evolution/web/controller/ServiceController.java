@@ -1,4 +1,4 @@
-package evolution.controller;
+package evolution.web.controller;
 
 import evolution.common.UserRoleEnum;
 import evolution.dao.UserDao;

@@ -33,6 +33,7 @@ public class AuthenticationSuccessHandlerImpl
                 .getContext()
                 .getAuthentication()
                 .getPrincipal();
+
         httpSession.setAttribute("authUser", customUser.getUser());
 
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);

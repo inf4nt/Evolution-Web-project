@@ -1,8 +1,6 @@
-package evolution.controller;
+package evolution.web.controller;
 
 import evolution.dao.AdminDao;
-import evolution.dao.UserDao;
-import evolution.model.user.User;
 import evolution.service.builder.PaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;

@@ -1,4 +1,4 @@
-package evolution.controller;
+package evolution.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.dao.MessageService;
@@ -43,18 +43,12 @@ public class MessageController {
             @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
             Model model,
             SessionStatus sessionStatus) {
-        if (customUser != null) {
-            sessionStatus.setComplete();
 
-            List<Message> list = messageService
-                    .findLastMessageForDialog(customUser.getUser().getId(), 100, 0);
-
-            model.addAttribute("list", list);
-            return "message/form-dialog";
-        } else {
-            LOGGER.info("User is not authentication");
-            return "redirect:/welcome";
-        }
+        sessionStatus.setComplete();
+        List<Message> list = messageService
+                .findLastMessageForDialog(customUser.getUser().getId(), 100, 0);
+        model.addAttribute("list", list);
+        return "message/form-dialog";
     }
 
     @RequestMapping(value = "/{sel}", method = RequestMethod.GET)
@@ -62,11 +56,6 @@ public class MessageController {
                          @PathVariable Long sel,
                          Model model) {
 
-        if (customUser.getUser()  == null) {
-            LOGGER.info("User is not authentication");
-            return "redirect:/welcome";
-        }
-        
         if (messageService.checkDialog(customUser.getUser().getId(), sel)) {
             List<Message> list =  messageService.findMessage(customUser.getUser().getId(), sel, 7, 0);
 

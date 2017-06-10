@@ -13,6 +13,7 @@ import evolution.service.validation.Validator;
 import org.hibernate.*;
 
 import org.hibernate.cfg.Configuration;
+import org.springframework.util.AntPathMatcher;
 
 
 import java.io.IOException;
@@ -30,52 +31,58 @@ public class Main {
 
 
 
-
-
-        SessionFactory sessionFactory = null;
-        Validator validator = new Validator();
-        try {
-            sessionFactory = getSessionFactory();
-            Session session = sessionFactory.getCurrentSession();
-            session.beginTransaction();
-
-
-            System.out.println("===============");
-            System.out.println("===============");
-            List list;
-            org.hibernate.query.Query query;
-            Map map;
+        String PathVariableId = new AntPathMatcher()
+                .extractPathWithinPattern( "/user/profile/**", "/user/profile/312" );
 
 
 
 
-//            query = session.createQuery("select new MessageDTO(m.id, m.message, m.dateDispatch, " +
-//                    " sender.id, sender.firstName, sender.lastName) " +
-//                    " from MessageDTO m " +
-//                    " join m.dialog as d " +
-//                    " join m.sender as sender " +
-//                    " where (d.first.id =:id1 and d.second.id =:id2 ) " +
-//                    " or (d.first.id =:id2 and d.second.id =:id1 )");
+
+//        SessionFactory sessionFactory = null;
+//        Validator validator = new Validator();
+//        try {
+//            sessionFactory = getSessionFactory();
+//            Session session = sessionFactory.getCurrentSession();
+//            session.beginTransaction();
 //
 //
-//            query.setParameter("id1", 226L);
-//            query.setParameter("id2", 217L);
+//            System.out.println("===============");
+//            System.out.println("===============");
+//            List list;
+//            org.hibernate.query.Query query;
+//            Map map;
 //
-//            query.list().forEach(System.out::println);
-
-
-
-
-
-
-            session.getTransaction().commit();
-            sessionFactory.close();
-        } catch (Exception e){
-            e.printStackTrace();
-            if (sessionFactory != null)
-                sessionFactory.close();
-        }
 //
+//
+//
+////            query = session.createQuery("select new MessageDTO(m.id, m.message, m.dateDispatch, " +
+////                    " sender.id, sender.firstName, sender.lastName) " +
+////                    " from MessageDTO m " +
+////                    " join m.dialog as d " +
+////                    " join m.sender as sender " +
+////                    " where (d.first.id =:id1 and d.second.id =:id2 ) " +
+////                    " or (d.first.id =:id2 and d.second.id =:id1 )");
+////
+////
+////            query.setParameter("id1", 226L);
+////            query.setParameter("id2", 217L);
+////
+////            query.list().forEach(System.out::println);
+//
+//
+//
+//
+//
+//
+//
+//            session.getTransaction().commit();
+//            sessionFactory.close();
+//        } catch (Exception e){
+//            e.printStackTrace();
+//            if (sessionFactory != null)
+//                sessionFactory.close();
+//        }
+
 
 
     }

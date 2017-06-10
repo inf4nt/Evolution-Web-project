@@ -1,4 +1,4 @@
-package evolution.controller;
+package evolution.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.common.FriendActionEnum;
@@ -48,7 +48,7 @@ public class FriendController {
                           Model model,
                           HttpServletRequest request){
 
-        int limit = 1;
+        int limit = 10;
         model.addAttribute("limit", limit);
 
         Map<String, List<Friends>> map;

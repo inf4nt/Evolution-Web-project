@@ -1,4 +1,4 @@
-package evolution.controller;
+package evolution.web.controller;
 
 
 
@@ -58,25 +58,25 @@ public class UserController {
             @SessionAttribute(required = false) User authUser,
             SessionStatus sessionStatus) {
 
-        if (authUser != null) {
-            if (authUser.getId().equals(id)) {
-                model.addAttribute("user", authUser);
-                LOGGER.info("My home. User id = " + id);
-            } else {
-                try {
-                    Friends friends = friendsDao.findUserAndFriendStatus(authUser.getId(), id);
-                    model.addAttribute("user", friends.getUser());
-                    model.addAttribute("status", friends.getStatus());
-                    LOGGER.info("Other user id = " + friends.getUser().getId());
-                } catch (NoResultException e) {
-                    LOGGER.info("User by id " + id +", is not exist\n" + e.toString());
-                    return "redirect:/user/id" + authUser.getId();
-                }
+        sessionStatus.setComplete();
+        LOGGER.info("Session status set complete");
+
+        if (authUser.getId().equals(id)) {
+            model.addAttribute("user", authUser);
+            LOGGER.info("My home. User id = " + id);
+        } else {
+            try {
+                Friends friends = friendsDao.findUserAndFriendStatus(authUser.getId(), id);
+                model.addAttribute("user", friends.getUser());
+                model.addAttribute("status", friends.getStatus());
+                LOGGER.info("Other user id = " + friends.getUser().getId());
+            } catch (NoResultException e) {
+                LOGGER.info("User by id " + id +", is not exist\n" + e.toString());
+                return "redirect:/user/id" + authUser.getId();
             }
-            sessionStatus.setComplete();
-            return "user/my-home";
         }
-        return "redirect:/welcome";
+
+        return "user/my-home";
     }
 
     // EDIT
@@ -115,6 +115,13 @@ public class UserController {
         return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), null, false);
     }
 
+    @RequestMapping(value = "/ex", method = RequestMethod.GET)
+    public String ex() {
+        throw new NullPointerException();
+    }
+
+
+
     // DELETE
     @ResponseBody @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable Long id,
@@ -142,6 +149,13 @@ public class UserController {
 
         return "redirect:/user/id" + customUser.getUser().getId();
     }
+
+
+
+
+
+
+
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String viewSearch(){
