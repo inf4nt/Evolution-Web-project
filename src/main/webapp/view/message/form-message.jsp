@@ -77,7 +77,6 @@
 
 <script>
 
-
     function message(sel) {
         $.ajax({
             url: "/im/getMessage?sel="+sel,
@@ -91,21 +90,16 @@
         });
     }
 
-
-
-
     function templateMessageTable(element) {
         var user = element.sender;
         var table = ' <tr><td><p><a href="/user/id' + user.userId + '"> '
-            + user.firstName +
+            + user.firstName + ' ' + user.lastName +
             ' </a> ' +
             ' </p> ' +
             ' <p> ' + element.message + '</p> ' +
             ' </td> </tr> ';
         return table;
     }
-
-
 
     function createTableMessage(data) {
         if (data) {
@@ -177,6 +171,7 @@
         }, 6000
     )
     </c:if>
+
 </script>
 
 
