@@ -67,17 +67,22 @@ public class ServiceController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/user/registration/CHECK_EXIST_USER/{username}", method = RequestMethod.GET,
+    @RequestMapping(value = "/user/registration/CHECK_EXIST_USER", method = RequestMethod.POST,
             produces={"application/json; charset=UTF-8"})
-    public String userCheckExistUser(@PathVariable String username) throws IOException {
+    public String userCheckExistUser(@RequestBody String json) throws IOException {
+        User user = (User) jacksonService.jsonToObject(json, User.class);
+
         try {
-            userDao.findByLogin(username);
+            userDao.findByLogin(user.getLogin());
+            LOGGER.info("User is exist");
             return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), null, true);
         } catch (NoResultException e) {
             LOGGER.info("User is not exist. Next step registration.\n" + e.toString());
             return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), null, false);
         }
     }
+
+
 
     @ResponseBody
     @RequestMapping(value = "/user/registration/CREATE_REGISTRATION_TOKEN", method = RequestMethod.POST,
@@ -136,6 +141,21 @@ public class ServiceController {
         if (entityToken != null
                 && token.equals(entityToken.getToken())
                 && validator.userValidator(((UserToken)entityToken).getUser())) {
+
+            try {
+                userDao.findByLogin(((UserToken) entityToken).getUser().getLogin());
+                LOGGER.info("System ignor. User by username "
+                        + ((UserToken) entityToken).getUser().getLogin()
+                        + " is exist !");
+                sessionStatus.setComplete();
+                return "redirect:/welcome?info=This user by username " +
+                        ((UserToken) entityToken).getUser().getLogin()
+                        + " already exist";
+            } catch (NoResultException nre) {
+                LOGGER.info("Okey. Next step\n" + nre.toString());
+            }
+
+
             User user = ((UserToken)entityToken).getUser();
             userDao.save(user);
             notificationUser.successUserRegistration((UserToken) entityToken);

@@ -364,9 +364,13 @@
             setTimeout(function () {
                 var login = $("#form-user-data input[name=login]").val();
 
+                var json = JSON.stringify({"login":login});
+
                 $.ajax({
-                    url: "/service/user/registration/CHECK_EXIST_USER/" + login,
-                    type:"GET",
+                    url: "/service/user/registration/CHECK_EXIST_USER",
+                    type:"POST",
+                    data:json,
+                    contentType: "application/json; charset=UTF-8",
                     success:function (dataJson) {
                         if (dataJson.info == true) {
                             $("#loader").hide();
