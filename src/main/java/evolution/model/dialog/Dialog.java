@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Admin on 09.06.2017.
  */
 @Entity
-@Table(name = "new_dialog")
+@Table(name = "dialog")
 @NoArgsConstructor @AllArgsConstructor
 @ToString @Getter @Setter
 public class Dialog {
