@@ -92,7 +92,7 @@ public class MessageController {
             LOGGER.info("create new dialog");
             Dialog dialog = new Dialog(customUser.getUser(), new User(sel));
             Long nextId = messageService.save(dialog);
-            m = new Message(nextId, new User(sel), message, new Date());
+            m = new Message(nextId, customUser.getUser(), message, new Date());
             messageService.repository().merge(m);
             response.sendRedirect("/im/" + sel);
         } else {
