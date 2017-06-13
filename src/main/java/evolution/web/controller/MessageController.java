@@ -93,12 +93,12 @@ public class MessageController {
             Dialog dialog = new Dialog(customUser.getUser(), new User(sel));
             Long nextId = messageService.save(dialog);
             m = new Message(nextId, new User(sel), message, new Date());
-            messageService.merge(m);
+            messageService.repository().merge(m);
             response.sendRedirect("/im/" + sel);
         } else {
             LOGGER.info("Dialog exist. Run save message");
             m = new Message(customUser.getUser().getId(), message, new Date(), dialogId);
-            messageService.merge(m);
+            messageService.repository().merge(m);
             LOGGER.info("Message saved\n" + m);
         }
     }

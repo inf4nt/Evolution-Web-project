@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by Admin on 09.03.2017.
  */
-public interface UserDao {
+public interface UserDao extends DefaultDao {
 
     String FIND_USER_BY_USERNAME = "from User where login = :l";
 
@@ -32,13 +32,6 @@ public interface UserDao {
 
     String FIND_USER_BY_ROLE_ADMIN = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.ADMIN.getId() +
             " order by id desc";
-
-
-    void save(User user);
-
-    void update(User user);
-
-    void delete(User user);
 
     User find(Long id);
 

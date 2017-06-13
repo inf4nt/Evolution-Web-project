@@ -5,6 +5,8 @@ package evolution.config;
 import evolution.model.dialog.Dialog;
 import evolution.model.friend.Friends;
 import evolution.model.message.Message;
+import evolution.model.news.Feed;
+import evolution.model.news.FeedReference;
 import evolution.model.user.User;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
@@ -54,9 +56,11 @@ public class HibernateServiceConfig
                 .addAnnotatedClasses(User.class)
                 .addAnnotatedClasses(Friends.class)
 
-
                 .addAnnotatedClasses(Message.class)
                 .addAnnotatedClasses(Dialog.class)
+
+                .addAnnotatedClasses(Feed.class)
+                .addAnnotatedClasses(FeedReference.class)
 
                 .setProperty("hibernate.show_sql", "true")
                 .setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory")

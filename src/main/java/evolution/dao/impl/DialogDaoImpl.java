@@ -24,8 +24,16 @@ public class DialogDaoImpl implements DialogDao {
     private SessionFactory sessionFactory;
 
     @Autowired
+    private evolution.dao.Repository repository;
+
+    @Autowired
     public DialogDaoImpl(SessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public evolution.dao.Repository repository() {
+        return repository;
     }
 
     @Override
@@ -34,16 +42,6 @@ public class DialogDaoImpl implements DialogDao {
         dialog.setId(nextval);
         session().save(dialog);
         return nextval;
-    }
-
-    @Override
-    public void update(Dialog dialog) {
-        session().update(dialog);
-    }
-
-    @Override
-    public void delete(Dialog dialog) {
-        session().delete(dialog);
     }
 
     @Override

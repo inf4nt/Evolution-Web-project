@@ -18,7 +18,7 @@
     <style>
         .block-sms {
             height: 500px;
-            width: 600px;
+            width: 700px;
             overflow: scroll;
             word-break:break-all;
             overflow-x:hidden;
@@ -27,7 +27,7 @@
 </head>
 <body>
 <%@include file="../index/header.jsp" %>
-<div class="col-lg-6 col-lg-offset-2" >
+<div class="col-lg-7 col-lg-offset-3" >
     <a href="/user/id${im.id}" >
         <h1 class="text-center"> ${im.firstName} ${im.lastName}</h1>
     </a>

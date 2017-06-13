@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by Admin on 26.03.2017.
  */
-public interface FriendsDao {
+public interface FriendsDao extends DefaultDao {
 
     String CHECK_FRIENDS = "select 1 from Friends f where (f.user.id =:id1 and f.friend.id =:id2 and f.status =:status) " +
             "or (f.user.id =:id2 and f.friend.id =:id1 and f.status =:status )";

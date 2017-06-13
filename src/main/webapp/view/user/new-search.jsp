@@ -16,10 +16,6 @@
 <body>
 <%@include file="../index/header.jsp" %>
 
-<br/>
-<br/>
-
-
 <div id="searchBox" class="input-group col-lg-7 col-lg-offset-3">
     <input maxlength="32" autocomplete="off" type="text" class="form-control input-xs" name="like">
     <div class="input-group-btn">
@@ -29,9 +25,10 @@
         </button>
     </div>
 </div>
-<h1 id="result"></h1>
+
 <div id="headSearchResult" style="display: none">
-    <div class="col-md-9">
+    <div class="col-md-6 col-lg-offset-3">
+        <h1 id="result"></h1>
         <div class="row">
             <div class="col-md-14">
                 <table class="table">

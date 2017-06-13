@@ -6,17 +6,13 @@
 <html>
 <head>
     <title>Profile</title>
-
-    <script src="<c:url value="/resources/js/other-js.js" />"></script>
-    <script src="<c:url value="/resources/js/validators.js" />"></script>
 </head>
 <body>
 
 <%@include file="../index/header.jsp" %>
 
-
-<div id="div-self-profile" style="display: none">
-    <div class="col-md-9">
+<div id="div-self-profile" class="col-lg-offset-2" style="display: none">
+    <div class="col-md-12">
         <div class="row">
             <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6 col-lg-offset-2">
                 <form id="profilePageForm" class="text text-center">
@@ -101,6 +97,8 @@
     </div>
 </div>
 
+<script src="<c:url value="/resources/js/other-js.js" />"></script>
+<script src="<c:url value="/resources/js/validators.js" />"></script>
 </body>
 
 <script>
@@ -154,12 +152,6 @@
 
 
     })
-
-
-
-
-
-
 
 </script>
 

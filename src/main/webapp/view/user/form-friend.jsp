@@ -22,7 +22,7 @@
 
 
 <br/><br/>
-<div class="col-md-9">
+<div class="col-md-10 col-lg-offset-2">
 
     <div class="col-md-3 pull-right">
         <br/>

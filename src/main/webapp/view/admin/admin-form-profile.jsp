@@ -11,13 +11,13 @@
 <html>
 <head>
     <title>Profile</title>
-    <script src="<c:url value="/resources/js/pageJS.js" />"></script>
+    <script src="<c:url value="/resources/js/other-js.js" />"></script>
     <script src="<c:url value="/resources/js/validators.js" />"></script>
 </head>
 <body>
 <%@include file="../index/header.jsp" %>
 
-<div class="col-md-9">
+<div class="col-md-9 col-lg-offset-2">
     <div class="row">
         <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6 col-lg-offset-2">
 

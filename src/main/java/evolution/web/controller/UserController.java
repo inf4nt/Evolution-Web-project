@@ -1,11 +1,8 @@
 package evolution.web.controller;
 
-
-
-
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.dao.FriendsDao;
+import evolution.dao.FeedDao;
 import evolution.dao.UserDao;
 import evolution.model.friend.Friends;
 import evolution.model.user.User;
@@ -18,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +25,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-
 
 /**
  * Created by Admin on 05.03.2017.
@@ -49,6 +46,8 @@ public class UserController {
     private Validator validator;
     @Autowired
     private SearchService searchService;
+    @Autowired
+    private FeedDao newsDao;
     private Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @RequestMapping (value = "/id{id}", method = RequestMethod.GET)
@@ -75,6 +74,8 @@ public class UserController {
                 return "redirect:/user/id" + authUser.getId();
             }
         }
+
+        model.addAttribute("news", newsDao.allPosts(id, 100, 0));
 
         return "user/my-home";
     }
@@ -106,7 +107,7 @@ public class UserController {
         }
 
         if (validator.userValidator(userRequest)) {
-            userDao.update(userRequest);
+            userDao.repository().update(userRequest);
             if (customUser.getUser().getId().equals(id))
                 customUser.getUser().updateFields(userRequest);
             return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), null, true);
@@ -120,16 +121,11 @@ public class UserController {
         throw new NullPointerException();
     }
 
-
-
     // DELETE
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseBody @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void deleteUser(@PathVariable Long id,
-                           @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser  customUser,
-                           HttpServletRequest request) {
-        if ((request.isUserInRole("ROLE_ADMIN") || customUser.getUser().getId().equals(id))){
-            userDao.delete(new User(id));
-        }
+    public void deleteUser(@PathVariable Long id) {
+        userDao.repository().delete(new User(id));
     }
 
     // GET FORM PROFILE
@@ -150,13 +146,6 @@ public class UserController {
         return "redirect:/user/id" + customUser.getUser().getId();
     }
 
-
-
-
-
-
-
-
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String viewSearch(){
         return "user/new-search";
@@ -166,4 +155,5 @@ public class UserController {
     public String resultSearch(@RequestParam String like) throws JsonProcessingException {
         return jacksonService.objectToJson(searchService.searchUser(like));
     }
+
 }

@@ -1,11 +1,22 @@
 
+
 body {
-
     background: url(https://santi4sound.files.wordpress.com/2016/06/scuffedstatic_blue1400x900.jpg?w=1200);
+    background-repeat: no-repeat;
+    background-position: center center;
     background-attachment: fixed;
-    background-size: 112% auto;
-
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
+
+.block-tweet {
+    height: 500px;
+    width: 650px;
+    word-break:break-all;
+}
+
 .dropdown-menu{
     background: #6d6f70;
 }

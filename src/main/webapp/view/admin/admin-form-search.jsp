@@ -21,7 +21,7 @@
 <c:set var="pageListHolder" value="${productList}" scope="session"/>
 
 <c:if test="${productList != null}">
-    <div class="col-md-9">
+    <div class="col-md-9 col-lg-offset-2">
         <div class="row">
             <div class="col-md-4">
                 <ul class="pagination justify-content-end pull-left">

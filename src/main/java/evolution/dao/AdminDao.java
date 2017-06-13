@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Admin on 02.04.2017.
  */
-public interface AdminDao {
+public interface AdminDao extends DefaultDao {
 
     String FIND_ALL_USER_ID_FIRST_LAST = "select new User(id, firstName, lastName) \n from User";
 

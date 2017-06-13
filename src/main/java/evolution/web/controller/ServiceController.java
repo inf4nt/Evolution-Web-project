@@ -42,6 +42,7 @@ public class ServiceController {
     private UserDao userDao;
     @Autowired
     private MyJacksonService jacksonService;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceController.class);
 
     @ResponseBody
@@ -123,7 +124,7 @@ public class ServiceController {
             LOGGER.info("update user");
             ((UserToken)entityToken).getUser().setPassword(newPassword);
 
-            userDao.update(((UserToken) entityToken).getUser());
+            userDao.repository().update(((UserToken) entityToken).getUser());
 
             LOGGER.info("send notification");
             notificationUser.successUserForgot((UserToken) entityToken);
@@ -157,7 +158,7 @@ public class ServiceController {
 
 
             User user = ((UserToken)entityToken).getUser();
-            userDao.save(user);
+            userDao.repository().save(user);
             notificationUser.successUserRegistration((UserToken) entityToken);
             LOGGER.info("User is valid, success registration");
             sessionStatus.setComplete();

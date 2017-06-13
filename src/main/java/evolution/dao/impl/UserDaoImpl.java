@@ -4,6 +4,7 @@ package evolution.dao.impl;
 import evolution.common.UserRoleEnum;
 import evolution.dao.UserDao;
 import evolution.model.user.User;
+import lombok.Getter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -27,23 +28,15 @@ public class UserDaoImpl implements UserDao {
     private SessionFactory sessionFactory;
 
     @Autowired
+    private evolution.dao.Repository repository;
+
+    @Autowired
     public UserDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
-    @Override
-    public void save(User user) {
-        session().save(user);
-    }
-
-    @Override
-    public void update(User user) {
-        session().update(user);
-    }
-
-    @Override
-    public void delete(User user) {
-        session().delete(user);
+    public Session session() {
+        return sessionFactory.getCurrentSession();
     }
 
     @Override
@@ -130,7 +123,8 @@ public class UserDaoImpl implements UserDao {
         return map;
     }
 
-    public Session session(){
-        return sessionFactory.getCurrentSession();
+    @Override
+    public evolution.dao.Repository repository() {
+        return repository;
     }
 }

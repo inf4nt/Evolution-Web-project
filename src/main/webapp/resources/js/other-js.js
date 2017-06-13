@@ -1,6 +1,9 @@
 /**
  * Created by Admin on 13.05.2017.
  */
+
+var defaultTweetLength = 10000;
+
 function showHidePassword(href, divPass, divConfirm) {
     var type = $("#"+divPass+" input").attr("type");
     if (type == 'password') {
@@ -15,14 +18,27 @@ function showHidePassword(href, divPass, divConfirm) {
 
 $(document).ready(function () {
     $("head").show();
-    $("#head-navbar").slideDown("slow");
-    $("a, h1, h2, h3, h4, label, p").css("color", "white");
 
+    $("#head-navbar").slideDown("slow");
+
+    $("a, h1, h2, h3, h4, label, p").css("color", "white");
 
     $("#brand").click(function () {
         $("body").hide();
         $("body").fadeToggle("slow");
     })
+
+
+
+    $("#head-navbar").slideDown("slow");
+
+    $("#side").show("slow");
+
+    $("#inputMessage").val("");
+
+    $("#inputMessage").attr("maxlength", defaultTweetLength);
+
+
 })
 
 function adminPanel() {

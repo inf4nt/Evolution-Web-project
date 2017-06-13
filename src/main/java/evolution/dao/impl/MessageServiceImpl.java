@@ -56,13 +56,23 @@ public class MessageServiceImpl
             " order by m.id desc ";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageServiceImpl.class);
+
     private SessionFactory sessionFactory;
+
     @Autowired
     private DialogDao dialogDao;
 
     @Autowired
+    private evolution.dao.Repository repository;
+
+    @Autowired
     public MessageServiceImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public evolution.dao.Repository repository() {
+        return repository;
     }
 
     @Override
@@ -71,38 +81,8 @@ public class MessageServiceImpl
     }
 
     @Override
-    public void update(Dialog dialog) {
-        dialogDao.update(dialog);
-    }
-
-    @Override
-    public void delete(Dialog dialog) {
-        dialogDao.delete(dialog);
-    }
-
-    @Override
     public Dialog find(Dialog dialog) {
         return dialogDao.find(dialog);
-    }
-
-    @Override
-    public void save(Message message) {
-        session().save(message);
-    }
-
-    @Override
-    public void merge(Message message) {
-        session().merge(message);
-    }
-
-    @Override
-    public void update(Message message) {
-        session().update(message);
-    }
-
-    @Override
-    public void delete(Message message) {
-        session().delete(message);
     }
 
     @Override

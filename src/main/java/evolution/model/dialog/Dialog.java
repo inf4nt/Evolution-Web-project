@@ -20,17 +20,16 @@ public class Dialog {
     @Column(name = "id")
     @JsonProperty
     private Long id;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "first")
     @JsonProperty
     private User first;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "second")
     @JsonProperty
     private User second;
-
-    @OneToMany(mappedBy = "dialog", fetch = FetchType.LAZY)
-    private List<Message> listMessage;
 
     public Dialog(Long id) {
         this.id = id;

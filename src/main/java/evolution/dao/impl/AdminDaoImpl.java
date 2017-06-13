@@ -20,11 +20,19 @@ import java.util.List;
 public class AdminDaoImpl
         implements AdminDao {
 
-    @Autowired
     private SessionFactory sessionFactory;
 
+    @Autowired
+    private evolution.dao.Repository repository;
+
+    @Autowired
     public AdminDaoImpl(SessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public evolution.dao.Repository repository() {
+        return repository;
     }
 
     @Override

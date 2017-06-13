@@ -25,11 +25,19 @@ import java.util.Map;
 public class FriendsDaoImpl
             implements FriendsDao {
 
-    @Autowired
     private SessionFactory sessionFactory;
 
+    @Autowired
+    private evolution.dao.Repository repository;
+
+    @Autowired
     public FriendsDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public evolution.dao.Repository repository() {
+        return repository;
     }
 
     @Override

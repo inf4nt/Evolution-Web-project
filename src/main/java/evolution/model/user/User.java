@@ -24,6 +24,7 @@ public class User extends UserDefaultData{
     @Column
     @JsonProperty
     private String country;
+
     @Column
     @JsonProperty
     private String state;
@@ -44,7 +45,6 @@ public class User extends UserDefaultData{
         this.firstName = firstName;
         this.lastName = lastName;
     }
-
 
     @JsonIgnore
     public void updateFields(User user) {

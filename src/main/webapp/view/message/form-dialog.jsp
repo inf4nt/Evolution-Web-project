@@ -15,7 +15,7 @@
 <%@include file="../index/header.jsp" %>
 
 
-<div id="div-message-dialog" class="col-lg-6 col-lg-offset-1 col-md-6 col-md-offset-1">
+<div id="div-message-dialog" class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-1">
 
     <h4>
         <span class="glyphicon glyphicon-th-list"></span>
