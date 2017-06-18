@@ -1,8 +1,8 @@
 package evolution.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import evolution.dao.FeedRepository;
 import evolution.dao.FriendsDao;
-import evolution.dao.FeedDao;
 import evolution.dao.UserDao;
 import evolution.model.friend.Friends;
 import evolution.model.user.User;
@@ -25,6 +25,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Admin on 05.03.2017.
@@ -47,37 +48,44 @@ public class UserController {
     @Autowired
     private SearchService searchService;
     @Autowired
-    private FeedDao newsDao;
+    private FeedRepository feedRepository;
     private Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @RequestMapping (value = "/id{id}", method = RequestMethod.GET)
     public String home (
             @PathVariable Long id,
             Model model,
-            @SessionAttribute(required = false) User authUser,
-            SessionStatus sessionStatus) {
-
-        sessionStatus.setComplete();
-        LOGGER.info("Session status set complete");
+            @SessionAttribute(required = false) User authUser) {
 
         if (authUser.getId().equals(id)) {
             model.addAttribute("user", authUser);
+            LOGGER.info("session user\n" + authUser);
             LOGGER.info("My home. User id = " + id);
         } else {
             try {
                 Friends friends = friendsDao.findUserAndFriendStatus(authUser.getId(), id);
                 model.addAttribute("user", friends.getUser());
+                LOGGER.info("session user\n" + friends.getUser());
                 model.addAttribute("status", friends.getStatus());
                 LOGGER.info("Other user id = " + friends.getUser().getId());
             } catch (NoResultException e) {
-                LOGGER.info("User by id " + id +", is not exist\n" + e.toString());
+                LOGGER.error("User by id " + id +", is not exist\n" + e);
                 return "redirect:/user/id" + authUser.getId();
             }
         }
 
-        model.addAttribute("news", newsDao.allPosts(id, 100, 0));
+//        model.addAttribute("feed", feedRepository.feed(id, 100, 0));
 
         return "user/my-home";
+    }
+
+    @ResponseBody @RequestMapping(value = "/", method = RequestMethod.GET,
+            produces={"application/json; charset=UTF-8"})
+    public String allUser(@RequestParam Integer limit,
+                          @RequestParam Integer offset) throws JsonProcessingException {
+
+        List list = userDao.findAll(limit, offset);
+        return jacksonService.objectToJson(list);
     }
 
     // EDIT
@@ -116,11 +124,6 @@ public class UserController {
         return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), null, false);
     }
 
-    @RequestMapping(value = "/ex", method = RequestMethod.GET)
-    public String ex() {
-        throw new NullPointerException();
-    }
-
     // DELETE
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseBody @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -135,6 +138,9 @@ public class UserController {
                           HttpServletRequest request,
                           Model model) {
 
+        LOGGER.info("session user\n" + request.getSession().getAttribute("user"));
+
+
         if (id.equals(customUser.getUser().getId())) {
             model.addAttribute("user", customUser.getUser());
             return "user/form-my-profile";
@@ -147,13 +153,24 @@ public class UserController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String viewSearch(){
+    public String viewSearch(Model model, SessionStatus sessionStatus){
+        sessionStatus.setComplete();
+        LOGGER.info("session status set complete");
+        int limit = 5;
+        model.addAttribute("limit", limit);
+        model.addAttribute("list", userDao.findAll(limit, 0));
         return "user/new-search";
     }
 
     @ResponseBody @RequestMapping(value = "/search-result", method = RequestMethod.GET, produces={"application/json; charset=UTF-8"})
-    public String resultSearch(@RequestParam String like) throws JsonProcessingException {
-        return jacksonService.objectToJson(searchService.searchUser(like));
+    public String resultSearch(@RequestParam String like,
+                               @RequestParam Integer limit,
+                               @RequestParam Integer offset) throws JsonProcessingException {
+        return jacksonService.objectToJson(searchService.searchUser(like, limit, offset));
     }
 
+    @RequestMapping(value = "/ex", method = RequestMethod.GET)
+    public String ex() {
+        throw new NullPointerException();
+    }
 }

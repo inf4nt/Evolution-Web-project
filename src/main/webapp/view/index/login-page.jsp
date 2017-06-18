@@ -41,9 +41,6 @@
 
 <body>
 
-
-
-
 <div id="loader" style="display: none" class="centerLayer">
   <h1 class="text text-center">
     <img src="/resources/3.gif"/>

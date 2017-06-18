@@ -79,9 +79,9 @@
 
 
     <mapping class="evolution.model.news.Feed"/>
-    <mapping class="evolution.model.news.FeedReference"/>
 
 
+    <mapping class="evolution.model.news.RepostFeed"/>
 
 
 

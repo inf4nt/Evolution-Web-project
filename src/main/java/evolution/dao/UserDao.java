@@ -41,9 +41,9 @@ public interface UserDao extends DefaultDao {
 
     List<User> findUserByFirstOrLastName(String p1);
 
-    List<User> findUserByFirstLastName(String p1, String p2, int limit);
+    List<User> findUserByFirstLastName(String p1, String p2, int limit, int offset);
 
-    List<User> findUserByFirstOrLastName(String p1, int limit);
+    List<User> findUserByFirstOrLastName(String p1, int limit, int offset);
 
     User selectFirstLastName (long id);
 
@@ -53,5 +53,5 @@ public interface UserDao extends DefaultDao {
 
     List<User> findAllAdmin(int limit, int offset);
 
-    Map<String, List<User>> findAll(int limit, int offset);
+    List<User> findAll (int limit, int offset);
 }

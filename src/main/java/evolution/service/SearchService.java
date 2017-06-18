@@ -17,13 +17,13 @@ public class SearchService {
     @Autowired
     private UserDao userDao;
 
-    public List<User> searchUser(String string) {
+    public List<User> searchUser(String string, int limit, int offset) {
         if (string.matches("^[a-zA-Z]+$")) {
-            return userDao.findUserByFirstOrLastName(string);
+            return userDao.findUserByFirstOrLastName(string, limit, offset);
         }
         if (string.matches("^[a-zA-Z]+\\s[a-zA-Z]+$")) {
             String regex[] = string.split(" ");
-            return userDao.findUserByFirstLastName(regex[0], regex[1]);
+            return userDao.findUserByFirstLastName(regex[0], regex[1], limit, offset);
         }
         throw new NoResultException();
     }

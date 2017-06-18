@@ -9,9 +9,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
-import evolution.dao.FeedDao;
-import evolution.dao.impl.FeedDaoImpl;
+import evolution.dao.FeedRepository;
+import evolution.dao.impl.FeedRepositoryImpl;
 import evolution.model.news.Feed;
+import evolution.model.user.User;
 import evolution.service.validation.Validator;
 import org.hibernate.*;
 
@@ -22,7 +23,6 @@ import java.io.IOException;
 import java.util.*;
 
 
-
 /**
  * Created by Admin on 03.03.2017.
  */
@@ -30,12 +30,9 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-//        String PathVariableId = new AntPathMatcher()
-//                .extractPathWithinPattern( "/user/profile/**", "/user/profile/312" );
 
 
         SessionFactory sessionFactory = null;
-        Validator validator = new Validator();
         Session session = null;
         try {
             sessionFactory = getSessionFactory();
@@ -48,23 +45,6 @@ public class Main {
             List list;
             org.hibernate.query.Query query;
             Map map;
-
-
-
-
-
-            FeedDao newsDao = new FeedDaoImpl(sessionFactory);
-
-//            News news = new News("last news", new Date(), new User(226L));
-//
-//            newsDao.session().save(news);
-
-
-//            newsDao.allPosts(226L, 100, 0).forEach(System.out::println);
-
-
-            newsDao.repository().delete(new Feed(6L));
-
 
 
 
@@ -84,8 +64,8 @@ public class Main {
 
 
 
-
     }
+
 
     public static SessionFactory getSessionFactory(){
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();

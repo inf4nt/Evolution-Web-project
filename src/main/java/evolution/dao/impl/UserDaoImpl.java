@@ -67,19 +67,21 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> findUserByFirstLastName(String p1, String p2, int limit) {
+    public List<User> findUserByFirstLastName(String p1, String p2, int limit, int offset) {
         Query query = session().createQuery(FIND_USER_BY_FIRST_LAST_NAME);
         query.setParameter("p1", p1);
         query.setParameter("p2", p2);
         query.setMaxResults(limit);
+        query.setFirstResult(offset);
         return query.list();
     }
 
     @Override
-    public List<User> findUserByFirstOrLastName(String p1, int limit) {
+    public List<User> findUserByFirstOrLastName(String p1, int limit, int offset) {
         Query query = session().createQuery(FIND_USER_BY_FIRST_OR_LAST_NAME);
         query.setParameter("p1", p1);
         query.setMaxResults(limit);
+        query.setFirstResult(offset);
         return query.list();
     }
 
@@ -114,13 +116,11 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Map<String, List<User>> findAll(int limit, int offset) {
-        Map<String, List<User>> map = new HashMap<>();
-
-        map.put(UserRoleEnum.USER.toString().toLowerCase(), findAllUser(limit, offset));
-        map.put(UserRoleEnum.ADMIN.toString().toLowerCase(), findAllAdmin(limit, offset));
-
-        return map;
+    public List<User> findAll(int limit, int offset) {
+        Query query = session().createQuery(FIND_ALL_USER);
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
+        return query.list();
     }
 
     @Override
