@@ -167,8 +167,6 @@ public class UserController {
                                @RequestParam Integer limit,
                                @RequestParam Integer offset
     ) throws JsonProcessingException {
-        limit = 100;
-        offset = 0;
         return jacksonService.objectToJson(searchService.searchUser(like, limit, offset));
     }
 
