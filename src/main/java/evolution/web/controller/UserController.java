@@ -165,7 +165,10 @@ public class UserController {
     @ResponseBody @RequestMapping(value = "/search-result", method = RequestMethod.GET, produces={"application/json; charset=UTF-8"})
     public String resultSearch(@RequestParam String like,
                                @RequestParam Integer limit,
-                               @RequestParam Integer offset) throws JsonProcessingException {
+                               @RequestParam Integer offset
+    ) throws JsonProcessingException {
+        limit = 100;
+        offset = 0;
         return jacksonService.objectToJson(searchService.searchUser(like, limit, offset));
     }
 
