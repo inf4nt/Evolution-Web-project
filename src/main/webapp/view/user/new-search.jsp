@@ -101,21 +101,21 @@
 
 <script>
 
-    var countLike = 0;
     var countMoreUser = 0;
     var limit = ${limit};
 
     function keyupSearch() {
         var like = $("#search-input").val();
 
-        var likePattern = /^[a-zA-Z0-9]+\s?[a-zA-Z0-9]+$/;
+        var likePattern = /^[a-zA-Z0-9]+\s?[a-zA-Z0-9]*$/;
 
         console.log(likePattern.test(like));
 
         if (likePattern.test(like) === false)
             return false;
 
-        var offset = countLike * limit;
+        limit = 50;
+        var offset = 0;
 
         $.ajax({
             url:"/user/search-result?like=" + like + "&limit=" + limit + "&offset=" + offset,
@@ -143,7 +143,7 @@
     }
 
     function ajaxMoreUser() {
-        var offset = countMoreUser * limit;
+        var offset = countMoreUser * limit + 1;
 
         countMoreUser = countMoreUser + 1;
         var loader = $("#span-more-users-loader");
