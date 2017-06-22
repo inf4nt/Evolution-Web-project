@@ -114,11 +114,9 @@
         if (likePattern.test(like) === false)
             return false;
 
-        limit = 50;
-        var offset = 0;
 
         $.ajax({
-            url:"/user/search-result?like=" + like + "&limit=" + limit + "&offset=" + offset,
+            url:"/user/search-result?like=" + like + "&limit=" + 50 + "&offset=" + 0,
             type:"GET",
             success:function (data) {
                 $("#tbody-search-result").html(generateTable(data));
