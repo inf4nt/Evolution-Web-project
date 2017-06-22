@@ -49,6 +49,7 @@ public class UserController {
     private SearchService searchService;
     @Autowired
     private FeedRepository feedRepository;
+
     private Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @RequestMapping (value = "/id{id}", method = RequestMethod.GET)
@@ -81,11 +82,14 @@ public class UserController {
 
     @ResponseBody @RequestMapping(value = "/", method = RequestMethod.GET,
             produces={"application/json; charset=UTF-8"})
-    public String allUser(@RequestParam Integer limit,
-                          @RequestParam Integer offset) throws JsonProcessingException {
+    public List allUser(@RequestParam(required = false) Integer limit,
+                        @RequestParam(required = false) Integer offset) throws JsonProcessingException {
 
-        List list = userDao.findAll(limit, offset);
-        return jacksonService.objectToJson(list);
+        if (limit == null || offset == null) {
+            return userDao.findAll();
+        }
+
+        return userDao.findAll(limit, offset);
     }
 
     // EDIT
@@ -162,12 +166,16 @@ public class UserController {
         return "user/new-search";
     }
 
-    @ResponseBody @RequestMapping(value = "/search-result", method = RequestMethod.GET, produces={"application/json; charset=UTF-8"})
-    public String resultSearch(@RequestParam String like,
-                               @RequestParam Integer limit,
-                               @RequestParam Integer offset
-    ) throws JsonProcessingException {
-        return jacksonService.objectToJson(searchService.searchUser(like, limit, offset));
+    @ResponseBody @RequestMapping(value = "/search-result", method = RequestMethod.GET,
+            produces={"application/json; charset=UTF-8"})
+    public List resultSearch(@RequestParam(required = false, defaultValue = "") String like,
+                             @RequestParam(required = false, defaultValue = "0") Integer limit,
+                             @RequestParam(required = false, defaultValue = "0") Integer offset) throws JsonProcessingException {
+        try {
+            return searchService.searchUser(like, limit, offset);
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @RequestMapping(value = "/ex", method = RequestMethod.GET)

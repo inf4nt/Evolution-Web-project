@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 11.05.2017
-  Time: 19:34
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
@@ -16,20 +9,15 @@
 <body>
 <%@include file="../index/header.jsp" %>
 
-<div id="searchBox" class="input-group col-lg-7 col-lg-offset-3">
-    <input maxlength="32" autocomplete="off" type="text" class="form-control input-xs" name="like">
-    <div class="input-group-btn">
-        <button id="button_searchBox" class="btn btn-search btn-muted">
-            <span class="glyphicon glyphicon-search"></span>
-            <span class="label-icon">Search</span>
-        </button>
-    </div>
-</div>
 
-<div id="headSearchResult" style="display: block">
-    <div class="col-md-6 col-lg-offset-3">
-        <%--<h1 id="result"></h1>--%>
-        <div class="row">
+
+<div class="col-lg-10 col-lg-offset-2">
+    <br/>
+    <br/>
+
+    <div class="col-lg-9">
+
+        <div id="users" style="display: none">
             <div class="col-md-14">
                 <table class="table">
                     <thead>
@@ -38,7 +26,7 @@
                         <td></td>
                     </tr>
                     </thead>
-                    <tbody id="tbodySearchResult">
+                    <tbody id="tbody-users">
                     <c:forEach var="a" items="${list}">
                         <tr>
                             <td style="width: 2%">
@@ -54,132 +42,137 @@
                 </table>
             </div>
             <div id="more-users" class="text-center">
-                <button name="more-users" class="btn btn-default">
-                    <span class="glyphicon glyphicon-download"></span> more
-                </button>
-                <button style="display: none" name="more-users-like" class="btn btn-default">
+                <button onclick="ajaxMoreUser()" name="more-users" class="btn btn-default">
                     <span class="glyphicon glyphicon-download"></span> more
                 </button>
                 <span style="display: none" id="span-more-users-loader" class="glyphicon glyphicon-download">
-                         <img style="width: 35px; height: 35px;" src="/resources/3.gif"/>
-                </span>
+                 <img style="width: 35px; height: 35px;" src="/resources/3.gif"/></span>
                 <br/><br/><br/>
             </div>
         </div>
+
+        <div id="search-box" style="display: block" >
+            <div id="searchBox" class="input-group">
+                <input id="search-input" onkeyup="keyupSearch()" maxlength="32" autocomplete="off" type="text" class="form-control input-xs" name="like">
+                <div class="input-group-btn">
+                    <button id="button-search" class="btn btn-search btn-muted">
+                        <span class="glyphicon glyphicon-search"></span>
+                        <span class="label-icon">Search</span>
+                    </button>
+                </div>
+            </div>
+            <br/>
+            <div id="search-result" class="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody-search-result">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
+
+    <div class="col-lg-2  btn-group">
+        <br/><br/>
+
+        <ul>
+            <li class="text-center">
+                <a onclick="showUsers()" href="#/" style="width: 80%" >Users <span class="glyphicon glyphicon-user"></span></a>
+            </li>
+            <hr/>
+            <li class="text-center">
+                <a onclick="showSearch()" href="#/" style="width: 80%">Search <span class="glyphicon glyphicon-search"></span></a>
+            </li>
+        </ul>
+    </div>
+
 </div>
+
+
 
 
 
 <script>
 
-    var count = 0;
-    var countLike;
+    var countLike = 0;
+    var countMoreUser = 0;
     var limit = ${limit};
-    var likes;
 
+    function keyupSearch() {
+        var like = $("#search-input").val();
 
-    $(document).ready(function () {
-        var idbutton = $("#more-users button[name=more-users]");
-        var idSpanLoader = $("#span-more-users-loader");
-        $(idbutton).click(function () {
-            count = count + 1;
-            var offset = count * limit;
+        var likePattern = /^[a-zA-Z0-9]+\s?[a-zA-Z0-9]+$/;
 
-            idbutton.hide();
-            idSpanLoader.fadeToggle("slow");
+        console.log(likePattern.test(like));
 
-            $.ajax({
-                url:"/user/?limit=" + limit + "&offset=" + offset,
-                type:"GET",
-                success:function (data) {
-                    moreUser(data);
-                    idSpanLoader.hide();
-                    if (data.length >= ${limit}){
-                        idbutton.fadeToggle("slow");
-                    }
-                },
-                error:function () {
-                    alert('Sorry, server is not responded');
-                },
-                timeout:15000
-            })
+        if (likePattern.test(like) === false)
+            return false;
+
+        var offset = countLike * limit;
+
+        $.ajax({
+            url:"/user/search-result?like=" + like + "&limit=" + limit + "&offset=" + offset,
+            type:"GET",
+            success:function (data) {
+                $("#tbody-search-result").html(generateTable(data));
+                $("a").css("color", "white");
+            },
+            error:function () {
+
+            },
+            timeout:30000
         })
-
-
-        var idButtonLikeUser = $("#more-users button[name=more-users-like]");
-
-        idButtonLikeUser.click(function () {
-            countLike = countLike + 1;
-            var offset = countLike * limit;
-
-
-            idButtonLikeUser.hide();
-            idSpanLoader.fadeToggle("slow");
-
-            $.ajax({
-                url:"/user/search-result/?limit=" + limit + "&offset=" + offset + "&like=" + likes,
-                success:function (data) {
-                    idSpanLoader.hide();
-                    if (data.length >= ${limit}){
-                        idButtonLikeUser.fadeToggle("slow");
-                    }
-                    else {
-                        idButtonLikeUser.hide();
-                    }
-                    moreUser(data);
-                },
-                error:function () {
-
-                },
-                timeout:15000
-            })
-        })
-    })
-
-
-
-    function moreUser(data) {
-        if (data) {
-            var result;
-            for (var i = 0; i < data.length; i++) {
-                var user = data[i];
-                result = result + templateUsersTable(user);
-            }
-            $("#tbodySearchResult")
-                .append(result);
-            $("a").css("color", "white");
-        }
     }
 
-    $(document).ready(function () {
-        $("#button_searchBox").click(function () {
-            var like = $("#searchBox input").val();
-            if (like.length > 2) {
-                $("#headSearchResult").show();
-                getResultAjax(like);
-            } else {
-                $("#headSearchResult").hide();
 
-            }
-            countLike = 0;
-            likes = like;
-        })
-        $("#searchBox input").keyup(function () {
-            setTimeout(function () {
-                var like = $("#searchBox input").val();
-                if (like.length > 2) {
-                    $("#headSearchResult").show();
-                    getResultAjax(like);
+    function showUsers() {
+        $("#search-box, #users").hide();
+        $("#users").fadeToggle("slow");
+    }
+
+    function showSearch() {
+        $("#search-box, #users").hide();
+        $("#search-box").fadeToggle("slow");
+    }
+
+    function ajaxMoreUser() {
+        var offset = countMoreUser * limit;
+
+        countMoreUser = countMoreUser + 1;
+        var loader = $("#span-more-users-loader");
+        var button = $("#more-users button[name=more-users]");
+
+        button.hide();
+        loader.fadeToggle("slow");
+
+        $.ajax({
+            url:"/user/?limit=${limit}&offset=" + offset,
+            type:"GET",
+            complete:function () {
+                loader.hide();
+            },
+            success:function (data) {
+                if (data.length === 0 || data.length < limit) {
+                    button.hide();
                 } else {
-                    $("#headSearchResult").hide();
+                    button.fadeToggle("slow");
+                    $("#tbody-users").append(generateTable(data));
+                    $("a").css("color", "white");
                 }
-                likes = like;
-            }, 1000);
-            $("#more-users button[name=more-users]").hide();
-            countLike = 0;
-        });
-    })
+            },
+            error:function () {
+                alert('Sorry, server is not responded');
+            },
+            timeout:30000
+        })
+    }
 
     function templateUsersTable(user) {
         var template =
@@ -192,46 +185,15 @@
         return template;
     }
 
-    function getResultAjax(like) {
-        $.ajax({
-            url:"/user/search-result?limit=" + limit + "&offset=" + count + "&like=" + like,
-            type:"GET",
-            contentType:"application/json; charset=UTF-8",
-            dataType: "json",
-            success:function (data) {
-                if (data.length == 0)
-                    $("#tbodySearchResult").html("");
-
-                if (data.length >= ${limit}) {
-                    $("#more-users button[name=more-users-like]").show();
-                }
-
-                generateTable(data);
-            },
-            error:function () {
-
-            },
-            timeout:15000
-        })
+    function generateTable(json) {
+        var result = '';
+        for (var i = 0; i < json.length; i++)
+            result = result + templateUsersTable(json[i]);
+        return result;
     }
 
-    function generateTable(data) {
-        if (data) {
-            var jsonData = data;
-            var result;
-            $("#result").html(jsonData.length +' matches')
-            for (var i = jsonData.length - 1; i >= 0; i--) {
-                var user = jsonData[i];
-                result = result + templateUsersTable(user);
-            }
-            $("#tbodySearchResult")
-                .html(result);
-            $("a").css("color", "white");
-        }
-    }
 
 </script>
-
-
 </body>
 </html>
+

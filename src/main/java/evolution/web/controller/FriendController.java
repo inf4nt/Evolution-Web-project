@@ -79,7 +79,7 @@ public class FriendController {
 
     @ResponseBody @RequestMapping(value = "/{status}/{userId}", method = RequestMethod.GET,
             produces={"application/json; charset=UTF-8"})
-    public String moreFriend(@PathVariable Long userId,
+    public List moreFriend(@PathVariable Long userId,
                          @PathVariable String status,
                          @RequestParam Integer limit,
                          @RequestParam Integer offset,
@@ -87,7 +87,6 @@ public class FriendController {
                          @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws JsonProcessingException {
 
         List list = new ArrayList();
-
         if (FriendStatusEnum.PROGRESS.toString().equalsIgnoreCase(status)) {
             list = friendsDao.moreFriend(userId, limit, offset);
         }
@@ -98,7 +97,7 @@ public class FriendController {
                 && FriendStatusEnum.REQUEST.toString().equalsIgnoreCase(status)){
             list =  friendsDao.moreRequest(userId, limit, offset);
         }
-        return jacksonService.objectToJson(list);
+        return list;
     }
 
 

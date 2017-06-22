@@ -25,6 +25,27 @@ import java.util.Map;
 @Transactional
 public class UserDaoImpl implements UserDao {
 
+    private final static String FIND_USER_BY_USERNAME = "from User where login = :l";
+
+    private final static String FIND_ALL_USER = " from User ";
+
+    private final static String SELECT_ID_FIRST_LAST_NAME = "select new User(id, firstName, lastName) " + FIND_ALL_USER + " where id = :id";
+
+    private final static String FIND_USER_BY_FIRST_LAST_NAME = "select new User(u.id, u.firstName, u.lastName )from User u " +
+            " where (lower(u.firstName) like lower (concat('%', :p1, '%')) and lower(u.lastName) like lower(concat('%', :p2, '%'))) " +
+            " or (lower(u.lastName) like lower (concat('%', :p1, '%')) and lower(u.firstName) like lower(concat('%', :p2, '%')))";
+
+    private final static String FIND_USER_BY_FIRST_OR_LAST_NAME = " select new User(u.id, u.firstName, u.lastName )from User u " +
+            " where (lower(u.firstName) like lower (concat('%', :p1, '%'))) or (lower(u.lastName) like lower(concat('%', :p1, '%')))";
+
+    private final static String FIND_ALL_USER_ID_FIRST_LAST = "select new User(id, firstName, lastName) \n " + FIND_ALL_USER;
+
+    private final static String FIND_USER_BY_ROLE_USER = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.USER.getId() +
+            " order by id desc";
+
+    private final static String FIND_USER_BY_ROLE_ADMIN = FIND_ALL_USER_ID_FIRST_LAST + "\n where role_id = " + UserRoleEnum.ADMIN.getId() +
+            " order by id desc";
+
     private SessionFactory sessionFactory;
 
     @Autowired
@@ -86,13 +107,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User selectFirstLastName(long id) {
-        Query query = session().createQuery(SELECT_FIRST_LAST_NAME);
-        query.setParameter("id", id);
-        return (User) query.getSingleResult();
-    }
-
-    @Override
     public User selectIdFirstLastName(long id) {
         Query query = session().createQuery(SELECT_ID_FIRST_LAST_NAME);
         query.setParameter("id", id);
@@ -121,6 +135,11 @@ public class UserDaoImpl implements UserDao {
         query.setMaxResults(limit);
         query.setFirstResult(offset);
         return query.list();
+    }
+
+    @Override
+    public List<User> findAll() {
+        return session().createQuery(FIND_ALL_USER_ID_FIRST_LAST).list();
     }
 
     @Override

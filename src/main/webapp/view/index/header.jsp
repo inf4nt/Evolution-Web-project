@@ -1,4 +1,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+
 <script src="<c:url value="/resources/JQuery/jquery-3.2.1.min.js" />"></script>
 <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
 <script src="<c:url value="/resources/js/validators.js" />"></script>
@@ -30,7 +33,8 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							${authUser.login}
+							<%--${authUser.login}--%>
+							${fn:substring(authUser.login,0 , 20)}
 							<span class="glyphicon glyphicon-log-out"></span>
 						</a>
 						<ul class="dropdown-menu">

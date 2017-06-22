@@ -41,5 +41,4 @@ public class IndexController {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         return "redirect:/welcome";
     }
-
 }

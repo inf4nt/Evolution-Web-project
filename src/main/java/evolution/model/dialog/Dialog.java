@@ -1,11 +1,10 @@
 package evolution.model.dialog;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import evolution.model.message.Message;
 import evolution.model.user.User;
 import lombok.*;
 import javax.persistence.*;
-import java.util.List;
+
 
 /**
  * Created by Admin on 09.06.2017.
