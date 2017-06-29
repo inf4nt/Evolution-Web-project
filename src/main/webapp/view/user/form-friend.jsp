@@ -19,34 +19,32 @@
 <body>
 <%@include file="../index/header.jsp" %>
 
-
-
-<br/><br/>
-<div class="col-md-10 col-lg-offset-2">
+<div class="col-md-10 col-lg-offset-2 div-white">
 
     <div class="col-md-3 pull-right">
-        <br/>
-        <a href="/user/id${user.id}" >${user.firstName} ${user.lastName}</a>
-        <br/><br/>
-        <span class="glyphicon glyphicon-user"></span><a id="open-friend" href="#" > Friends</a>
-        <br/>
-        <span class="glyphicon glyphicon-share-alt"></span><a id="open-follower" href="#" > Followers</a>
-        <br/>
-        <sec:authorize access="hasRole('ROLE_USER')">
-            <c:if test="${authUser.id == user.id}">
-                <span class="glyphicon glyphicon-question-sign"></span><a id="open-request" href="#" > Friend request</a>
-            </c:if>
-        </sec:authorize>
-        <sec:authorize access="hasRole('ROLE_ADMIN')">
-            <span class="glyphicon glyphicon-question-sign"></span><a id="open-request" href="#" > Friend request</a>
-        </sec:authorize>
+        <div class="block-background" style="width: 70%">
+            <br/>
+            <p class="text-center">
+                <a href="/user/id${user.id}" >${user.firstName} ${user.lastName}</a>
+                <br/><br/>
+                <span class="glyphicon glyphicon-user"></span><a id="open-friend" href="#" > Friends</a>
+                <br/>
+                <span class="glyphicon glyphicon-share-alt"></span><a id="open-follower" href="#" > Followers</a>
+                <br/>
+                <sec:authorize access="hasRole('ROLE_USER')">
+                    <c:if test="${authUser.id == user.id}">
+                        <span class="glyphicon glyphicon-question-sign"></span><a id="open-request" href="#" > Friend request</a>
+                    </c:if>
+                </sec:authorize>
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                    <span class="glyphicon glyphicon-question-sign"></span><a id="open-request" href="#" > Friend request</a>
+                </sec:authorize>
+            </p>
+        </div>
     </div>
-
-
-
     <div class="friend" id="div-friend" style="display: none">
         <c:if test="${progress.size() > 0}">
-            <div class="col-md-8">
+            <div class="col-md-8 block-background">
                 <p class="pull-left">Friends</p>
                 <br/>
                 <table id="table-friend" class="table">
@@ -84,7 +82,7 @@
 
     <div class="friend" id="div-follower" style="display: none">
         <c:if test="${follower.size() > 0}">
-            <div class="col-md-8">
+            <div class="col-md-8 block-background">
                 <p class="pull-left">Followers</p>
                 <br/>
                 <table id="table-follower" class="table">
@@ -122,7 +120,7 @@
 
     <div class="friend" id="div-request" style="display: none">
         <c:if test="${request.size() > 0}">
-            <div class="col-md-8">
+            <div class="col-md-8 block-background">
                 <p class="pull-left">Request</p>
                 <br/>
                 <table id="table-request" class="table">

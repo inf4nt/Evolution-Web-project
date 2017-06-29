@@ -21,7 +21,7 @@ $(document).ready(function () {
 
     $("#head-navbar").slideDown("slow");
 
-    $("a, h1, h2, h3, h4, label, p").css("color", "white");
+    // $("a, h1, h2, h3, h4, label, p").css("color", "white");
 
     $("#brand").click(function () {
         $("body").hide();

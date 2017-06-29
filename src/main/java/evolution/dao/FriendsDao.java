@@ -2,18 +2,26 @@ package evolution.dao;
 
 import evolution.common.FriendStatusEnum;
 import evolution.model.friend.Friends;
+import evolution.model.user.User;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by Admin on 26.03.2017.
  */
-public interface FriendsDao extends DefaultDao {
+@Service
+public class FriendsDao {
 
-    String CHECK_FRIENDS = "select 1 from Friends f where (f.user.id =:id1 and f.friend.id =:id2 and f.status =:status) " +
+    private static final String CHECK_FRIENDS = "select 1 from Friends f where (f.user.id =:id1 and f.friend.id =:id2 and f.status =:status) " +
             "or (f.user.id =:id2 and f.friend.id =:id1 and f.status =:status )";
 
-    String FIND_ALL_FRIENDS = "select new Friends " +
+    private static final String FIND_ALL_FRIENDS = "select new Friends " +
             "(uf.id, uf.firstName, uf.lastName," +
             " uu.id, uu.firstName, uu.lastName) from User uf" +
             " join Friends ff on uf.id = ff.friend.id " +
@@ -21,59 +29,178 @@ public interface FriendsDao extends DefaultDao {
             " where ff.user.id = :id ";
 
 
-    String USER_JOIN_FRIEND = "select new Friends " +
+    private static final String USER_JOIN_FRIEND = "select new Friends " +
             "(uf.id, uf.firstName, uf.lastName) " +
             " from User uf" +
             " join Friends ff on uf.id = ff.friend.id " +
             " where ff.user.id = :id ";
 
-    String SET_STATUS_FRIEND = "update Friends \nset status = :status \nwhere user.id = :u \nand friend.id = :f \nand status =:s";
+    private static final String SET_STATUS_FRIEND = "update Friends \nset status = :status \nwhere user.id = :u \nand friend.id = :f \nand status =:s";
 
-    String DELETE_REQUEST_FRIEND = "delete from Friends where (user.id = :u and friend.id = :f) \n" +
+    private static final String DELETE_REQUEST_FRIEND = "delete from Friends where (user.id = :u and friend.id = :f) \n" +
             "or (user.id = :f and friend.id = :u)";
 
-    String MORE_FRIEND = USER_JOIN_FRIEND + " and ff.status = " + FriendStatusEnum.PROGRESS.getId();
+    private static final String MORE_FRIEND = USER_JOIN_FRIEND + " and ff.status = " + FriendStatusEnum.PROGRESS.getId();
 
-    String MORE_FOLLOWER = USER_JOIN_FRIEND + " and ff.status = " + FriendStatusEnum.FOLLOWER.getId();
+    private static final String MORE_FOLLOWER = USER_JOIN_FRIEND + " and ff.status = " + FriendStatusEnum.FOLLOWER.getId();
 
-    String MORE_REQUEST = USER_JOIN_FRIEND + " and ff.status = " + FriendStatusEnum.REQUEST.getId();
+    private static final String MORE_REQUEST = USER_JOIN_FRIEND + " and ff.status = " + FriendStatusEnum.REQUEST.getId();
 
-    String FIND_FRIEND = FIND_ALL_FRIENDS + " and ff.status = " + FriendStatusEnum.PROGRESS.getId();
+    private static final String FIND_FRIEND = FIND_ALL_FRIENDS + " and ff.status = " + FriendStatusEnum.PROGRESS.getId();
 
-    String FIND_FOLLOWER = FIND_ALL_FRIENDS + " and ff.status = " + FriendStatusEnum.FOLLOWER.getId();
+    private static final String FIND_FOLLOWER = FIND_ALL_FRIENDS + " and ff.status = " + FriendStatusEnum.FOLLOWER.getId();
 
-    String FIND_REQUEST = FIND_ALL_FRIENDS + " and ff.status = " + FriendStatusEnum.REQUEST.getId();
+    private static final String FIND_REQUEST = FIND_ALL_FRIENDS + " and ff.status = " + FriendStatusEnum.REQUEST.getId();
 
 
-    String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status) from Friends f " +
+    private static final String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status) from Friends f " +
             " right join User u on u.id = f.friend.id and f.user.id = :authUserId " +
             " where u.id = :id";
 
-    Friends findUserAndFriendStatus(Long authUserId, Long id);
 
-    List<Friends> findFriend(long authUserId, int limit, int offset);
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    List<Friends> findFollower(long authUserId, int limit, int offset);
+    @Transactional
+    public void friendRequest(long authUserId, long id2) {
+        User authUser = new User(authUserId);
+        User user2 = new User(id2);
+        Friends request = new Friends(authUser, user2, FriendStatusEnum.REQUEST.getId());
+        Friends follower = new Friends(user2, authUser, FriendStatusEnum.FOLLOWER.getId());
+        entityManager.persist(follower);
+        entityManager.persist(request);
+    }
 
-    List<Friends> findRequest(long authUserId, int limit, int offset);
+    @Transactional
+    public void deleteFriend(long authUserId, long id2) {
+        javax.persistence.Query query = entityManager.createQuery(SET_STATUS_FRIEND);
+        query.setParameter("status", FriendStatusEnum.FOLLOWER.getId());
+        query.setParameter("u", authUserId);
+        query.setParameter("f", id2);
+        query.setParameter("s", FriendStatusEnum.PROGRESS.getId());
+        query.executeUpdate();
 
-    List<Friends> moreFriend(long authUserId, int limit, int offset);
+        query = entityManager.createQuery(SET_STATUS_FRIEND);
+        query.setParameter("status", FriendStatusEnum.REQUEST.getId());
+        query.setParameter("u", id2);
+        query.setParameter("f", authUserId);
+        query.setParameter("s", FriendStatusEnum.PROGRESS.getId());
+        query.executeUpdate();
+    }
 
-    List<Friends> moreFollower(long authUserId, int limit, int offset);
+    @Transactional
+    public void acceptFriend(long authUserId, long id2) {
+        javax.persistence.Query query = entityManager.createQuery(SET_STATUS_FRIEND);
+        query.setParameter("status", FriendStatusEnum.PROGRESS.getId());
+        query.setParameter("u", authUserId);
+        query.setParameter("f", id2);
+        query.setParameter("s", FriendStatusEnum.FOLLOWER.getId());
+        query.executeUpdate();
 
-    List<Friends> moreRequest(long authUserId, int limit, int offset);
+        query = entityManager.createQuery(SET_STATUS_FRIEND);
+        query.setParameter("status", FriendStatusEnum.PROGRESS.getId());
+        query.setParameter("u", id2);
+        query.setParameter("f", authUserId);
+        query.setParameter("s", FriendStatusEnum.REQUEST.getId());
+        query.executeUpdate();
+    }
 
-    Map<String, List<Friends>> friend(long authUserId, int limit, int offset);
+    @Transactional
+    public void deleteRequest(long authUserId, long id2) {
+        javax.persistence.Query query = entityManager.createQuery(DELETE_REQUEST_FRIEND);
+        query.setParameter("u", authUserId);
+        query.setParameter("f", id2);
+        query.executeUpdate();
+    }
 
-    Map<String, List<Friends>> friendFollower(long authUserId, int limit, int offset);
+    @Transactional
+    public Friends findUserAndFriendStatus(Long authUserId, Long id) {
+        javax.persistence.Query query = entityManager.createQuery(FIND_USER_AND_FRIEND_STATUS);
+        query.setParameter("authUserId", authUserId);
+        query.setParameter("id", id);
+        return (Friends) query.getSingleResult();
+    }
 
-    void acceptFriend (long authUserId, long id2);
 
-    void friendRequest (long authUserId, long id2);
+    @Transactional
+    public List<Friends> findFriend(long authUserId, int limit, int offset) {
+        javax.persistence.Query query = entityManager.createQuery(FIND_FRIEND);
+        query.setParameter("id", authUserId);
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
+        return query.getResultList();
+    }
 
-    void deleteFriend(long authUserId, long id2);
+    @Transactional
+    public Map<String, List<Friends>> friend(long authUserId, int limit, int offset) {
+        Map<String, List<Friends>> map = new HashMap<>();
+        map.put("progress", findFriend(authUserId, limit, offset));
+        map.put("follower", findFollower(authUserId, limit, offset));
+        map.put("request", findRequest(authUserId, limit, offset));
+        return map;
+    }
 
-    void deleteRequest(long authUserId, long id2);
+    @Transactional
+    public Map<String, List<Friends>> friendFollower(long authUserId, int limit, int offset) {
+        Map<String, List<Friends>> map = new HashMap<>();
+        map.put("progress", findFriend(authUserId, limit, offset));
+        map.put("follower", findFollower(authUserId, limit, offset));
+        return map;
+    }
 
-    boolean checkFriends(long authUserId, long id2);
+    @Transactional
+    public List<Friends> findFollower(long authUserId, int limit, int offset) {
+        javax.persistence.Query query = entityManager.createQuery(FIND_FOLLOWER);
+        query.setParameter("id", authUserId);
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
+        return query.getResultList();
+    }
+
+    @Transactional
+    public List<Friends> findRequest(long authUserId, int limit, int offset) {
+        javax.persistence.Query query = entityManager.createQuery(FIND_REQUEST);
+        query.setParameter("id", authUserId);
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
+        return query.getResultList();
+    }
+
+    @Transactional
+    public List<Friends> moreFriend(long authUserId, int limit, int offset) {
+        javax.persistence.Query query = entityManager.createQuery(MORE_FRIEND);
+        query.setParameter("id", authUserId);
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
+        return query.getResultList();
+    }
+
+    @Transactional
+    public List<Friends> moreFollower(long authUserId, int limit, int offset) {
+        javax.persistence.Query query = entityManager.createQuery(MORE_FOLLOWER);
+        query.setParameter("id", authUserId);
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
+        return query.getResultList();
+    }
+
+    @Transactional
+    public List<Friends> moreRequest(long authUserId, int limit, int offset) {
+        javax.persistence.Query query = entityManager.createQuery(MORE_REQUEST);
+        query.setParameter("id", authUserId);
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
+        return query.getResultList();
+    }
+
+    @Transactional
+    public boolean checkFriends(long authUserId, long id2) {
+        javax.persistence.Query query = entityManager.createQuery(CHECK_FRIENDS);
+        query.setParameter("id1", authUserId);
+        query.setParameter("id2", id2);
+        query.setParameter("status", FriendStatusEnum.PROGRESS.getId());
+        if (query.getResultList().size() == 2)
+            return true;
+        return false;
+    }
 }

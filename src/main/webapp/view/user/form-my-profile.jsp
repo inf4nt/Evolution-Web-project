@@ -14,7 +14,7 @@
 <div id="div-self-profile" class="col-lg-offset-2" style="display: none">
     <div class="col-md-12">
         <div class="row">
-            <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6 col-lg-offset-2">
+            <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6 col-lg-offset-2 block-background div-white">
                 <form id="profilePageForm" class="text text-center">
 
                     <fieldset disabled>
@@ -97,7 +97,7 @@
     </div>
 </div>
 
-<script src="<c:url value="/resources/js/other-js.js" />"></script>
+<script src="<c:url value="/resources/js/js.js" />"></script>
 <script src="<c:url value="/resources/js/validators.js" />"></script>
 </body>
 
@@ -132,7 +132,7 @@
                     data: json,
                     contentType: "application/json; charset=UTF-8",
                     success: function (data) {
-                        if (data.info == true)
+                        if (data == true)
                             $("#submit_profilePageForm").slideDown(1000);
                         else {
                             alert('validator or id');

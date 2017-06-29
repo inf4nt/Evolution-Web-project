@@ -15,229 +15,215 @@
 <body>
 <%@include file="../index/header.jsp" %>
 
-
-<div id="content" class="col-lg-10 col-lg-offset-2">
-
-    <div id="info-block" class="col-lg-4 ">
-        <h1 class="text-center">PHOTO</h1>
-        <img data-src="holder.js/140x140" class="img-circle center-block" style="width: 250px; height: 300px;"
-             src="http://www.isu.edu.tw/upload/276e/9/coming-soon.jpg" data-holder-rendered="true">
-
-        <hr/>
-        <h4 class="text-center">
-            <span class="glyphicon glyphicon-user"></span>
-            <a href="/friend/${user.id}">
-                Friends
-            </a>
-            <c:if test="${authUser.id != user.id}">
-                <hr/>
-                <span class="glyphicon glyphicon-envelope"></span>
-                <a href="/im/${user.id}">Message</a>
-            </c:if>
-        </h4>
-        <hr/>
-        <c:if test="${authUser.id != user.id}">
-
-            <div id="div-friend-panel-loader" style="display: none">
-                <h1 class="text-center">
-                    <img style="height: 22px; width: 22px" src="/resources/3.gif"/>
-                </h1>
+<div id="default-user-data" style="display: none">
+    <div class="col-md-3 col-md-offset-2">
+        <div class="profile-sidebar">
+            <div class="profile-userpic">
+                <img data-src="holder.js/140x140" class="img-circle center-block" style="width: 200px; height: 250px;"
+                     src="https://avatars1.githubusercontent.com/u/15056371?v=3&s=400" data-holder-rendered="true">
             </div>
-
-            <div id="div-friend-panel">
-                <h4 class="text-center">
-                    <c:if test="${status == null}">
-                        <a onclick="actionFriend('ADD_FRIEND')" href="#/">
-                            <span class="glyphicon glyphicon-plus text-success"></span> Add friend
-                        </a>
+            <div class="profile-usertitle">
+                <div class="profile-usertitle-name">
+                    <a href="/user/id${user.id}">
+                        ${user.firstName} ${user.lastName}
+                    </a>
+                </div>
+            </div>
+            <div class="profile-usertitle-job text-center">
+                Country
+            </div>
+            <c:if test="${authUser.id != user.id}">
+                <div class="profile-userbuttons">
+                    <c:if test="${status == 0}">
+                        <button class="btn btn-success" onclick="actionFriend('ADD_FRIEND')">
+                            <span class="glyphicon glyphicon-plus"></span> Add friend
+                        </button>
                     </c:if>
                     <c:if test="${status == 2}">
-                        <a onclick="actionFriend('ACCEPT_REQUEST')" href="#/" >
-                            <span class="glyphicon glyphicon-ok text-success"></span> Accept request
-                        </a>
+                        <button class="btn btn-success" onclick="actionFriend('ACCEPT_REQUEST')" >
+                            <span class="glyphicon glyphicon-ok "></span> Accept request
+                        </button>
                     </c:if>
 
                     <c:if test="${status == 1}">
-                        <a onclick="actionFriend('DELETE_FRIEND')" href="#/">
-                            <span class="glyphicon glyphicon-remove text-danger"></span> Delete friend
-                        </a>
+                        <button class="btn btn-danger" onclick="actionFriend('DELETE_FRIEND')" >
+                            <span class="glyphicon glyphicon-remove"></span> Delete friend
+                        </button>
                     </c:if>
 
                     <c:if test="${status == 3}">
-                        <a onclick="actionFriend('DELETE_REQUEST')" href="#/">
-                            <span class="glyphicon glyphicon-trash text-muted"></span> Delete request
-                        </a>
+                        <button class="btn btn-muted" onclick="actionFriend('DELETE_REQUEST')" >
+                            <span class="glyphicon glyphicon-trash"></span> Delete request
+                        </button>
                     </c:if>
-                </h4>
-            </div>
-        </c:if>
-        <sec:authorize access="hasRole('ROLE_ADMIN')">\
-            <c:if test="${authUser.id != user.id}">
-                <hr/>
-                <h4 class="text-center">
-                    <span class="glyphicon glyphicon-edit text-muted"></span>
-                    <a href="/user/profile/${user.id}">
-                        Profile
-                    </a>
-                    <%--<span class="glyphicon glyphicon-remove text-danger"></span>--%>
-                    <%--<a id="delete-user" href="#/">--%>
-                        <%--Delete--%>
-                    <%--</a>--%>
-                </h4>
-
-                <hr/>
+                </div>
             </c:if>
-        </sec:authorize>
-    </div>
-
-    <div id="other-block" class="col-lg-8">
-        <div id="name-block" class="text-center">
-            <h3>
-                <c:if test="${user.id == authUser.id}">
-                    <ins><span>Hello!</span></ins>
-                </c:if>
-                <a href="/user/id${user.id}">${user.firstName} ${user.lastName}</a>
-            </h3>
-            <hr/>
+            <div class="profile-usermenu">
+                <ul class="nav">
+                    <li>
+                        <c:if test="${authUser.id == user.id}">
+                            <a href="/im/">
+                                <i class="glyphicon glyphicon-envelope"></i>
+                                Messages
+                            </a>
+                        </c:if>
+                        <c:if test="${authUser.id != user.id}">
+                            <a href="/im/${user.id}">
+                                <i class="glyphicon glyphicon-envelope"></i>
+                                Messages
+                            </a>
+                        </c:if>
+                    </li>
+                    <li>
+                        <a href="/friend/${user.id}" >
+                            <i class="glyphicon glyphicon-user"></i>
+                            Friends
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/">
+                            <i class="glyphicon glyphicon-flag"></i>
+                            Help
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-
-        <%--<div id="tweet-block" class="col-lg-12">--%>
-            <%--<div id="tweet-text" class="col-lg-12">--%>
-                <%--<form action="/feed/" method="POST" id="formMessage">--%>
-                    <%--<div class="form-group">--%>
-                <%--<textarea id="inputMessage" placeholder="write post............"--%>
-                          <%--name="tweet" class="form-control" style="height: 80px " rows="5">--%>
-                <%--</textarea>--%>
-                    <%--</div>--%>
-                    <%--<div class="col-lg-5 col-lg-offset-7">--%>
-                        <%--<button style="width: 100%" class="btn btn-success">--%>
-                            <%--Send <span class="glyphicon glyphicon-pushpin"></span>--%>
-                        <%--</button>--%>
-                    <%--</div>--%>
-                <%--</form>--%>
-            <%--</div>--%>
-            <%--<div class="col-lg-12">--%>
-                <%--<br/>--%>
-            <%--</div>--%>
-
-
-            <%--<div id="tweet-content" class="col-lg-12 form-group block-tweet">--%>
-                <%--<div class="tweets" id="tweet-content-post">--%>
-                    <%--<table class="table">--%>
-                        <%--<thead>--%>
-                        <%--<tr>--%>
-                            <%--<td></td>--%>
-                        <%--</tr>--%>
-                        <%--</thead>--%>
-                        <%--<tbody>--%>
-                        <%--<c:forEach var="a" items="${feed}">--%>
-                            <%--<tr>--%>
-                                <%--<td>--%>
-                                    <%--<div class="btn-group pull-right">--%>
-                                        <%--<c:choose>--%>
-                                            <%--<c:when test="${user.id == authUser.id}">--%>
-                                                <%--<c:if test="${a.sender.id == authUser.id && a.user.id == authUser.id}">--%>
-                                                    <%--<form class="form-group" action="/feed/${a.id}" method="GET">--%>
-                                                        <%--<button onclick="alert('мой пост на моей стене')" class="btn btn-danger">--%>
-                                                            <%--<span class="glyphicon glyphicon-remove"></span>--%>
-                                                        <%--</button>--%>
-                                                <%--</c:if>--%>
-                                                <%--<c:if test="${a.sender.id != authUser.id && a.repostFeed.userReposted.id == authUser.id}">--%>
-                                                    <%--<form class="form-group" action="/feed/repost/${a.id}">--%>
-                                                        <%--<button onclick="alert('удаляю свой репост')" class="btn btn-danger">--%>
-                                                            <%--<span class="glyphicon glyphicon-remove"></span>--%>
-                                                        <%--</button>--%>
-                                                <%--</c:if>--%>
-                                                <%--<c:if test="${a.sender.id != authUser.id && a.user.id == authUser.id}">--%>
-                                                    <%--<form action="/feed/delete-feed-on-my-board/${a.id}" method="GET">--%>
-                                                        <%--<button onclick="alert('пост который мне написали')" class="btn btn-danger">--%>
-                                                            <%--<span class="glyphicon glyphicon-remove"></span>--%>
-                                                        <%--</button>--%>
-                                                <%--</c:if>--%>
-                                            <%--</c:when>--%>
-                                            <%--<c:otherwise>--%>
-                                                <%--<c:if test="${a.sender.id == authUser.id && a.user.id == user.id}">--%>
-                                                    <%--<form action="/feed/${a.id}" method="GET">--%>
-                                                        <%--<button onclick="alert('пост который я написал')" class="btn btn-danger">--%>
-                                                            <%--<span class="glyphicon glyphicon-remove"></span>--%>
-                                                        <%--</button>--%>
-                                                <%--</c:if>--%>
-                                            <%--</c:otherwise>--%>
-                                        <%--</c:choose>--%>
-                                                        <%--<button onclick="alert('post info')" class="btn btn-info">--%>
-                                                            <%--<span class="glyphicon glyphicon-info-sign"></span>--%>
-                                                        <%--</button>--%>
-                                                    <%--</form>--%>
-                                    <%--</div>--%>
-                                    <%--<h4>--%>
-                                        <%--<p>${a.id}</p>--%>
-                                        <%--<c:if test="${a.sender.id != user.id && a.user.id != user.id}">--%>
-                                            <%--<a href="/user/id${user.id}">--%>
-                                                <%--@${user.firstName} ${user.lastName}--%>
-                                            <%--</a>--%>
-                                            <%--pinned post--%>
-                                            <%--<br/><br/>--%>
-                                        <%--</c:if>--%>
-                                        <%--<c:choose>--%>
-                                            <%--<c:when test="${a.sender.id != user.id && a.user.id == user.id}">--%>
-                                                <%--<a href="/user/id${a.sender.id}">--%>
-                                                    <%--@${a.sender.firstName} ${a.sender.lastName}--%>
-                                                <%--</a>--%>
-                                                <%--<br/><br/>--%>
-                                            <%--</c:when>--%>
-                                            <%--<c:otherwise>--%>
-                                                <%--<a href="/user/id${a.sender.id}">--%>
-                                                    <%--@${a.sender.firstName} ${a.sender.lastName}--%>
-                                                <%--</a>--%>
-                                            <%--</c:otherwise>--%>
-                                        <%--</c:choose>--%>
-                                    <%--</h4>--%>
-                                    <%--<h4 id="tweet">--%>
-                                        <%--<div class="col-lg-12">--%>
-                                                <%--${a.feedContent}--%>
-                                            <%--<br/><br/>--%>
-                                        <%--</div>--%>
-                                        <%--<div id="tweet-img" class="text-center">--%>
-                                            <%--<img style="width: 70%; height: 50%" src="http://www.team-bhp.com/forum/attachments/international-automotive-scene/314225d1269364819-new-bwm-vision-image001.jpg"/>--%>
-                                        <%--</div>--%>
-                                    <%--</h4>--%>
-                                    <%--<br/>--%>
-                                <%--</td>--%>
-                            <%--</tr>--%>
-                        <%--</c:forEach>--%>
-                        <%--</tbody>--%>
-                    <%--</table>--%>
-                <%--</div>--%>
-            <%--</div>--%>
-
-        <%--</div>--%>
-
     </div>
 </div>
 
 
+<div id="user-data">
+    <div class="col-lg-3 col-lg-offset-2 block-background">
+        <div id="user-avatar">
+            <img data-src="holder.js/140x140" class="img-circle center-block" style="width: 200px; height: 250px;"
+                 src="https://avatars1.githubusercontent.com/u/15056371?v=3&s=400" data-holder-rendered="true">
+        </div>
+
+        <div id="user-data">
+            <hr/>
+            <h4 class="text-center">
+                <a style="color: white" href="/user/id${user.id}">
+                    ${user.firstName} ${user.lastName}
+                </a>
+                <br/><br/>
+                <p>Country</p>
+            </h4>
+            <hr/>
+        </div>
 
 
+        <div class="btn-group" style="width: 100%">
+            <p class="text-center">
+                <a href="/friend/${user.id}" class="btn btn-md btn-success">
+                    <span class="glyphicon glyphicon-user"></span>
+                    Friends
+                </a>
+                <c:if test="${user == authUser}">
+                    <a href="/im/" class="btn btn-md btn-info">
+                        <span class="glyphicon glyphicon-envelope"></span>
+                        Message
+                    </a>
+                </c:if>
+                <c:if test="${user != authUser}">
+                    <a href="/im/${user.id}" class="btn btn-md btn-info">
+                        <span class="glyphicon glyphicon-envelope"></span>
+                        Message
+                    </a>
+                </c:if>
+            </p>
+        </div>
+
+        <hr/>
+        <c:if test="${authUser != user}">
+            <div id="div-friend-panel-loader" style="display: none">
+                <h1 class="text-center">
+                    <img style="height: 34px; width: 34px" src="/resources/3.gif"/>
+                </h1>
+            </div>
+            <div id="div-friend-panel">
+                <h4 class="text-center">
+                    <c:if test="${status == null}">
+                        <button class="btn btn-md btn-info" onclick="actionFriend('ADD_FRIEND')">
+                            <span class="glyphicon glyphicon-plus"></span> Add friend
+                        </button>
+                    </c:if>
+                    <c:if test="${status == 2}">
+                        <button class="btn btn-md btn-info" onclick="actionFriend('ACCEPT_REQUEST')" >
+                            <span class="glyphicon glyphicon-ok "></span> Accept request
+                        </button>
+                    </c:if>
+
+                    <c:if test="${status == 1}">
+                        <button class="btn btn-md btn-info" onclick="actionFriend('DELETE_FRIEND')">
+                            <span class="glyphicon glyphicon-remove"></span> Delete friend
+                        </button>
+                    </c:if>
+
+                    <c:if test="${status == 3}">
+                        <button class="btn btn-md btn-info" onclick="actionFriend('DELETE_REQUEST')">
+                            <span class="glyphicon glyphicon-trash"></span> Delete request
+                        </button>
+                    </c:if>
+                </h4>
+            </div>
+        </c:if>
+
+
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
+            <c:if test="${authUser != user}">
+                <hr/>
+                <div class="btn-group" style="width: 100%">
+                    <p class="text-center">
+                        <a href="/user/profile/${user.id}" class="btn btn-md btn-primary">
+                            <span class="glyphicon glyphicon-edit"></span>
+                            Profile
+                        </a>
+                        <button data-toggle="modal" data-target="#modal-id" class="btn btn-md btn-danger">
+                            <span class="glyphicon glyphicon-remove"></span>
+                            Delete
+                        </button>
+                    </p>
+                </div>
+                <hr/>
+            </c:if>
+        </sec:authorize>
+    </div>
+</div>
+
+<%--<a class="btn btn-primary" data-toggle="modal" href="#modal-id">Trigger modal</a>--%>
+<div class="modal fade" id="modal-id">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <div class="text-muted">Are you sure ?</div>
+            </div>
+            <div class="modal-footer">
+                <button id="delete-user" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 
 </body>
 <script>
 
     $(document).ready(function () {
-        $("#delete-user").click(function () {
 
+        $("#delete-user").click(function () {
             $.ajax({
                 url:"/user/${user.id}",
                 type:"DELETE",
                 success:function () {
-                    $("#content").html("");
+                    $("#user-data").html("");
                 },
                 error:function () {
                     alert('Sorry ( server is not responded')
                 },
                 timeout:15000
             })
-
         })
     })
 
@@ -250,18 +236,18 @@
                 if (data.info == true) {
                     var span;
                     if (data.message == 'ACCEPT_REQUEST') {
-                        span = '<span class="glyphicon glyphicon-ok text-success"></span> Accept request';
+                        span = '<span class="glyphicon glyphicon-ok"></span> Accept request';
                     } else if (data.message == 'DELETE_FRIEND'){
-                        span = '<span class="glyphicon glyphicon-remove text-danger"></span> Delete friend';
+                        span = '<span class="glyphicon glyphicon-remove "></span> Delete friend';
                     } else if (data.message == 'DELETE_REQUEST') {
-                        span = '<span class="glyphicon glyphicon-trash text-muted"></span> Delete request';
+                        span = '<span class="glyphicon glyphicon-trash"></span> Delete request';
                     } else if (data.message == 'ADD_FRIEND') {
-                        span = '<span class="glyphicon glyphicon-plus text-success"></span> Add friend';
+                        span = '<span class="glyphicon glyphicon-plus"></span> Add friend';
                     }
 
-                    var html = '<h4 class="text-center"><a href="#/" style="color: white" onclick="actionFriend(\''+ data.message + '\')"> ' +
+                    var html = '<h4 class="text-center"><button class="btn btn-md btn-info" onclick="actionFriend(\''+ data.message + '\')"> ' +
                         span +
-                        '</a></h4>';
+                        '</button></h4>';
                     $("#div-friend-panel").html(html);
                     $("#div-friend-panel-loader").hide();
                     $("#div-friend-panel").fadeToggle("slow");

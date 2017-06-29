@@ -27,7 +27,7 @@
 </head>
 <body>
 <%@include file="../index/header.jsp" %>
-<div class="col-lg-7 col-lg-offset-3" >
+<div class="col-lg-7 col-lg-offset-3 div-white block-background" >
     <a href="/user/id${im.id}" >
         <h1 class="text-center"> ${im.firstName} ${im.lastName}</h1>
     </a>

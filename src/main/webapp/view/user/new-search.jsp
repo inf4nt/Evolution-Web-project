@@ -11,14 +11,11 @@
 
 
 
-<div class="col-lg-10 col-lg-offset-2">
-    <br/>
-    <br/>
-
+<div class="col-lg-10 col-lg-offset-2 div-white">
     <div class="col-lg-9">
 
         <div id="users" style="display: none">
-            <div class="col-md-14">
+            <div class="col-md-14 block-background">
                 <table class="table">
                     <thead>
                     <tr>
@@ -42,6 +39,7 @@
                 </table>
             </div>
             <div id="more-users" class="text-center">
+                <br/>
                 <button onclick="ajaxMoreUser()" name="more-users" class="btn btn-default">
                     <span class="glyphicon glyphicon-download"></span> more
                 </button>
@@ -62,7 +60,7 @@
                 </div>
             </div>
             <br/>
-            <div id="search-result" class="">
+            <div id="search-result">
                 <table class="table">
                     <thead>
                     <tr>
@@ -70,8 +68,7 @@
                         <td></td>
                     </tr>
                     </thead>
-                    <tbody id="tbody-search-result">
-
+                    <tbody id="tbody-search-result" class="block-background">
                     </tbody>
                 </table>
             </div>
@@ -114,9 +111,8 @@
         if (likePattern.test(like) === false)
             return false;
 
-
         $.ajax({
-            url:"/user/search-result?like=" + like + "&limit=" + 50 + "&offset=" + 0,
+            url:"/user/search-result?like=" + like + "&size=" + 50 + "&page=" + 0,
             type:"GET",
             success:function (data) {
                 $("#tbody-search-result").html(generateTable(data));
@@ -141,7 +137,7 @@
     }
 
     function ajaxMoreUser() {
-        var offset = countMoreUser * limit + 1;
+//        var offset = countMoreUser * limit + 1;
 
         countMoreUser = countMoreUser + 1;
         var loader = $("#span-more-users-loader");
@@ -151,7 +147,7 @@
         loader.fadeToggle("slow");
 
         $.ajax({
-            url:"/user/?limit=${limit}&offset=" + offset,
+            url:"/user/?size=${limit}&page=" + countMoreUser,
             type:"GET",
             complete:function () {
                 loader.hide();

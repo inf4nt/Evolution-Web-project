@@ -1,8 +1,8 @@
 package evolution.service.security;
 
 
-import evolution.dao.UserDao;
 import evolution.model.user.User;
+import evolution.repository.UserRepository;
 import lombok.Getter;
 import lombok.ToString;
 import org.slf4j.Logger;
@@ -13,7 +13,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,9 +29,10 @@ import java.util.List;
 public class UserDetailsServiceImpl
         implements UserDetailsService {
 
-    @Autowired
-    private UserDao userDao;
     private Logger LOGGER = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     @Transactional
@@ -40,9 +40,9 @@ public class UserDetailsServiceImpl
         User user;
 
         try {
-            user = userDao.findByLogin(s);
+            user = userRepository.findUserByLogin(s);
         } catch (NoResultException e) {
-            LOGGER.info("user y username = " + s + ", not found");
+            LOGGER.info(e + "\nuser y username = " + s + ", not found");
             throw new UsernameNotFoundException("user " + s + " not found");
         }
 

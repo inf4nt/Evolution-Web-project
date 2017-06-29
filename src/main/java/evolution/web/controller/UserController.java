@@ -1,20 +1,20 @@
 package evolution.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import evolution.dao.FeedRepository;
+import evolution.common.UserRoleEnum;
 import evolution.dao.FriendsDao;
-import evolution.dao.UserDao;
 import evolution.model.friend.Friends;
 import evolution.model.user.User;
+import evolution.repository.UserRepository;
 import evolution.service.MyJacksonService;
 import evolution.service.SearchService;
-import evolution.service.builder.JsonInformationBuilder;
 import evolution.service.security.UserDetailsServiceImpl;
 import evolution.service.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -36,10 +36,6 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private JsonInformationBuilder jsonInformationBuilder;
-    @Autowired
-    private UserDao userDao;
-    @Autowired
     private MyJacksonService jacksonService;
     @Autowired
     private FriendsDao friendsDao;
@@ -48,9 +44,9 @@ public class UserController {
     @Autowired
     private SearchService searchService;
     @Autowired
-    private FeedRepository feedRepository;
+    private UserRepository userRepository;
 
-    private Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @RequestMapping (value = "/id{id}", method = RequestMethod.GET)
     public String home (
@@ -75,27 +71,24 @@ public class UserController {
             }
         }
 
-//        model.addAttribute("feed", feedRepository.feed(id, 100, 0));
-
         return "user/my-home";
     }
 
-    @ResponseBody @RequestMapping(value = "/", method = RequestMethod.GET,
-            produces={"application/json; charset=UTF-8"})
-    public List allUser(@RequestParam(required = false) Integer limit,
-                        @RequestParam(required = false) Integer offset) throws JsonProcessingException {
-
-        if (limit == null || offset == null) {
-            return userDao.findAll();
+    @ResponseBody
+    @GetMapping(value = "/", produces={"application/json; charset=UTF-8"})
+    public List allUser(@RequestParam(required = false) Integer page,
+                        @RequestParam(required = false) Integer size) throws JsonProcessingException {
+        LOGGER.info("page=" + page + " size=" + size);
+        if (size == null || page == null) {
+            return userRepository.findUsers();
         }
-
-        return userDao.findAll(limit, offset);
+        return userRepository.findUsers(new PageRequest(page, size));
     }
 
     // EDIT
-    @ResponseBody @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
-            produces={"application/json; charset=UTF-8"})
-    public String edit(@RequestBody String json,
+    @ResponseBody
+    @PutMapping(value = "/{id}", produces={"application/json; charset=UTF-8"})
+    public boolean edit(@RequestBody String json,
                         @PathVariable Long id,
                         @SessionAttribute User user,
                         @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
@@ -119,20 +112,33 @@ public class UserController {
         }
 
         if (validator.userValidator(userRequest)) {
-            userDao.repository().update(userRequest);
+//            userDao.repository().update(userRequest);
+            userRepository.save(userRequest);
             if (customUser.getUser().getId().equals(id))
                 customUser.getUser().updateFields(userRequest);
-            return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), null, true);
+            return true;
         }
 
-        return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), null, false);
+        return false;
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public User postUser(@RequestBody String json) throws IOException {
+        User user = (User) jacksonService.jsonToObject(json, User.class);
+        user.setRoleId(UserRoleEnum.USER.getId());
+        if (validator.userValidator(user)) {
+            return userRepository.save(user);
+        }
+        return null;
     }
 
     // DELETE
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @ResponseBody @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    @DeleteMapping(value = "/{id}")
     public void deleteUser(@PathVariable Long id) {
-        userDao.repository().delete(new User(id));
+        userRepository.delete(id);
     }
 
     // GET FORM PROFILE
@@ -149,37 +155,33 @@ public class UserController {
             model.addAttribute("user", customUser.getUser());
             return "user/form-my-profile";
         } else if (request.isUserInRole("ROLE_ADMIN")) {
-            model.addAttribute("user", userDao.find(id));
+            model.addAttribute("user", userRepository.findOne(id));
             return "admin/admin-form-profile";
         }
 
         return "redirect:/user/id" + customUser.getUser().getId();
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    @GetMapping(value = "/search")
     public String viewSearch(Model model, SessionStatus sessionStatus){
         sessionStatus.setComplete();
         LOGGER.info("session status set complete");
-        int limit = 5;
-        model.addAttribute("limit", limit);
-        model.addAttribute("list", userDao.findAll(limit, 0));
+        int size = 5;
+        model.addAttribute("limit", size);
+        model.addAttribute("list", userRepository.findUsers(new PageRequest(0, size)));
         return "user/new-search";
     }
 
-    @ResponseBody @RequestMapping(value = "/search-result", method = RequestMethod.GET,
+    @ResponseBody
+    @GetMapping(value = "/search-result",
             produces={"application/json; charset=UTF-8"})
     public List resultSearch(@RequestParam(required = false, defaultValue = "") String like,
-                             @RequestParam(required = false, defaultValue = "0") Integer limit,
-                             @RequestParam(required = false, defaultValue = "0") Integer offset) throws JsonProcessingException {
+                             @RequestParam(required = false, defaultValue = "0") Integer size,
+                             @RequestParam(required = false, defaultValue = "0") Integer page) throws JsonProcessingException {
         try {
-            return searchService.searchUser(like, limit, offset);
+            return searchService.searchUser(like, page, size);
         } catch (NoResultException e) {
             return null;
         }
-    }
-
-    @RequestMapping(value = "/ex", method = RequestMethod.GET)
-    public String ex() {
-        throw new NullPointerException();
     }
 }

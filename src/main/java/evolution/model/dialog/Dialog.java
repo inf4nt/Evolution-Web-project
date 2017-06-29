@@ -1,5 +1,6 @@
 package evolution.model.dialog;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import evolution.model.user.User;
 import lombok.*;
@@ -13,10 +14,13 @@ import javax.persistence.*;
 @Table(name = "dialog")
 @NoArgsConstructor @AllArgsConstructor
 @ToString @Getter @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Dialog {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "seq_dialog")
+    @SequenceGenerator(name = "seq_dialog", sequenceName = "seq_dialog_id", allocationSize = 1)
     @JsonProperty
     private Long id;
 

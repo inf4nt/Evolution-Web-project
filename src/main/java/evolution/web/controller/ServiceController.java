@@ -1,10 +1,10 @@
 package evolution.web.controller;
 
 import evolution.common.UserRoleEnum;
-import evolution.dao.UserDao;
 import evolution.model.user.User;
 import evolution.model.userToken.AbstractToken;
 import evolution.model.userToken.UserToken;
+import evolution.repository.UserRepository;
 import evolution.service.MyJacksonService;
 import evolution.service.builder.JsonInformationBuilder;
 import evolution.service.notification.NotificationUser;
@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,11 +40,63 @@ public class ServiceController {
     @Autowired
     private Validator validator;
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
     @Autowired
     private MyJacksonService jacksonService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceController.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ServiceController.class);
+
+    @RequestMapping(value = "/user/forgot/{token}", method = RequestMethod.GET)
+    public String userForgotPasswordToken(@PathVariable String token,
+                                          @SessionAttribute(required = false) AbstractToken entityToken,
+                                          SessionStatus sessionStatus) throws IOException {
+
+        if (entityToken != null
+                && token.equals(entityToken.getToken())
+                && validator.userValidator(((UserToken)entityToken).getUser())) {
+
+            String newPassword = RandomStringUtils.randomAlphanumeric(32);
+            LOGGER.info("Generate new password = " + newPassword);
+            LOGGER.info("update user");
+            ((UserToken)entityToken).getUser().setPassword(newPassword);
+
+            userRepository.save(((UserToken) entityToken).getUser());
+
+            LOGGER.info("send notification");
+            notificationUser.successUserForgot((UserToken) entityToken);
+            sessionStatus.setComplete();
+            return "redirect:/welcome?info=Restore password successful. A new password has been sent to your e-mail";
+        }
+        return "redirect:/welcome";
+    }
+
+    @RequestMapping(value = "/user/registration/{token}", method = RequestMethod.GET)
+    public String userRegistrationToken (@PathVariable String token,
+                                         @SessionAttribute(required = false) AbstractToken entityToken,
+                                         SessionStatus sessionStatus) throws IOException {
+
+        if (entityToken != null
+                && token.equals(entityToken.getToken())
+                && validator.userValidator(((UserToken)entityToken).getUser())) {
+
+            if (checkExistUser(((UserToken) entityToken).getUser().getLogin())) {
+                return "redirect:/welcome?info=This user by username " +
+                        ((UserToken) entityToken).getUser().getLogin()
+                        + " already exist";
+            }
+
+
+            User user = ((UserToken)entityToken).getUser();
+            userRepository.save(user);
+            notificationUser.successUserRegistration((UserToken) entityToken);
+
+            LOGGER.info("User is valid, success registration");
+            sessionStatus.setComplete();
+            return "redirect:/welcome?info=Registration success. Your e-mail has been sent registration information";
+        }
+        return "redirect:/welcome";
+    }
+
 
     @ResponseBody
     @RequestMapping(value = "/user/forgot/CREATE_FORGOT_TOKEN", method = RequestMethod.POST,
@@ -51,13 +104,13 @@ public class ServiceController {
     public String userCreateForgotToken(@RequestBody String json,
                                         Model model) throws IOException {
         User user = (User) jacksonService.jsonToObject(json, User.class);
-        User u;
-        try {
-            u = userDao.findByLogin(user.getLogin());
-        } catch (NoResultException e) {
-            LOGGER.info("User by username = " + user.getLogin()+", is not exist\n" + e.toString());
+        User u = userRepository.findUserByLogin(user.getLogin());
+
+
+        if (u == null)
             return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), "User " + user.getLogin()+", is not exist\n", false);
-        }
+
+
         AbstractToken entityToken = new UserToken(UUID.randomUUID().toString(), u);
         model.addAttribute("entityToken", entityToken);
         LOGGER.info("user-forgot\n entityToken = " + entityToken.toString());
@@ -66,24 +119,6 @@ public class ServiceController {
                 "Your e-mail has been sent further instructions",
                 true);
     }
-
-    @ResponseBody
-    @RequestMapping(value = "/user/registration/CHECK_EXIST_USER", method = RequestMethod.POST,
-            produces={"application/json; charset=UTF-8"})
-    public String userCheckExistUser(@RequestBody String json) throws IOException {
-        User user = (User) jacksonService.jsonToObject(json, User.class);
-
-        try {
-            userDao.findByLogin(user.getLogin());
-            LOGGER.info("User is exist");
-            return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), null, true);
-        } catch (NoResultException e) {
-            LOGGER.info("User is not exist. Next step registration.\n" + e.toString());
-            return jsonInformationBuilder.buildJson(HttpStatus.OK.toString(), null, false);
-        }
-    }
-
-
 
     @ResponseBody
     @RequestMapping(value = "/user/registration/CREATE_REGISTRATION_TOKEN", method = RequestMethod.POST,
@@ -110,61 +145,21 @@ public class ServiceController {
         }
     }
 
-    @RequestMapping(value = "/user/forgot/{token}", method = RequestMethod.GET)
-    public String userForgotPasswordToken(@PathVariable String token,
-                                          @SessionAttribute(required = false) AbstractToken entityToken,
-                                          SessionStatus sessionStatus) throws IOException {
-
-        if (entityToken != null
-                && token.equals(entityToken.getToken())
-                && validator.userValidator(((UserToken)entityToken).getUser())) {
-
-            String newPassword = RandomStringUtils.randomAlphanumeric(32);
-            LOGGER.info("Generate new password = " + newPassword);
-            LOGGER.info("update user");
-            ((UserToken)entityToken).getUser().setPassword(newPassword);
-
-            userDao.repository().update(((UserToken) entityToken).getUser());
-
-            LOGGER.info("send notification");
-            notificationUser.successUserForgot((UserToken) entityToken);
-            sessionStatus.setComplete();
-            return "redirect:/welcome?info=Restore password successful. A new password has been sent to your e-mail";
-        }
-        return "redirect:/welcome";
+    @ResponseBody
+    @RequestMapping(value = "/user/is-exist", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public boolean checkExistUser(@RequestParam String username) {
+        User user = userRepository.findUserByLogin(username);
+        LOGGER.info("check user = " + user);
+        return user != null;
     }
 
-    @RequestMapping(value = "/user/registration/{token}", method = RequestMethod.GET)
-    public String userRegistrationToken (@PathVariable String token,
-                                         @SessionAttribute(required = false) AbstractToken entityToken,
-                                         SessionStatus sessionStatus) throws IOException {
-
-        if (entityToken != null
-                && token.equals(entityToken.getToken())
-                && validator.userValidator(((UserToken)entityToken).getUser())) {
-
-            try {
-                userDao.findByLogin(((UserToken) entityToken).getUser().getLogin());
-                LOGGER.info("System ignor. User by username "
-                        + ((UserToken) entityToken).getUser().getLogin()
-                        + " is exist !");
-                sessionStatus.setComplete();
-                return "redirect:/welcome?info=This user by username " +
-                        ((UserToken) entityToken).getUser().getLogin()
-                        + " already exist";
-            } catch (NoResultException nre) {
-                LOGGER.info("Okey. Next step\n" + nre.toString());
-            }
-
-
-            User user = ((UserToken)entityToken).getUser();
-            userDao.repository().save(user);
-            notificationUser.successUserRegistration((UserToken) entityToken);
-            LOGGER.info("User is valid, success registration");
-            sessionStatus.setComplete();
-            return "redirect:/welcome?info=Registration success. Your e-mail has been sent registration information";
-        }
-        return "redirect:/welcome";
+    @ResponseBody
+    @RequestMapping(value = "/user/is-exist/{username}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public boolean checkExistUse2r(@PathVariable String username) {
+        User user = userRepository.findUserByLogin(username);
+        LOGGER.info("check user = " + user);
+        return user != null;
     }
-
 }

@@ -9,7 +9,7 @@
   <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
   <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
   <script src="<c:url value="/resources/js/validators.js" />"></script>
-  <script src="<c:url value="/resources/js/other-js.js" />"></script>
+  <script src="<c:url value="/resources/js/js.js" />"></script>
   <script src="<c:url value="/resources/js/country.js" />"></script>
   <style>
     html { height: 100%; }
@@ -280,7 +280,7 @@
                         complete();
                     },
                     error: function () {
-                        $("#info-forgot").html("Sorry, server is not responded").delay(3000).fadeToggle("slow");
+                        $("#info-forgot").html("Sorry, server is not responded");
                         complete();
                     },
                     timeout: 15000
@@ -361,15 +361,11 @@
             setTimeout(function () {
                 var login = $("#form-user-data input[name=login]").val();
 
-                var json = JSON.stringify({"login":login});
-
                 $.ajax({
-                    url: "/service/user/registration/CHECK_EXIST_USER",
-                    type:"POST",
-                    data:json,
-                    contentType: "application/json; charset=UTF-8",
+                    url: "/service/user/is-exist?username=" + login,
+                    type:"GET",
                     success:function (dataJson) {
-                        if (dataJson.info == true) {
+                        if (dataJson == true) {
                             $("#loader").hide();
                             $("#div-first-user-data, #return-login-registrationPage").fadeToggle("slow");
                             $("#info").html("This user " + login + " is exist");
@@ -377,7 +373,7 @@
                             $("#div_email_form-user-data span").hide();
                             return false;
                         }
-                        if (dataJson.info == false) {
+                        if (dataJson == false) {
                             // ТУТ ОТКРЫВАЕМ СЛЕД ФОРМУ
                             $("#loader").hide();
                             $("#div-second-user-data, #return-login-registrationPage").fadeToggle("slow");
@@ -458,14 +454,6 @@
         populateCountries("country", "state");
         populateCountries("country2");
     })
-
-
-
-
-    $(document).ready(function () {
-
-    })
-
 </script>
 
 

@@ -9,11 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
-import evolution.dao.FeedRepository;
-import evolution.dao.impl.FeedRepositoryImpl;
-import evolution.model.news.Feed;
-import evolution.model.user.User;
-import evolution.service.validation.Validator;
+
 import org.hibernate.*;
 
 import org.hibernate.cfg.Configuration;

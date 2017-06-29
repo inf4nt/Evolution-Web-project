@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.common.FriendActionEnum;
 import evolution.common.FriendStatusEnum;
 import evolution.dao.FriendsDao;
-import evolution.dao.UserDao;
 import evolution.model.friend.Friends;
 import evolution.model.jsonModel.JsonInformation;
+import evolution.repository.UserRepository;
 import evolution.service.MyJacksonService;
 import evolution.service.builder.JsonInformationBuilder;
 import evolution.service.security.UserDetailsServiceImpl;
@@ -38,11 +38,12 @@ public class FriendController {
     @Autowired
     private MyJacksonService jacksonService;
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(FriendController.class);
     private static String responseJson;
 
-    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+    @GetMapping(value = "/{userId}")
     public String friends(@PathVariable Long userId,
                           @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
                           Model model,
@@ -72,12 +73,13 @@ public class FriendController {
         else if (!map.get(FriendStatusEnum.REQUEST.toString().toLowerCase()).isEmpty())
             model.addAttribute("user", map.get(FriendStatusEnum.REQUEST.toString().toLowerCase()).get(0).getUser());
         else
-            model.addAttribute("user", userDao.selectIdFirstLastName(userId));
+            model.addAttribute("user", userRepository.selectIdFirstLastName(userId));
         return "user/form-friend";
     }
 
 
-    @ResponseBody @RequestMapping(value = "/{status}/{userId}", method = RequestMethod.GET,
+    @ResponseBody
+    @GetMapping(value = "/{status}/{userId}",
             produces={"application/json; charset=UTF-8"})
     public List moreFriend(@PathVariable Long userId,
                          @PathVariable String status,
@@ -101,7 +103,8 @@ public class FriendController {
     }
 
 
-    @ResponseBody @RequestMapping(value = "/", method = RequestMethod.PUT,
+    @ResponseBody
+    @PutMapping(value = "/",
             produces={"application/json; charset=UTF-8"})
     public String friendAction (@RequestBody String json,
                                 @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws IOException {
