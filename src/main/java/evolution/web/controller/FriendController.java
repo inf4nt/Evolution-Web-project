@@ -3,7 +3,7 @@ package evolution.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.common.FriendActionEnum;
 import evolution.common.FriendStatusEnum;
-import evolution.dao.FriendsDao;
+import evolution.dao.FriendsDaoService;
 import evolution.model.friend.Friends;
 import evolution.model.jsonModel.JsonInformation;
 import evolution.repository.UserRepository;
@@ -32,7 +32,7 @@ import java.util.Map;
 public class FriendController {
 
     @Autowired
-    private FriendsDao friendsDao;
+    private FriendsDaoService friendsDaoService;
     @Autowired
     private JsonInformationBuilder jsonBuilder;
     @Autowired
@@ -54,11 +54,11 @@ public class FriendController {
 
         Map<String, List<Friends>> map;
         if (request.isUserInRole("ROLE_ADMIN") || customUser.getUser().getId().equals(userId)) {
-            map = friendsDao.friend(userId, limit, 0);
+            map = friendsDaoService.friend(userId, limit, 0);
             model.addAttribute(FriendStatusEnum.REQUEST.toString().toLowerCase(),
                     map.get(FriendStatusEnum.REQUEST.toString().toLowerCase()));
         } else {
-            map = friendsDao.friendFollower(userId, limit, 0);
+            map = friendsDaoService.friendFollower(userId, limit, 0);
         }
         model.addAttribute(FriendStatusEnum.PROGRESS.toString().toLowerCase(),
                 map.get(FriendStatusEnum.PROGRESS.toString().toLowerCase()
@@ -90,14 +90,14 @@ public class FriendController {
 
         List list = new ArrayList();
         if (FriendStatusEnum.PROGRESS.toString().equalsIgnoreCase(status)) {
-            list = friendsDao.moreFriend(userId, limit, offset);
+            list = friendsDaoService.moreFriend(userId, limit, offset);
         }
         else if (FriendStatusEnum.FOLLOWER.toString().equalsIgnoreCase(status)) {
-            list =  friendsDao.moreFollower(userId, limit, offset);
+            list =  friendsDaoService.moreFollower(userId, limit, offset);
         }
         else if ((request.isUserInRole("ROLE_ADMIN") || customUser.getUser().getId().equals(userId))
                 && FriendStatusEnum.REQUEST.toString().equalsIgnoreCase(status)){
-            list =  friendsDao.moreRequest(userId, limit, offset);
+            list =  friendsDaoService.moreRequest(userId, limit, offset);
         }
         return list;
     }
@@ -118,20 +118,20 @@ public class FriendController {
         LOGGER.info("START " + jsonInformation.getMessage() + "\n" + "authUserId = " +userId + ", friendId = " + friendId);
         if (jsonInformation.getMessage().equals(FriendActionEnum.DELETE_FRIEND.toString())) {
 
-            friendsDao.deleteFriend(userId, friendId);
+            friendsDaoService.deleteFriend(userId, friendId);
             responseJson = jsonBuilder.buildJson(HttpStatus.OK.toString(), FriendActionEnum.ACCEPT_REQUEST.toString(), true);
 
         } else if (jsonInformation.getMessage().equals(FriendActionEnum.ACCEPT_REQUEST.toString())) {
-            friendsDao.acceptFriend(userId, friendId);
+            friendsDaoService.acceptFriend(userId, friendId);
             responseJson = jsonBuilder.buildJson(HttpStatus.OK.toString(), FriendActionEnum.DELETE_FRIEND.toString(), true);
 
         } else if (jsonInformation.getMessage().equals(FriendActionEnum.ADD_FRIEND.toString()) &&
-                !friendsDao.checkFriends(userId, friendId)) {
-            friendsDao.friendRequest(userId, friendId);
+                !friendsDaoService.checkFriends(userId, friendId)) {
+            friendsDaoService.friendRequest(userId, friendId);
             responseJson = jsonBuilder.buildJson(HttpStatus.OK.toString(), FriendActionEnum.DELETE_REQUEST.toString(), true);
 
         } else if (jsonInformation.getMessage().equals(FriendActionEnum.DELETE_REQUEST.toString())) {
-            friendsDao.deleteRequest(userId, friendId);
+            friendsDaoService.deleteRequest(userId, friendId);
             responseJson = jsonBuilder.buildJson(HttpStatus.OK.toString(), FriendActionEnum.ADD_FRIEND.toString(), true);
         }
 

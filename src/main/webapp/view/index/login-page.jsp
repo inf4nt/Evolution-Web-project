@@ -43,7 +43,7 @@
 
 <div id="loader" style="display: none" class="centerLayer">
   <h1 class="text text-center">
-    <img src="/resources/3.gif"/>
+    <img src="/resources/preloader.gif"/>
   </h1>
 </div>
 
@@ -338,9 +338,8 @@
             if (validLoginPage('div_email_formLogin', 'div_password_formLogin') == false)
                 return false;
             var form = this;
-            $("#div_button_formLogin").hide();
-            $("#loginPage").slideUp(2000);
-            $("#loader").slideDown(2000);
+            $("#div_button_formLogin, #loginPage").hide();
+            $("#loader").fadeToggle("slow");
             setTimeout(function () {
                 form.submit();
             }, 2000);

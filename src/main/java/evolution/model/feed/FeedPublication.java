@@ -17,7 +17,7 @@ import java.util.Date;
 @Entity
 @Table(name = "feed_publication")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@NoArgsConstructor @AllArgsConstructor @Getter @Setter @ToString
+@NoArgsConstructor @AllArgsConstructor @Data
 public class FeedPublication {
 
     @JsonProperty
@@ -78,7 +78,6 @@ public class FeedPublication {
         this.sender = new StandardUser(senderId, senderFirstName, senderLastName);
         this.reposted = new StandardUser(repostedId, repostedFirstName, repostedLastName);
     }
-
 
 
     public FeedPublication(StandardUser sender, StandardUser reposted) {

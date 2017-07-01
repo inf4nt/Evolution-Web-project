@@ -23,7 +23,7 @@
         <a href="/user/id${authUser.getId()}">${authUser.getFirstName()} ${authUser.getLastName()}</a>
     </h4>
 
-    <div class="col-md-12 col-sm-10 block-sms">
+    <div class="col-md-12 col-sm-10">
 
         <table class="table">
             <thead>

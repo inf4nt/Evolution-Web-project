@@ -1,6 +1,7 @@
 package evolution.service.validation;
 
 import evolution.common.UserRoleEnum;
+import evolution.model.feed.FeedPublication;
 import evolution.model.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class Validator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Validator.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private static final int tweetLength = 10000;
 
     public boolean userValidator(User user){
 
@@ -48,4 +51,32 @@ public class Validator {
         LOGGER.info("user valid\n" + user.toString());
         return true;
     }
+
+    public boolean feedPublicationValid(FeedPublication feedPublication) {
+        try {
+            if (feedPublication.getFeedData() == null) {
+                LOGGER.warn("feedPublication feedData not valid");
+                return false;
+            }
+            if (feedPublication.getSender() == null || feedPublication.getSender().getId() == null) {
+                LOGGER.warn("feedPublication sender not valid");
+                return false;
+            }
+            if (feedPublication.getDate() == null) {
+                LOGGER.warn("feedPublication date not valid");
+                return false;
+            }
+            if (feedPublication.getFeedData().getContent() == null ||
+                    feedPublication.getFeedData().getContent().length() <= 0 ||
+                    feedPublication.getFeedData().getContent().length() > tweetLength) {
+                LOGGER.warn("feedPublication tweet content not valid");
+                return false;
+            }
+        } catch (Exception e){
+            LOGGER.warn(e + "");
+            return false;
+        }
+        return true;
+    }
+
 }

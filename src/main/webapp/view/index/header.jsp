@@ -18,7 +18,8 @@
 
 <style>
 	.block-background {
-		background: rgba(255, 253, 244, 0.5); /* Цвет фона */
+		background: rgba(177, 175, 168, 0.5); /* Цвет фона */
+		/*background: rgba(126, 124, 119, 0.5); !* Цвет фона *!*/
 		color: #fff; /* Цвет текста */
 		padding: 5px; /* Поля вокруг текста */
 		border-radius: 10px;
@@ -31,9 +32,12 @@
 	<div id="head-navbar" style="display: none"  class="navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<div class="div-white">
-				<a id="brand" href="#/" class="navbar-brand">Evolution
-					<span class="glyphicon glyphicon-globe"></span>
-				</a>
+				<%--<a id="brand" href="#/" class="navbar-brand">Evolution--%>
+					<%--<span class="glyphicon glyphicon-globe"></span>--%>
+				<%--</a>--%>
+					<a id="brand" href="#/" class="navbar-brand">Evolution
+						<span><img style="width: 20px; height: 20px" src="/resources/brand.gif"></span>
+					</a>
 			</div>
 			<div class="callapse navbar-collapse div-white">
 				<ul class="nav navbar-nav">
@@ -70,6 +74,12 @@
 				<div id="userPanel" class="div-white">
 					<hr/>
 					<li>
+						<a href="/feed/news">
+							<span class="glyphicon glyphicon-list-alt"></span> News
+						</a>
+					</li>
+					<hr/>
+					<li>
 						<a href="/user/search">
 							<span class="glyphicon glyphicon-search"></span> Search
 						</a>
@@ -77,7 +87,7 @@
 					<hr/>
 					<li>
 						<a href="/friend/${authUser.id}"/>
-						<span class="glyphicon glyphicon-user"></span> Friends
+							<span class="glyphicon glyphicon-user"></span> Friends
 						</a>
 					</li>
 					<hr/>
@@ -114,4 +124,9 @@
 	</div>
 </div>
 
+<script>
+//	$(document).ready(function () {
+//		$(".navbar-inverse").css("background", "#000");
+//    })
 
+</script>

@@ -2,7 +2,7 @@ package evolution.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.common.UserRoleEnum;
-import evolution.dao.FriendsDao;
+import evolution.dao.FriendsDaoService;
 import evolution.model.friend.Friends;
 import evolution.model.user.User;
 import evolution.repository.UserRepository;
@@ -38,7 +38,7 @@ public class UserController {
     @Autowired
     private MyJacksonService jacksonService;
     @Autowired
-    private FriendsDao friendsDao;
+    private FriendsDaoService friendsDaoService;
     @Autowired
     private Validator validator;
     @Autowired
@@ -60,7 +60,7 @@ public class UserController {
             LOGGER.info("My home. User id = " + id);
         } else {
             try {
-                Friends friends = friendsDao.findUserAndFriendStatus(authUser.getId(), id);
+                Friends friends = friendsDaoService.findUserAndFriendStatus(authUser.getId(), id);
                 model.addAttribute("user", friends.getUser());
                 LOGGER.info("session user\n" + friends.getUser());
                 model.addAttribute("status", friends.getStatus());

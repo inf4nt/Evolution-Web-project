@@ -16,7 +16,7 @@ import java.util.Map;
  * Created by Admin on 26.03.2017.
  */
 @Service
-public class FriendsDao {
+public class FriendsDaoService {
 
     private static final String CHECK_FRIENDS = "select 1 from Friends f where (f.user.id =:id1 and f.friend.id =:id2 and f.status =:status) " +
             "or (f.user.id =:id2 and f.friend.id =:id1 and f.status =:status )";
@@ -52,11 +52,9 @@ public class FriendsDao {
 
     private static final String FIND_REQUEST = FIND_ALL_FRIENDS + " and ff.status = " + FriendStatusEnum.REQUEST.getId();
 
-
-    private static final String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status) from Friends f " +
-            " right join User u on u.id = f.friend.id and f.user.id = :authUserId " +
+    private static final String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status) from User u " +
+            " left join Friends f on u.id = f.friend.id and f.user.id = :authUserId " +
             " where u.id = :id";
-
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -106,6 +104,7 @@ public class FriendsDao {
     }
 
     @Transactional
+    @Deprecated
     public void deleteRequest(long authUserId, long id2) {
         javax.persistence.Query query = entityManager.createQuery(DELETE_REQUEST_FRIEND);
         query.setParameter("u", authUserId);

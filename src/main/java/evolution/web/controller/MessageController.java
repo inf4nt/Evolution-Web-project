@@ -104,7 +104,7 @@ public class MessageController {
 
             LOGGER.info("dialog id= " + d.getId());
             m = new Message(d.getId(), customUser.getUser(), message, new Date());
-            messageRepository.save(m);
+            messageRepository.saveAndFlush(m);
             response.sendRedirect("/im/" + sel);
         } else {
             LOGGER.info("Dialog exist. Run save message");

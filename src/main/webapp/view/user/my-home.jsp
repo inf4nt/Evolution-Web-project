@@ -138,7 +138,7 @@
         <c:if test="${authUser != user}">
             <div id="div-friend-panel-loader" style="display: none">
                 <h1 class="text-center">
-                    <img style="height: 34px; width: 34px" src="/resources/3.gif"/>
+                    <img style="height: 34px; width: 34px" src="/resources/preloader.gif"/>
                 </h1>
             </div>
             <div id="div-friend-panel">
