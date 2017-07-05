@@ -45,11 +45,6 @@ public class AppConfig
 
     @Bean
     public ObjectMapper objectMapper() {
-//        ObjectMapper mapper = new ObjectMapper();
-//        Hibernate5Module hbm = new Hibernate5Module();
-//        hbm.enable(Hibernate5Module.Feature.FORCE_LAZY_LOADING);
-//        mapper.registerModule(hbm);
-//        return mapper;
         ObjectMapper mapper = new ObjectMapper();
         Hibernate5Module hbm = new Hibernate5Module();
         hbm.configure(Hibernate5Module.Feature.FORCE_LAZY_LOADING, false);
