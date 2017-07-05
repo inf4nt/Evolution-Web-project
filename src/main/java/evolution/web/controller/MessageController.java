@@ -3,9 +3,11 @@ package evolution.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.model.dialog.Dialog;
 import evolution.model.message.Message;
+import evolution.model.user.StandardUser;
 import evolution.model.user.User;
 import evolution.repository.DialogRepository;
 import evolution.repository.MessageRepository;
+import evolution.repository.StandardUserRepository;
 import evolution.repository.UserRepository;
 import evolution.service.MyJacksonService;
 import evolution.service.security.UserDetailsServiceImpl;
@@ -44,6 +46,9 @@ public class MessageController {
     @Autowired
     private DialogRepository dialogRepository;
 
+    @Autowired
+    private StandardUserRepository standardUserRepository;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageController.class);
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -79,7 +84,7 @@ public class MessageController {
         }
 
         model.addAttribute("sel", sel);
-        model.addAttribute("im", userRepository.selectIdFirstLastName(sel));
+        model.addAttribute("im", standardUserRepository.selectIdFirstLastName(sel));
         return "message/form-message";
     }
 
@@ -97,13 +102,13 @@ public class MessageController {
 
         if (dialogId == -1) {
             LOGGER.info("create new dialog");
-            Dialog dialog = new Dialog(customUser.getUser(), new User(sel));
+            Dialog dialog = new Dialog(new StandardUser(customUser.getUser().getId()), new StandardUser(sel));
             LOGGER.info(dialog.toString());
 
             Dialog d = dialogRepository.saveAndFlush(dialog);
 
             LOGGER.info("dialog id= " + d.getId());
-            m = new Message(d.getId(), customUser.getUser(), message, new Date());
+            m = new Message(d.getId(), new StandardUser(customUser.getUser().getId()), message, new Date());
             messageRepository.saveAndFlush(m);
             response.sendRedirect("/im/" + sel);
         } else {

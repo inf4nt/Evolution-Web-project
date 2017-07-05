@@ -1,14 +1,18 @@
 package evolution.model;
 
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import evolution.model.user.StandardUser;
 import lombok.*;
+
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Infant on 05.07.2017.
@@ -38,7 +42,7 @@ public class Publication {
     @JsonProperty
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sender_id")
-    private StandardUser standardUser;
+    private StandardUser sender;
 
     @JsonProperty
     @Column(name = "category_id")
@@ -47,4 +51,16 @@ public class Publication {
     @JsonProperty
     @Column(name = "theme_publication")
     private String theme;
+
+    @JsonProperty
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "comment",
+            joinColumns = @JoinColumn(name = "publication_id") ,
+            inverseJoinColumns =  @JoinColumn(name = "id"))
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Comment> commentList;
+
+    public Publication(Long id) {
+        this.id = id;
+    }
 }

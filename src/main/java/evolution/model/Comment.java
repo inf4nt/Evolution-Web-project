@@ -1,5 +1,6 @@
 package evolution.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import evolution.model.user.StandardUser;
@@ -14,7 +15,7 @@ import java.util.Date;
 @Entity
 @Table(name = "comment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@NoArgsConstructor @AllArgsConstructor @Getter @Setter @ToString
+@NoArgsConstructor @AllArgsConstructor @Getter @Setter @ToString(exclude = "publication")
 public class Comment {
 
     @JsonProperty
@@ -36,10 +37,21 @@ public class Comment {
     @JsonProperty
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sender_id")
-    private StandardUser standardUser;
+    private StandardUser sender;
 
-    @JsonProperty
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publication_id")
     private Publication publication;
+
+    public Comment(String content, StandardUser sender, Date date, Publication publication){
+        this.content = content;
+        this.sender = sender;
+        this.date = date;
+        this.publication = publication;
+    }
+
+    public Comment(Long id){
+        this.id = id;
+    }
 }

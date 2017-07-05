@@ -2,6 +2,7 @@ package evolution.model.dialog;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import evolution.model.user.StandardUser;
 import evolution.model.user.User;
 import lombok.*;
 import javax.persistence.*;
@@ -24,26 +25,26 @@ public class Dialog {
     @JsonProperty
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "first")
     @JsonProperty
-    private User first;
+    private StandardUser first;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "second")
     @JsonProperty
-    private User second;
+    private StandardUser second;
 
     public Dialog(Long id) {
         this.id = id;
     }
 
-    public Dialog(Long id, User second) {
+    public Dialog(Long id, StandardUser second) {
         this.id = id;
         this.second = second;
     }
 
-    public Dialog(User first, User second) {
+    public Dialog(StandardUser first, StandardUser second) {
         this.first = first;
         this.second = second;
     }

@@ -10,6 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
 
+import evolution.model.Comment;
+import evolution.model.Publication;
+import evolution.model.user.StandardUser;
 import org.hibernate.*;
 
 import org.hibernate.cfg.Configuration;
@@ -42,17 +45,32 @@ public class Main {
             org.hibernate.query.Query query;
             Map map;
 
+//            Publication publication = new Publication();
+//            publication.setCategory(1L);
+//            publication.setContent("СОДЕРЖАНИЕ");
+//            publication.setStandardUser(new StandardUser(226L));
+//            publication.setDate(new Date());
+//            publication.setTheme("Theme");
+//
+//            session.save(publication);
 
 
+            Comment comment = new Comment();
+            comment.setContent("comment content2");
+            comment.setDate(new Date());
+            comment.setSender(new StandardUser(216L));
+            comment.setPublication(new Publication(2L));
 
+            session.save(comment);
 
 
 
             session.getTransaction().commit();
             sessionFactory.close();
         } catch (Exception e){
-            session.getTransaction().rollback();
             e.printStackTrace();
+            if (session != null && session.getTransaction() != null)
+            session.getTransaction().rollback();
             if (sessionFactory != null)
                 sessionFactory.close();
         }

@@ -28,7 +28,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             " from Message m " +
             " join m.sender as sender " +
             " join m.dialog as d" +
-            " join User second on ( " +
+            " join StandardUser second on ( " +
             "       (second.id = d.first.id and d.first.id !=:id1 ) " +
             "       or (second.id = d.second.id and d.second.id !=:id1 ) " +
             " ) " +
@@ -41,4 +41,5 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             " group by m.dialog.id ) " +
             " order by m.id desc ")
     List<Message> findLastMessageForDialog(@Param("id1") Long authUserId);
+
 }

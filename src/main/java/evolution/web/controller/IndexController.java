@@ -1,16 +1,8 @@
 package evolution.web.controller;
 
 
-import evolution.model.dialog.Dialog;
-import evolution.repository.DialogRepository;
-import evolution.repository.MessageRepository;
-import evolution.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;

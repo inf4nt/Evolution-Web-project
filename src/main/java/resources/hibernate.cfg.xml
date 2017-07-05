@@ -68,20 +68,16 @@
     <mapping class="evolution.model.user.User"/>
     <mapping class="evolution.model.friend.Friends"/>
 
-
-
-
-
     <mapping class="evolution.model.dialog.Dialog"/>
 
     <mapping class="evolution.model.message.Message"/>
 
+    <mapping class="evolution.model.Comment"/>
+    <mapping class="evolution.model.Publication"/>
+    <mapping class="evolution.model.user.StandardUser"/>
 
+    <mapping class="evolution.model.SubscriptionPublication"/>
 
-    <mapping class="evolution.model.news.Feed"/>
-
-
-    <mapping class="evolution.model.news.RepostFeed"/>
 
 
 

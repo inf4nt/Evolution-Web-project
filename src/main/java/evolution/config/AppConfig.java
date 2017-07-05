@@ -5,6 +5,7 @@ package evolution.config;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.springframework.context.annotation.*;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -44,9 +45,14 @@ public class AppConfig
 
     @Bean
     public ObjectMapper objectMapper() {
+//        ObjectMapper mapper = new ObjectMapper();
+//        Hibernate5Module hbm = new Hibernate5Module();
+//        hbm.enable(Hibernate5Module.Feature.FORCE_LAZY_LOADING);
+//        mapper.registerModule(hbm);
+//        return mapper;
         ObjectMapper mapper = new ObjectMapper();
         Hibernate5Module hbm = new Hibernate5Module();
-        hbm.enable(Hibernate5Module.Feature.FORCE_LAZY_LOADING);
+        hbm.configure(Hibernate5Module.Feature.FORCE_LAZY_LOADING, false);
         mapper.registerModule(hbm);
         return mapper;
     }

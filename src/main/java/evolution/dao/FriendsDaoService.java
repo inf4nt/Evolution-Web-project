@@ -2,6 +2,7 @@ package evolution.dao;
 
 import evolution.common.FriendStatusEnum;
 import evolution.model.friend.Friends;
+import evolution.model.user.StandardUser;
 import evolution.model.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,19 +24,19 @@ public class FriendsDaoService {
 
     private static final String FIND_ALL_FRIENDS = "select new Friends " +
             "(uf.id, uf.firstName, uf.lastName," +
-            " uu.id, uu.firstName, uu.lastName) from User uf" +
+            " uu.id, uu.firstName, uu.lastName) from StandardUser uf" +
             " join Friends ff on uf.id = ff.friend.id " +
-            " join User uu on uu.id = ff.user.id " +
+            " join StandardUser uu on uu.id = ff.user.id " +
             " where ff.user.id = :id ";
 
 
     private static final String USER_JOIN_FRIEND = "select new Friends " +
             "(uf.id, uf.firstName, uf.lastName) " +
-            " from User uf" +
+            " from StandardUser uf" +
             " join Friends ff on uf.id = ff.friend.id " +
             " where ff.user.id = :id ";
 
-    private static final String SET_STATUS_FRIEND = "update Friends \nset status = :status \nwhere user.id = :u \nand friend.id = :f \nand status =:s";
+    private static final String SET_STATUS_FRIEND = "update Friends set status = :status where user.id = :u and friend.id = :f and status =:s";
 
     private static final String DELETE_REQUEST_FRIEND = "delete from Friends where (user.id = :u and friend.id = :f) \n" +
             "or (user.id = :f and friend.id = :u)";
@@ -52,7 +53,7 @@ public class FriendsDaoService {
 
     private static final String FIND_REQUEST = FIND_ALL_FRIENDS + " and ff.status = " + FriendStatusEnum.REQUEST.getId();
 
-    private static final String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status) from User u " +
+    private static final String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status) from StandardUser u " +
             " left join Friends f on u.id = f.friend.id and f.user.id = :authUserId " +
             " where u.id = :id";
 
@@ -61,8 +62,8 @@ public class FriendsDaoService {
 
     @Transactional
     public void friendRequest(long authUserId, long id2) {
-        User authUser = new User(authUserId);
-        User user2 = new User(id2);
+        StandardUser authUser = new StandardUser(authUserId);
+        StandardUser user2 = new StandardUser(id2);
         Friends request = new Friends(authUser, user2, FriendStatusEnum.REQUEST.getId());
         Friends follower = new Friends(user2, authUser, FriendStatusEnum.FOLLOWER.getId());
         entityManager.persist(follower);
@@ -104,7 +105,6 @@ public class FriendsDaoService {
     }
 
     @Transactional
-    @Deprecated
     public void deleteRequest(long authUserId, long id2) {
         javax.persistence.Query query = entityManager.createQuery(DELETE_REQUEST_FRIEND);
         query.setParameter("u", authUserId);
@@ -119,7 +119,6 @@ public class FriendsDaoService {
         query.setParameter("id", id);
         return (Friends) query.getSingleResult();
     }
-
 
     @Transactional
     public List<Friends> findFriend(long authUserId, int limit, int offset) {

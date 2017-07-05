@@ -6,6 +6,7 @@ import evolution.common.FriendStatusEnum;
 import evolution.dao.FriendsDaoService;
 import evolution.model.friend.Friends;
 import evolution.model.jsonModel.JsonInformation;
+import evolution.repository.StandardUserRepository;
 import evolution.repository.UserRepository;
 import evolution.service.MyJacksonService;
 import evolution.service.builder.JsonInformationBuilder;
@@ -40,6 +41,9 @@ public class FriendController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private StandardUserRepository standardUserRepository;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(FriendController.class);
     private static String responseJson;
 
@@ -73,7 +77,7 @@ public class FriendController {
         else if (!map.get(FriendStatusEnum.REQUEST.toString().toLowerCase()).isEmpty())
             model.addAttribute("user", map.get(FriendStatusEnum.REQUEST.toString().toLowerCase()).get(0).getUser());
         else
-            model.addAttribute("user", userRepository.selectIdFirstLastName(userId));
+            model.addAttribute("user", standardUserRepository.selectIdFirstLastName(userId));
         return "user/form-friend";
     }
 

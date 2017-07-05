@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import evolution.common.UserRoleEnum;
 import lombok.*;
+import org.hibernate.annotations.WhereJoinTable;
 
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.text.DateFormat;
+import java.util.List;
 
 /**
  * Created by Admin on 09.03.2017.

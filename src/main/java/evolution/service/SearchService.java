@@ -1,6 +1,8 @@
 package evolution.service;
 
+import evolution.model.user.StandardUser;
 import evolution.model.user.User;
+import evolution.repository.StandardUserRepository;
 import evolution.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -16,15 +18,15 @@ import java.util.List;
 public class SearchService {
 
     @Autowired
-    private UserRepository userRepository;
+    private StandardUserRepository standardUserRepository;
 
-    public List<User> searchUser(String string, int page, int size) {
+    public List<StandardUser> searchUser(String string, int page, int size) {
         if (string.matches("^[a-zA-Z]+$")) {
-            return userRepository.findUserByFirstOrLastName(string, new PageRequest(page, size));
+            return standardUserRepository.findUserByFirstOrLastName(string, new PageRequest(page, size));
         }
         if (string.matches("^[a-zA-Z]+\\s[a-zA-Z]+$")) {
             String regex[] = string.split(" ");
-            return userRepository.findUserByFirstLastName(regex[0], regex[1], new PageRequest(page, size));
+            return standardUserRepository.findUserByFirstLastName(regex[0], regex[1], new PageRequest(page, size));
         }
         throw new NoResultException();
     }

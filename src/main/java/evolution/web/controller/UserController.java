@@ -5,6 +5,7 @@ import evolution.common.UserRoleEnum;
 import evolution.dao.FriendsDaoService;
 import evolution.model.friend.Friends;
 import evolution.model.user.User;
+import evolution.repository.StandardUserRepository;
 import evolution.repository.UserRepository;
 import evolution.service.MyJacksonService;
 import evolution.service.SearchService;
@@ -45,6 +46,8 @@ public class UserController {
     private SearchService searchService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private StandardUserRepository standardUserRepository;
 
     private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
@@ -80,9 +83,9 @@ public class UserController {
                         @RequestParam(required = false) Integer size) throws JsonProcessingException {
         LOGGER.info("page=" + page + " size=" + size);
         if (size == null || page == null) {
-            return userRepository.findUsers();
+            return standardUserRepository.findAll();
         }
-        return userRepository.findUsers(new PageRequest(page, size));
+        return standardUserRepository.findUsers(new PageRequest(page, size));
     }
 
     // EDIT
@@ -168,7 +171,7 @@ public class UserController {
         LOGGER.info("session status set complete");
         int size = 5;
         model.addAttribute("limit", size);
-        model.addAttribute("list", userRepository.findUsers(new PageRequest(0, size)));
+        model.addAttribute("list", standardUserRepository.findUsers(new PageRequest(0, size)));
         return "user/new-search";
     }
 
