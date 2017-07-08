@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
@@ -187,4 +188,28 @@ public class UserController {
             return null;
         }
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping (value = {"/role/{role}"}, method = RequestMethod.GET)
+    public ModelAndView formAllUserByRole (@PathVariable String role) {
+        int pageSize = 5;
+        ModelAndView modelAndView = new ModelAndView("user/all-user");
+        modelAndView.addObject("role", role);
+        modelAndView.addObject("list", userRepository.findAllByRole(UserRoleEnum.valueOf(role.toUpperCase()).getId()));
+        modelAndView.addObject("pageSize", pageSize);
+        return modelAndView;
+    }
+
+    @RequestMapping (value = {"/list"}, method = RequestMethod.GET)
+    public ModelAndView formAllUserByRoleUser () {
+        int pageSize = 5;
+        ModelAndView modelAndView = new ModelAndView("user/all-user");
+        modelAndView.addObject("role", "user");
+        modelAndView.addObject("list", standardUserRepository.findAll());
+        modelAndView.addObject("pageSize", pageSize);
+        return modelAndView;
+    }
+
+
+
 }

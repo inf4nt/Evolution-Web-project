@@ -24,7 +24,7 @@ public class GlobalFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        LOGGER.info(this.getClass().getSimpleName());
+//        LOGGER.info(this.getClass().getSimpleName());
 
 //        try {
 //            filterChain.doFilter(request, response);

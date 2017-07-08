@@ -55,13 +55,13 @@ public class Main {
 //            session.save(publication);
 
 
-            Comment comment = new Comment();
-            comment.setContent("comment content2");
-            comment.setDate(new Date());
-            comment.setSender(new StandardUser(216L));
-            comment.setPublication(new Publication(2L));
-
-            session.save(comment);
+//            Comment comment = new Comment();
+//            comment.setContent("comment content2");
+//            comment.setDate(new Date());
+//            comment.setSender(new StandardUser(216L));
+//            comment.setPublication(new Publication(2L));
+//
+//            session.save(comment);
 
 
 

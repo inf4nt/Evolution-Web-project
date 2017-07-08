@@ -338,11 +338,13 @@
             if (validLoginPage('div_email_formLogin', 'div_password_formLogin') == false)
                 return false;
             var form = this;
-            $("#div_button_formLogin, #loginPage").hide();
-            $("#loader").fadeToggle("slow");
-            setTimeout(function () {
-                form.submit();
-            }, 2000);
+//            $("#div_button_formLogin, #loginPage").hide();
+            $("#div_button_formLogin").hide();
+//            $("#loader").fadeToggle("slow");
+//            setTimeout(function () {
+//                form.submit();
+//            }, 2000);
+            form.submit();
             return false;
         });
 

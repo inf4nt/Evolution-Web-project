@@ -48,3 +48,10 @@ li {
     width: 90%;
     height: 80px;
 }
+
+.hidden {
+    display: none;
+}
+.curs {
+    cursor: pointer;
+}

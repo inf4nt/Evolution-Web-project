@@ -1,5 +1,6 @@
 package evolution.web.controller;
 
+import evolution.common.PublicationCategory;
 import evolution.model.Comment;
 import evolution.model.Publication;
 import evolution.model.user.StandardUser;
@@ -14,8 +15,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +26,7 @@ import java.util.List;
  * Created by Infant on 05.07.2017.
  */
 @Controller
+@RequestMapping(value = "/publication")
 public class PublicationController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -35,6 +39,35 @@ public class PublicationController {
 
     @Autowired
     private MyJacksonService jacksonService;
+
+
+    @RequestMapping(value = "/new")
+    public ModelAndView formCreatePublication() {
+        ModelAndView modelAndView = new ModelAndView("publication/create-publication");
+        modelAndView.addObject("lengthContent", 30000);
+        modelAndView.addObject("category", Arrays.asList(PublicationCategory.values()));
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/action")
+    public ModelAndView actionPublication() {
+        ModelAndView modelAndView = new ModelAndView("publication/action-publication");
+        return modelAndView;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @ResponseBody
     @RequestMapping(value = "/publication/{id}", method = RequestMethod.GET,
@@ -70,17 +103,19 @@ public class PublicationController {
     public Comment saveComment(@PathVariable Long id,
                                @RequestBody String json,
                                @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws IOException {
-        Comment comment = (Comment) jacksonService.jsonToObject(json, Comment.class);
-        comment.setDate(new Date());
-        comment.setSender(new StandardUser(customUser.getUser().getId()));
-        comment.setPublication(new Publication(id));
-        return commentRepository.saveAndFlush(comment);
+//        Comment comment = (Comment) jacksonService.jsonToObject(json, Comment.class);
+//        comment.setDate(new Date());
+//        comment.setSender(new StandardUser(customUser.getUser().getId()));
+//        comment.setPublication(new Publication(id));
+//        return commentRepository.saveAndFlush(comment);
+        return null;
     }
 
     @ResponseBody
     @RequestMapping(value = "/publication/{idPublication}/comment/", method = RequestMethod.GET)
     public List<Comment> getCommentByPublication(@PathVariable Long idPublication) throws IOException {
-        return publicationRepository.findOne(idPublication).getCommentList();
+//        return publicationRepository.findOne(idPublication).getCommentList();
+        return null;
     }
 
     @ResponseBody

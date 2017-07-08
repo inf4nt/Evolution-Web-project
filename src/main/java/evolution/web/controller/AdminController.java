@@ -1,17 +1,36 @@
-//package evolution.web.controller;
-//
-//import evolution.dao.AdminDao;
-//import evolution.service.builder.PaginationService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.beans.support.PagedListHolder;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.ui.Model;
-//import org.springframework.web.bind.annotation.*;
-//import javax.servlet.http.HttpServletRequest;
-//
-///**
-// * Created by Admin on 05.03.2017.
-// */
+package evolution.web.controller;
+
+
+import evolution.common.UserRoleEnum;
+import evolution.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+/**
+ * Created by Admin on 05.03.2017.
+ */
+@Controller
+@RequestMapping("/admin")
+public class AdminController {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @RequestMapping (value = {"/user/role/{role}"}, method = RequestMethod.GET)
+    public ModelAndView formAllUserByRole (
+            @PathVariable String role) {
+        ModelAndView modelAndView = new ModelAndView("user/all-user");
+        modelAndView.addObject("role", role);
+        modelAndView.addObject("list", userRepository.findAllByRole(UserRoleEnum.valueOf(role.toUpperCase()).getId()));
+        return modelAndView;
+    }
+}
+
+
+
+
 //@Controller
 //@RequestMapping("/admin")
 //@SessionAttributes({"servletName", "role", "productList", "user"})

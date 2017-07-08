@@ -15,7 +15,7 @@
     </script>
 
     <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/css.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/my-css.css" />" rel="stylesheet">
 
 
 

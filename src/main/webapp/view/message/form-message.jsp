@@ -18,7 +18,7 @@
     <style>
         .block-sms {
             height: 500px;
-            width: 700px;
+            width: 100%;
             overflow: scroll;
             word-break:break-all;
             overflow-x:hidden;
