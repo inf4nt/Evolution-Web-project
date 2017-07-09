@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -41,19 +42,92 @@ public class PublicationController {
     private MyJacksonService jacksonService;
 
 
-    @RequestMapping(value = "/new")
+    @RequestMapping(value = "/post/view", method = RequestMethod.GET)
     public ModelAndView formCreatePublication() {
         ModelAndView modelAndView = new ModelAndView("publication/create-publication");
         modelAndView.addObject("lengthContent", 30000);
+        modelAndView.addObject("lengthSubject", 255);
         modelAndView.addObject("category", Arrays.asList(PublicationCategory.values()));
         return modelAndView;
     }
 
-    @RequestMapping(value = "/action")
-    public ModelAndView actionPublication() {
-        ModelAndView modelAndView = new ModelAndView("publication/action-publication");
+    @RequestMapping(value = "/user/{id}/get/view", method = RequestMethod.GET)
+    public ModelAndView listPublicationByUser(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("publication/list-publication");
+        modelAndView.addObject("list", publicationRepository.findPublicationBySenderId(id));
+        modelAndView.addObject("pageSize", 5);
         return modelAndView;
     }
+
+    @RequestMapping(value = "/{id}/get/view", method = RequestMethod.GET)
+    public ModelAndView listPublicationById(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("publication/publication");
+        modelAndView.addObject("list", publicationRepository.findOne(id));
+        modelAndView.addObject("pageSize", 5);
+        return modelAndView;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @ResponseBody
+    @RequestMapping(value = "/user/{id}",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Object findPublicationBySenderId(@PathVariable Long id) {
+        return publicationRepository.findPublicationBySenderId(id);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/category/{category}",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Object findPublicationByCategory(@PathVariable String category) {
+        try {
+            return publicationRepository.findPublicationByCategory(PublicationCategory.valueOf(category.toUpperCase()).getId());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public Publication savePublication(@RequestBody String json,
+                                       @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
+                                       @RequestParam String category) throws IOException {
+
+
+        Publication publication = (Publication) jacksonService.jsonToObject(json, Publication.class);
+        publication.setDate(new Date());
+        publication.setSender(new StandardUser(customUser.getUser().getId()));
+        try {
+            publication.setCategory(PublicationCategory.valueOf(category.toUpperCase()).getId());
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            LOGGER.warn(e.toString());
+            return null;
+        }
+
+        LOGGER.info(publication.toString());
+
+        return publicationRepository.saveAndFlush(publication);
+    }
+
+
+
+
 
 
 
@@ -83,15 +157,6 @@ public class PublicationController {
         return publicationRepository.findAll();
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/publication/", method = RequestMethod.POST)
-    public Publication savePublication(@RequestBody String json,
-                                       @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws IOException {
-        Publication publication = (Publication) jacksonService.jsonToObject(json, Publication.class);
-        publication.setDate(new Date());
-        publication.setSender(new StandardUser(customUser.getUser().getId()));
-        return publicationRepository.saveAndFlush(publication);
-    }
 
     @RequestMapping(value = "/publication/{id}", method = RequestMethod.DELETE)
     public void deletePublication(@PathVariable Long id) throws IOException {

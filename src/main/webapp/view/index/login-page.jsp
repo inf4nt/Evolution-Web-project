@@ -335,23 +335,17 @@
 
         // LOGIN
         $('#formLogin').on('submit', function () {
-            if (validLoginPage('div_email_formLogin', 'div_password_formLogin') == false)
+            if (validLoginPage('div_email_formLogin', 'div_password_formLogin') === false)
                 return false;
-            var form = this;
-//            $("#div_button_formLogin, #loginPage").hide();
-            $("#div_button_formLogin").hide();
-//            $("#loader").fadeToggle("slow");
-//            setTimeout(function () {
-//                form.submit();
-//            }, 2000);
-            form.submit();
+            $("#div_button_formLogin button").addClass("disabled");
+            this.submit();
             return false;
         });
 
 
 
         $("#div-first-user-data button[name=submit-first-user-data]").click(function () {
-            if (loginValid('div_email_form-user-data') == false)
+            if (loginValid('div_email_form-user-data') === false)
                 return false;
 
             $("#div-first-user-data, #return-login-registrationPage").hide();
@@ -366,7 +360,7 @@
                     url: "/service/user/is-exist?username=" + login,
                     type:"GET",
                     success:function (dataJson) {
-                        if (dataJson == true) {
+                        if (dataJson === true) {
                             $("#loader").hide();
                             $("#div-first-user-data, #return-login-registrationPage").fadeToggle("slow");
                             $("#info").html("This user " + login + " is exist");
@@ -374,7 +368,7 @@
                             $("#div_email_form-user-data span").hide();
                             return false;
                         }
-                        if (dataJson == false) {
+                        if (dataJson === false) {
                             // ТУТ ОТКРЫВАЕМ СЛЕД ФОРМУ
                             $("#loader").hide();
                             $("#div-second-user-data, #return-login-registrationPage").fadeToggle("slow");
@@ -399,7 +393,7 @@
                 'div_password_confirm_form-user-data',
                 'div_first_name_form-user-data',
                 'div_last_name_form-user-data')
-            if (valid == false)
+            if (valid === false)
                 return false;
 
 
@@ -413,9 +407,9 @@
             var countryCheck = $("#country").val();
             var stateCheck = $("#state").val();
             var country; var state;
-            if (stateCheck != null && stateCheck.length > 0)
+            if (stateCheck !==null && stateCheck.length > 0)
                 state = stateCheck;
-            if (countryCheck != -1)
+            if (countryCheck !== -1)
                 country = countryCheck;
 
             var json = JSON.stringify({"login":login, "password":password,

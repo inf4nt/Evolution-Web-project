@@ -36,8 +36,8 @@ public class Publication {
     @Column(name = "category_id")
     private Long category;
 
-    @Column(name = "theme_publication")
-    private String theme;
+    @Column
+    private String subject;
 
     public Publication(Long id) {
         this.id = id;

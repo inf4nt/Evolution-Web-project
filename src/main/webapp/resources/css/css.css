@@ -55,3 +55,8 @@ li {
 .curs {
     cursor: pointer;
 }
+.block-link a {
+    display: block; /* Ссылка как блочный элемент */
+    height: 100%; /* Высота на весь слой */
+    /*color: #666; !* Цвет ссылки *!*/
+}

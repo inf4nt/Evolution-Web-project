@@ -19,26 +19,29 @@
 
         <div class="col-lg-10 col-lg-offset-2  block-background ">
             <div id="category-publication" class="col-lg-5">
-                <label>Category list:</label>
+                <label>Category list:  <p id="sending" style="font-size:xx-large; display:none;">Sending</p></label>
                 <select class="form-control" id="category">
                     <c:forEach var="a" items="${category}">
-                        <option value="${a.name()}">${a.name()}</option>
+                        <option value="${a.name()}">
+                            ${a.name()}
+                        </option>
                     </c:forEach>
                 </select>
             </div>
 
             <div id="content-publication-theme" class="col-lg-12 ">
-                <label>Subject:</label>
-                <textarea style="width: 100%" class="form-control" rows="5"></textarea>
+                <label>Subject: <span id="length-subject">${lengthSubject}</span></label>
+                <textarea id="subject" style="width: 100%" class="form-control" rows="5"></textarea>
             </div>
             <div id="content-publication-textarea" class="col-lg-12 ">
                 <label>Content: <span id="length-publication">${lengthContent}</span></label>
                 <textarea style="width: 100%" id="publication-text" class="form-control" maxlength="${lengthContent}" rows="22"></textarea>
                 <br/>
-                <button data-toggle="modal" data-target="#modal-id" class="btn btn-primary btn-lg pull-right" style="width: 20%">
+                <button data-toggle="modal" data-target="#modal-id" id="post-publication" class="btn btn-primary btn-lg pull-right" style="width: 20%">
                     Post
                     <span class="glyphicon glyphicon-pushpin"></span>
                 </button>
+                <p id="success-send" style="font-size:x-large; display:none;">Successful</p>
             </div>
 
         </div>
@@ -51,8 +54,7 @@
                         <h4 class="modal-title" style="color: black">Are you sure ?</h4>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success">Post</button>
+                        <button id="post-modal-publication" type="button" class="btn btn-success" data-dismiss="modal">Send</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -65,7 +67,7 @@
 <script>
 
     var lengthContent = ${lengthContent};
-
+    var lengthSubject = ${lengthSubject};
 
     $(document).ready(function () {
         $(".pagination-btn").click(function () {
@@ -78,8 +80,60 @@
             var c = $("#publication-text").val().length;
             $("#length-publication").html(lengthContent - c);
         })
+        $("#subject").keyup(function () {
+            var c = $("#subject").val().length;
+            $("#length-subject").html(lengthSubject - c);
+        })
 
 
+        $("#post-publication").click(function () {
+            var subject = $("#subject").val();
+            var publication = $("#publication-text").val();
+            var category = $("#category").val();
+            if (publication.length > lengthContent || publication.length === 0 || subject.length > lengthSubject || subject.length === 0)
+                return false;
+            return true;
+        })
+
+
+
+
+
+        $("#post-modal-publication").click(function () {
+            var subject = $("#subject").val();
+            var publication = $("#publication-text").val();
+            var category = $("#category").val();
+            if (publication.length > lengthContent || publication.length === 0 || subject.length > lengthSubject || subject.length === 0)  {
+                $("#modal-id").modal("hide");
+                return false;
+            }
+
+            var json = JSON.stringify({"content":publication, "subject":subject});
+
+            $("#sending").fadeToggle("slow");
+
+            setTimeout(function () {
+                $.ajax({
+                    url:"/publication/?category=" + category,
+                    type:"POST",
+                    data: json,
+                    contentType:"application/json; charset=UTF-8",
+                    success:function (data) {
+                        if (data !== null) {
+                            $("#success-send").fadeToggle("slow").delay(3000).hide("slow");
+                        }
+                        $("#subject").val("");
+                        $("#publication-text").val("");
+                    },
+                    error:function () {
+
+                    },
+                    timeout:30000
+                })
+                $("#sending").hide("slow");
+            }, 2000);
+
+        })
     })
 
 

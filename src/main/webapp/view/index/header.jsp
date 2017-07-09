@@ -9,7 +9,7 @@
 <script src="<c:url value="/resources/js/js.js" />"></script>
 <script src="<c:url value="/resources/js/country.js" />"></script>
 <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/css/my-css.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/css.css" />" rel="stylesheet">
 
 <script>
     $(document).ready(function () {
@@ -84,13 +84,13 @@
 					<div id="publication-all" style="display: none;">
 						<hr/>
 						<li>
-							<a href="/publication/new">
+							<a href="/publication/post/view">
 								<span class="glyphicon glyphicon-pencil"></span> Create publication
 							</a>
 						</li>
 						<hr/>
 						<li>
-							<a class="curs">
+							<a href="/publication/user/${authUser.id}/get/view">
 								<span class="glyphicon glyphicon-send"></span> My publication
 							</a>
 						</li>

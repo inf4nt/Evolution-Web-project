@@ -13,9 +13,9 @@ import lombok.Getter;
 public enum PublicationCategory {
 
     IT(1),
-    Technics(2),
-    Sport(3),
-    Machine_and_Technics(4);
+    TECHNICS(2),
+    SROPT(3),
+    MACHINE_AND_TECHNICS(4);
 
     private final long id;
 }
