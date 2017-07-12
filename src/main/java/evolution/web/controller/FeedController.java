@@ -51,6 +51,7 @@ public class FeedController {
     @GetMapping(value = "/{id}/get/view")
     public ModelAndView getPageNews(@PathVariable Long id) {
         ModelAndView model = new ModelAndView("feed/my-news");
+        LOGGER.warn("feed by user id " + id);
         model.addObject("list", feedPublicationRepository.findAllNews(id, new PageRequest(0, 100)));
         return model;
     }

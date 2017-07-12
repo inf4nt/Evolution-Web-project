@@ -21,16 +21,13 @@ public class Friends implements Serializable{
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    @JsonProperty
     private StandardUser user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "friend_id")
-    @JsonProperty
     private StandardUser friend;
 
     @Column(name = "status")
-    @JsonProperty
     private Long status;
 
     public Friends(Long id, String firstName, String lastName, Long friendStatus) {

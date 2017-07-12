@@ -39,22 +39,24 @@ public interface FeedPublicationRepository extends JpaRepository<FeedPublication
             " order by fp.date desc ")
     List<FeedPublication> findAll(@Param("user_id") Long userId);
 
-    @Query( " select new FeedPublication ( " +
+    @Query("  select new FeedPublication ( " +
             " fd.id, fd.content, fd.tags, " +
             " fp.id, fp.date, " +
             " sender.id, sender.firstName, sender.lastName, " +
             " reposted.id, reposted.firstName, reposted.lastName ) " +
             " from FeedPublication fp " +
-            " join fp.feedData as fd " +
-            " join fp.sender as sender " +
-            " left join fp.reposted as reposted " +
+            " join fp.feedData as fd" +
+            " join fp.sender as sender" +
+            " left join fp.reposted as reposted" +
             " where fp.id in ( " +
-            " select fp.id from Friends f " +
-            " join FeedPublication fp on fp.sender.id = f.friend.id or fp.reposted.id = f.friend.id " +
-            " where f.user.id = :user_id) " +
+            " select fp.id from Friends f" +
+            " join FeedPublication fp on fp.sender.id = f.friend.id and fp.reposted is null " +
+            " or fp.reposted.id = f.friend.id " +
+            " where f.user.id =:user_id) " +
             " or fp.id in ( " +
             " select fp.id from FeedPublication fp " +
-            " where fp.sender.id =:user_id and fp.reposted is null ) " +
+            " where fp.sender.id = :user_id and fp.reposted is null " +
+            " or fp.reposted.id =:user_id) " +
             " order by fp.date desc ")
     List<FeedPublication> findAllNews(@Param("user_id") Long userId, Pageable pageable);
 
@@ -79,10 +81,6 @@ public interface FeedPublicationRepository extends JpaRepository<FeedPublication
             " where fp.feedData.tags like lower (concat('%', :tag, '%')) " +
             " order by fp.id desc ")
     List<FeedPublication> findByTags(@Param("tag") String tag);
-
-
-
-
 
 //    @Transactional
 //    @Modifying
