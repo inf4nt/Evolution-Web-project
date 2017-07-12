@@ -9,7 +9,7 @@
   <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
   <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
   <script src="<c:url value="/resources/js/validators.js" />"></script>
-  <script src="<c:url value="/resources/js/js.js" />"></script>
+  <script src="<c:url value="/resources/js/my-js.js" />"></script>
   <script src="<c:url value="/resources/js/country.js" />"></script>
   <style>
     html { height: 100%; }
@@ -83,7 +83,7 @@
                 <td><a onclick="getRegistrationPage()" style="color: #fbfff9" href="#">Registration</a></td>
               </div>
               <div id="div_button_formLogin" class="text-center">
-                <button class="btn btn-info" form="formLogin"
+                <button class="btn btn-info" id="btn-login" form="formLogin"
                         style="width: 100%">Log in
                   <span class="glyphicon glyphicon-log-in"></span>
                 </button>
@@ -337,7 +337,7 @@
         $('#formLogin').on('submit', function () {
             if (validLoginPage('div_email_formLogin', 'div_password_formLogin') === false)
                 return false;
-            $("#div_button_formLogin button").addClass("disabled");
+            actionBtn("btn-login", true);
             this.submit();
             return false;
         });

@@ -40,30 +40,19 @@
     }
 </style>
 
-<div style="display: none;" id="content" class="col-lg-8 col-lg-offset-2">
+<div id="content" class="col-lg-8 col-lg-offset-2">
 
     <div>
-        <%--<form id="form-tweet-post" action="/feed/save" method="POST">--%>
-            <%--<div class="form-group">--%>
-                <%--<textarea id="input-tweet" placeholder="What's new ?" name="tweetContent" class="form-control" style="height: 100px " rows="5" ></textarea>--%>
-            <%--</div>--%>
-
-            <%--<div class="col-lg-12 " id="tweet-post">--%>
-                <%--<button type="submit" form="form-tweet-post" style="width: 20%" class="btn btn-info pull-right">--%>
-                    <%--Post <span class="glyphicon glyphicon-ok"/>--%>
-                <%--</button>--%>
-            <%--</div>--%>
-        <%--</form>--%>
-
-        <div class="form-group">
-            <textarea id="input-tweet" placeholder="What's new ?" name="tweetContent" class="form-control" style="height: 100px " rows="5" ></textarea>
-        </div>
-        <div class="col-lg-12 " id="tweet-post">
-            <button id="btn-tweet-post" style="width: 20%" class="btn btn-info pull-right">
-                Post <span class="glyphicon glyphicon-ok"/>
-            </button>
-        </div>
-
+        <form action="/feed/post/view" method="POST">
+            <div class="form-group">
+                <textarea id="input-tweet" placeholder="What's new ?" name="tweetContent" class="form-control" style="height: 100px " rows="5" ></textarea>
+            </div>
+            <div class="col-lg-12 " id="tweet-post">
+                <button type="submit" id="btn-tweet-post" style="width: 20%" class="btn btn-info pull-right">
+                    Post <span class="glyphicon glyphicon-ok"/>
+                </button>
+            </div>
+        </form>
     </div>
 
     <br/><br/><br/>
@@ -80,36 +69,44 @@
                 <tr>
                     <td>
                         <div class="block-background div-white">
-                            <span class="pull-right curs">
-                                <span class="glyphicon glyphicon-remove" style="color:white;"></span>
-                            </span>
+                            <c:if test="${a.sender.id == authUser.id && a.reposted.id == null}">
+                                <form action="/feed/${a.id}/delete/view" method="GET">
+                                    <button type="submit" class="btn btn-default btn-md pull-right">
+                                        <span class="glyphicon glyphicon-remove text-danger"></span>
+                                    </button>
+                                </form>
+                            </c:if>
                             <c:if test="${a.reposted.id != null}">
                                 <a href="/user/id${a.reposted.id}">
-                                        ${a.reposted.firstName} ${a.reposted.lastName}
+                                    ${a.reposted.firstName} ${a.reposted.lastName}
                                 </a>
                                 <span style="color: white"> <span class="glyphicon glyphicon-share-alt"></span> reposted</span>
                                 <br/><br/>
                             </c:if>
 
                             <a href="/user/id${a.sender.id}">
-                                    ${a.sender.firstName} ${a.sender.lastName}
+                                ${a.sender.firstName} ${a.sender.lastName}
                             </a>
 
                             <div class="feed-link">
                                 <br/>
                                 <c:if test="${a.feedData.content.length() > 1000}">
                                     <p onclick="ajaxTweetModal(this)" class="curs" id="${a.id}" href="#modal-id" data-toggle="modal">
-                                            ${fn:substring(a.feedData.content, 0, 1000)}...
+                                        ${fn:substring(a.feedData.content, 0, 1000)}...
                                     </p>
                                 </c:if>
                                 <c:if test="${a.feedData.content.length() <= 1000}">
                                     <p>
-                                            ${a.feedData.content}
+                                        ${a.feedData.content}
                                     </p>
                                 </c:if>
                             </div>
-                            <p class="tweet-tags">
-                                ${a.feedData.tags}
+                            <p>
+                                <c:forEach var="t" items="${a.feedData.listTags()}">
+                                    <a class="tweet-tags" href="/feed/tag/${t}">
+                                        #${t}
+                                    </a>
+                                </c:forEach>
                             </p>
                             <br/>
                             <div class="btn-group">
@@ -145,44 +142,46 @@
 
 
 </div>
+
 <script>
 
 
 
     $(document).ready(function () {
-        $("#content").fadeToggle("slow");
+//        $("#content").delay(500).fadeToggle("slow");
+//        $("#content").delay(500).show("slow");
         $(".tweet-tags").css("color", "#84cbff");
 
-        $("#btn-tweet-post").click(function postTweet() {
-            var content = $("#input-tweet").val();
-            var maxTweetLength = 10000;
-            if (content.length <=0 || content.length > maxTweetLength)
-                return false;
-
-            $("#tweet-post").hide();
-
-
-            var json = JSON.stringify({"feedData":{"content":content}});
-            console.log(json);
-            $.ajax({
-                url:"/feed/",
-                type:"POST",
-                data:json,
-                contentType:"application/json; charset=UTF-8",
-                success:function (data) {
-                    if (data) {
-
-                    }
-                    $("#input-tweet").val("");
-                    $("#tweet-post").fadeToggle("slow");
-                },
-                error:function () {
-                    alert('Sorry, server is not responded');
-                },
-                timeout:30000
-            })
-            return false;
-        });
+//        $("#btn-tweet-post").click(function postTweet() {
+//            var content = $("#input-tweet").val();
+//            var maxTweetLength = 10000;
+//            if (content.length <=0 || content.length > maxTweetLength)
+//                return false;
+//
+//            $("#tweet-post").hide();
+//
+//
+//            var json = JSON.stringify({"feedData":{"content":content}});
+//            console.log(json);
+//            $.ajax({
+//                url:"/feed/",
+//                type:"POST",
+//                data:json,
+//                contentType:"application/json; charset=UTF-8",
+//                success:function (data) {
+//                    if (data) {
+//
+//                    }
+//                    $("#input-tweet").val("");
+//                    $("#tweet-post").fadeToggle("slow");
+//                },
+//                error:function () {
+//                    alert('Sorry, server is not responded');
+//                },
+//                timeout:30000
+//            })
+//            return false;
+//        });
     })
 
     function ajaxTweetModal(a) {

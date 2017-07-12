@@ -2,10 +2,13 @@ package evolution.model;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import evolution.common.PublicationCategoryEnum;
 import evolution.model.user.StandardUser;
 import lombok.*;
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Infant on 05.07.2017.
@@ -42,4 +45,16 @@ public class Publication {
     public Publication(Long id) {
         this.id = id;
     }
+
+    public String getCategoryName() {
+        List<PublicationCategoryEnum> list = Arrays.asList(PublicationCategoryEnum.values());
+        for (PublicationCategoryEnum pce: list) {
+            if (pce.getId() == category) {
+                return pce.name();
+            }
+        }
+        return null;
+    }
+
+
 }

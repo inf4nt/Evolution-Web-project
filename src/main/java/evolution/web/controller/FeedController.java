@@ -20,8 +20,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.print.attribute.standard.Media;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -37,17 +40,86 @@ public class FeedController {
     private MyJacksonService jacksonService;
 
     @Autowired
+    private FeedDataRepository feedDataRepository;
+
+    @Autowired
     private FeedDaoService feedDaoService;
 
     @Autowired
     private Validator validator;
 
-    @GetMapping(value = "/news")
-    public String getPageNews(@AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-                              Model model) {
-        model.addAttribute("list", feedPublicationRepository.findAllNews(customUser.getUser().getId(), new PageRequest(0, 100)));
-        return "feed/my-news";
+    @GetMapping(value = "/{id}/get/view")
+    public ModelAndView getPageNews(@PathVariable Long id) {
+        ModelAndView model = new ModelAndView("feed/my-news");
+        model.addObject("list", feedPublicationRepository.findAllNews(id, new PageRequest(0, 100)));
+        return model;
     }
+
+    @PostMapping(value = "/post/view")
+    public String saveFeed (@RequestParam String tweetContent,
+                            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws IOException {
+
+
+        FeedPublication feedPublication = new FeedPublication();
+        feedPublication.setFeedData(new FeedData(tweetContent, null));
+        feedPublication.setDate(new Date());
+        feedPublication.setSender(new StandardUser(customUser.getUser().getId()));
+        feedPublication.setReposted(null);
+
+        if (validator.feedPublicationValid(feedPublication)) {
+            feedDaoService.save(feedPublication);
+        }
+        return "redirect:/feed/" + customUser.getUser().getId() + "/get/view";
+    }
+
+    @GetMapping(value = "/{id}/delete/view")
+    public String saveFeed (@PathVariable Long id,
+                            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws IOException {
+        feedDataRepository.deletePost(id, customUser.getUser().getId());
+        return "redirect:/feed/" + customUser.getUser().getId() + "/get/view";
+    }
+
+
+    @ResponseBody
+    @GetMapping(value = "/tag/{tag}",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<FeedPublication> findByTag(@PathVariable(required = false) String tag) {
+        if (tag != null) {
+            return feedPublicationRepository.findByTags(tag.toLowerCase());
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+//    @ResponseBody
+//    @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//    public FeedPublication saveFeed (@RequestBody String json,
+//                            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws IOException {
+//
+//        FeedPublication fp = (FeedPublication) jacksonService.jsonToObject(json, FeedPublication.class);
+//        FeedPublication feedPublication = new FeedPublication(new FeedData(fp.getFeedData().getContent(), null),
+//                new StandardUser(customUser.getUser().getId()),
+//                null);
+//
+//        if (validator.feedPublicationValid(feedPublication)) {
+//            return feedDaoService.save(fp.getFeedData().getContent(), null, customUser.getUser().getId(), null);
+//        }
+//        return null;
+//    }
+
+
+
+
+
+
+
+
 
     @ResponseBody
     @RequestMapping(value = "/", method = RequestMethod.GET,
@@ -63,22 +135,22 @@ public class FeedController {
         return feedPublicationRepository.findOne(id);
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/", method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public FeedPublication saveFeed (@RequestBody String json,
-                                     @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws IOException {
-
-        FeedPublication fp = (FeedPublication) jacksonService.jsonToObject(json, FeedPublication.class);
-        FeedPublication feedPublication = new FeedPublication(new FeedData(fp.getFeedData().getContent(), null),
-                new StandardUser(customUser.getUser().getId()),
-                null);
-
-        if (validator.feedPublicationValid(feedPublication)) {
-            return feedDaoService.save(fp.getFeedData().getContent(), null, customUser.getUser().getId(), null);
-        }
-        return null;
-    }
+//    @ResponseBody
+//    @RequestMapping(value = "/", method = RequestMethod.POST,
+//            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//    public FeedPublication saveFeed (@RequestBody String json,
+//                                     @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws IOException {
+//
+//        FeedPublication fp = (FeedPublication) jacksonService.jsonToObject(json, FeedPublication.class);
+//        FeedPublication feedPublication = new FeedPublication(new FeedData(fp.getFeedData().getContent(), null),
+//                new StandardUser(customUser.getUser().getId()),
+//                null);
+//
+//        if (validator.feedPublicationValid(feedPublication)) {
+//            return feedDaoService.save(fp.getFeedData().getContent(), null, customUser.getUser().getId(), null);
+//        }
+//        return null;
+//    }
 
     @ResponseBody
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET,

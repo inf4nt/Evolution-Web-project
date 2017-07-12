@@ -24,9 +24,6 @@ public class FeedDaoService {
 
     private final Logger LOGGER  = LoggerFactory.getLogger(this.getClass());
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     @Autowired
     private FeedDataRepository feedDataRepository;
 
@@ -46,7 +43,9 @@ public class FeedDaoService {
         return feedPublicationRepository.saveAndFlush(feedPublication);
     }
 
-    public Session session() {
-        return entityManager.unwrap(Session.class);
+    @Transactional
+    public FeedPublication save(FeedPublication output) {
+        feedDataRepository.save(output.getFeedData());
+        return feedPublicationRepository.saveAndFlush(output);
     }
 }

@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="profile-usertitle-job text-center">
-                Country
+                future country and state
             </div>
             <c:if test="${authUser.id != user.id}">
                 <div class="profile-userbuttons">
@@ -175,7 +175,7 @@
                 <hr/>
                 <div class="btn-group" style="width: 100%">
                     <p class="text-center">
-                        <a href="/user/profile/${user.id}" class="btn btn-md btn-primary">
+                        <a href="/user/${user.id}/put/view" class="btn btn-md btn-primary">
                             <span class="glyphicon glyphicon-edit"></span>
                             Profile
                         </a>
@@ -207,6 +207,11 @@
 </div><!-- /.modal -->
 
 
+<footer class="footer text-center">
+    <p>Evolution</p>
+    <a href="/user/id226" style="color: white"><span class="glyphicon glyphicon-eye-open"></span> Maksim Lukaretskiy</a>
+</footer>
+
 </body>
 <script>
 
@@ -233,15 +238,15 @@
 
         setTimeout(function () {
             actionFriendAJAX(actionType, function (data) {
-                if (data.info == true) {
+                if (data.info === true) {
                     var span;
-                    if (data.message == 'ACCEPT_REQUEST') {
+                    if (data.message === 'ACCEPT_REQUEST') {
                         span = '<span class="glyphicon glyphicon-ok"></span> Accept request';
-                    } else if (data.message == 'DELETE_FRIEND'){
+                    } else if (data.message === 'DELETE_FRIEND'){
                         span = '<span class="glyphicon glyphicon-remove "></span> Delete friend';
-                    } else if (data.message == 'DELETE_REQUEST') {
+                    } else if (data.message === 'DELETE_REQUEST') {
                         span = '<span class="glyphicon glyphicon-trash"></span> Delete request';
-                    } else if (data.message == 'ADD_FRIEND') {
+                    } else if (data.message === 'ADD_FRIEND') {
                         span = '<span class="glyphicon glyphicon-plus"></span> Add friend';
                     }
 
@@ -278,8 +283,6 @@
             timeout: 15000
         })
     }
-
-
 </script>
 
 
@@ -288,10 +291,7 @@
 
 
 
-<%--<footer class="footer text-center">--%>
-<%--<p>Evolution</p>--%>
-<%--<a href="/user/id226"><span class="glyphicon glyphicon-eye-open"></span> Maksim Lukaretskiy</a>--%>
-<%--</footer>--%>
+
 
 
 

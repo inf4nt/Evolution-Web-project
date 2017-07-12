@@ -11,22 +11,22 @@ import org.springframework.web.servlet.ModelAndView;
 /**
  * Created by Admin on 05.03.2017.
  */
-@Controller
-@RequestMapping("/admin")
-public class AdminController {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @RequestMapping (value = {"/user/role/{role}"}, method = RequestMethod.GET)
-    public ModelAndView formAllUserByRole (
-            @PathVariable String role) {
-        ModelAndView modelAndView = new ModelAndView("user/all-user");
-        modelAndView.addObject("role", role);
-        modelAndView.addObject("list", userRepository.findAllByRole(UserRoleEnum.valueOf(role.toUpperCase()).getId()));
-        return modelAndView;
-    }
-}
+//@Controller
+//@RequestMapping("/admin")
+//public class AdminController {
+//
+//    @Autowired
+//    private UserRepository userRepository;
+//
+//    @RequestMapping (value = {"/user/role/{role}"}, method = RequestMethod.GET)
+//    public ModelAndView formAllUserByRole (
+//            @PathVariable String role) {
+//        ModelAndView modelAndView = new ModelAndView("user/all-user");
+//        modelAndView.addObject("role", role);
+//        modelAndView.addObject("list", userRepository.findAllByRole(UserRoleEnum.valueOf(role.toUpperCase()).getId()));
+//        return modelAndView;
+//    }
+//}
 
 
 

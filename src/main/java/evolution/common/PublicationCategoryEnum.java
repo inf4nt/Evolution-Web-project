@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 
 @AllArgsConstructor @Getter
-public enum PublicationCategory {
+public enum PublicationCategoryEnum {
 
     IT(1),
     TECHNICS(2),

@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,11 +25,9 @@ import java.util.List;
 public class User extends UserDefaultData{
 
     @Column
-    @JsonProperty
     private String country;
 
     @Column
-    @JsonProperty
     private String state;
 
     public User(Long id){
@@ -61,13 +60,13 @@ public class User extends UserDefaultData{
 
     @JsonIgnore
     public String getRole() {
-        if (roleId != null) {
-            if (roleId == UserRoleEnum.USER.getId())
-                return UserRoleEnum.USER.toString();
-            if (roleId == UserRoleEnum.ADMIN.getId())
-                return UserRoleEnum.ADMIN.toString();
-        }
-        return null;
+        StringBuilder s = new StringBuilder();
+        Arrays.asList(UserRoleEnum.values()).forEach(userRoleEnum -> {
+            if (userRoleEnum.id == roleId) {
+                s.append(userRoleEnum.name());
+            }
+        });
+        return s.toString();
     }
 
     @JsonIgnore

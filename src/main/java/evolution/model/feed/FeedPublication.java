@@ -17,35 +17,30 @@ import java.util.Date;
 @Entity
 @Table(name = "feed_publication")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@NoArgsConstructor @AllArgsConstructor @Data
+@NoArgsConstructor @AllArgsConstructor @Getter @Setter @ToString
 public class FeedPublication {
 
-    @JsonProperty
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fp_id")
     @SequenceGenerator(name = "fp_id", sequenceName = "seq_feed_publication", allocationSize = 1)
     private Long id;
 
-    @JsonProperty
     @ManyToOne
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "feed_id")
     private FeedData feedData;
 
-    @JsonProperty
     @ManyToOne
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "sender_id")
     private StandardUser sender;
 
-    @JsonProperty
     @ManyToOne
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "reposted_id")
     private StandardUser reposted;
 
-    @JsonProperty
     @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;

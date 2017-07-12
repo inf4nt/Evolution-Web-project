@@ -11,7 +11,7 @@
 
 <%@include file="../index/header.jsp" %>
 
-<div id="div-self-profile" class="col-lg-offset-2" style="display: none">
+<div id="div-self-profile" class="col-lg-offset-2">
     <div class="col-md-12">
         <div class="row">
             <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6 col-lg-offset-2 block-background div-white">
@@ -86,9 +86,9 @@
 
                     <hr/>
                     <div id="submit_profilePageForm" class="text-center">
-                        <button class="btn btn-success"
+                        <button class="btn btn-success" id="btn-submit-profile"
                                 style="width: 100%">
-                            Save <span class="glyphicon glyphicon-check"/>
+                            Save <span class="glyphicon glyphicon-check"></span>
                         </button>
                     </div>
                 </form>
@@ -97,7 +97,7 @@
     </div>
 </div>
 
-<script src="<c:url value="/resources/js/js.js" />"></script>
+<script src="<c:url value="/resources/js/my-js.js" />"></script>
 <script src="<c:url value="/resources/js/validators.js" />"></script>
 </body>
 
@@ -106,14 +106,20 @@
     $(document).ready(function () {
         $("label").addClass("pull-left");
 
-        $("#div-self-profile").fadeToggle(1000);
+
+
+
+
+
+
+
 
         $('#profilePageForm').on('submit', function () {
 
             if (validProfileForm('div_password_registrationPageForm',
                     'div_password_confirm_registrationPageForm',
                     'div_first_name_registrationPageForm',
-                    'div_last_name_registrationPageForm') == false)
+                    'div_last_name_registrationPageForm') === false)
                 return false;
 
 
@@ -123,8 +129,8 @@
             var json = JSON.stringify({"password":password, "firstName":firstName, "lastName":lastName});
 
 
+            actionBtn("btn-submit-profile", true);
 
-            $("#submit_profilePageForm").hide();
             setTimeout(function () {
                 $.ajax({
                     url: "/user/${user.id}",
@@ -132,13 +138,9 @@
                     data: json,
                     contentType: "application/json; charset=UTF-8",
                     success: function (data) {
-                        if (data == true)
-                            $("#submit_profilePageForm").slideDown(1000);
-                        else {
-                            alert('validator or id');
-                            $("#submit_profilePageForm").slideDown(1000);
-                        }
-
+                        if (data === false)
+                            alert('success catch false');
+                        actionBtn("btn-submit-profile", false);
                     },
                     error:function () {
                         $("#profilePageForm div input").val("");
@@ -152,6 +154,18 @@
 
 
     })
+
+
+//    function actionBtn(idBtn, disabled) {
+//        if (disabled) {
+//            $(idBtn).addClass("disabled");
+//            $(idBtn).prop('disabled', true);
+//        } else {
+//            $(idBtn).removeClass("disabled");
+//            $(idBtn).prop('disabled', false);
+//        }
+//    }
+
 
 </script>
 

@@ -146,14 +146,13 @@ public class UserController {
     }
 
     // GET FORM PROFILE
-    @RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}/put/view", method = RequestMethod.GET)
     public String profile(@PathVariable Long id,
                           @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
                           HttpServletRequest request,
                           Model model) {
 
         LOGGER.info("session user\n" + request.getSession().getAttribute("user"));
-
 
         if (id.equals(customUser.getUser().getId())) {
             model.addAttribute("user", customUser.getUser());
@@ -200,7 +199,7 @@ public class UserController {
         return modelAndView;
     }
 
-    @RequestMapping (value = {"/list"}, method = RequestMethod.GET)
+    @RequestMapping (value = {"/get/view"}, method = RequestMethod.GET)
     public ModelAndView formAllUserByRoleUser () {
         int pageSize = 5;
         ModelAndView modelAndView = new ModelAndView("user/all-user");
@@ -209,7 +208,4 @@ public class UserController {
         modelAndView.addObject("pageSize", pageSize);
         return modelAndView;
     }
-
-
-
 }

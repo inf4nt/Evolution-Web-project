@@ -11,7 +11,7 @@
 <html>
 <head>
     <title>Profile</title>
-    <script src="<c:url value="/resources/js/js.js" />"></script>
+    <script src="<c:url value="/resources/js/my-js.js" />"></script>
     <script src="<c:url value="/resources/js/validators.js" />"></script>
 </head>
 <body>
@@ -127,8 +127,8 @@
 
                 <br/>
                 <div id="submit_formAdminProfile" class="text-center">
-                    <button form="formAdminProfile" type="submit" class="btn btn-success" style="width: 100%">
-                        Edit <span class="glyphicon glyphicon-check"/>
+                    <button form="formAdminProfile" id="btn-submit-profile-admin" type="submit" class="btn btn-success" style="width: 100%">
+                        Edit <span class="glyphicon glyphicon-check"></span>
                     </button>
                 </div>
             </form>
@@ -152,7 +152,7 @@
             if (validProfileForm('div_password_formAdminProfile',
                     'div_password_confirm_formAdminProfile',
                     'div_first_name_formAdminProfile',
-                    'div_last_name_formAdminProfile') == false)
+                    'div_last_name_formAdminProfile') === false)
                 return false;
 
 
@@ -162,14 +162,15 @@
             var lastName = $("#formAdminProfile input[name=lastName]").val();
             var role = $("#formAdminProfile select[name=role]").val();
 
-            $("#submit_formAdminProfile").hide();
+            actionBtn("btn-submit-profile-admin", true);
+
             setTimeout(function () {
                 $.ajax({
                     url: "/user/${user.id}",
                     type: "PUT",
                     data:JSON.stringify({"login":login, "password":password, "firstName":firstName, "lastName":lastName, "roleId": role}),
                     success: function () {
-                        $("#submit_formAdminProfile").slideDown(1000);
+                        actionBtn("btn-submit-profile-admin", false);
                     },
                     error: function () {
                         $("#formAdminProfile div input").val("");

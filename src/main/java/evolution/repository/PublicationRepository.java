@@ -12,12 +12,14 @@ import java.util.List;
  */
 public interface PublicationRepository extends JpaRepository<Publication, Long> {
 
-//    @Query("select p from Publication p " +
-//            " join fetch p.sender " +
-//            " where p.sender.id = :id")
-//    List<Publication> findPublicationBySenderId(@Param("id") Long id);
-
-    List<Publication> findPublicationBySenderId(Long id);
+    @Query("select p from Publication p " +
+            " where p.sender.id = :id " +
+            " order by p.id desc")
+    List<Publication> findPublicationBySenderId(@Param("id") Long id);
 
     List<Publication> findPublicationByCategory(Long id);
+
+//    @Query(" delete from Publication p " +
+//            " where p.id =:id and p.sender.id =:senderId ")
+//    void delete(@Param("id") Long id, @Param("senderId") Long senderId);
 }

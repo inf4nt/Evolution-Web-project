@@ -3,8 +3,11 @@ package evolution.repository;
 import evolution.model.feed.FeedPublication;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 /**
@@ -12,7 +15,7 @@ import java.util.List;
  */
 public interface FeedPublicationRepository extends JpaRepository<FeedPublication, Long> {
 
-    @Query("select new FeedPublication (" +
+    @Query("select new FeedPublication ( " +
             " fd.id, fd.content, fd.tags, " +
             " fp.id, fp.date, " +
             " sender.id, sender.firstName, sender.lastName) " +
@@ -24,7 +27,7 @@ public interface FeedPublicationRepository extends JpaRepository<FeedPublication
             " order by fp.date desc ")
     List<FeedPublication> findAll(@Param("user_id") Long userId, Pageable pageable);
 
-    @Query("select new FeedPublication (" +
+    @Query("select new FeedPublication ( " +
             " fd.id, fd.content, fd.tags, " +
             " fp.id, fp.date, " +
             " sender.id, sender.firstName, sender.lastName) " +
@@ -36,8 +39,7 @@ public interface FeedPublicationRepository extends JpaRepository<FeedPublication
             " order by fp.date desc ")
     List<FeedPublication> findAll(@Param("user_id") Long userId);
 
-
-    @Query( " select new FeedPublication (" +
+    @Query( " select new FeedPublication ( " +
             " fd.id, fd.content, fd.tags, " +
             " fp.id, fp.date, " +
             " sender.id, sender.firstName, sender.lastName, " +
@@ -46,7 +48,7 @@ public interface FeedPublicationRepository extends JpaRepository<FeedPublication
             " join fp.feedData as fd " +
             " join fp.sender as sender " +
             " left join fp.reposted as reposted " +
-            " where fp.id in (" +
+            " where fp.id in ( " +
             " select fp.id from Friends f " +
             " join FeedPublication fp on fp.sender.id = f.friend.id or fp.reposted.id = f.friend.id " +
             " where f.user.id = :user_id) " +
@@ -55,7 +57,6 @@ public interface FeedPublicationRepository extends JpaRepository<FeedPublication
             " where fp.sender.id =:user_id and fp.reposted is null ) " +
             " order by fp.date desc ")
     List<FeedPublication> findAllNews(@Param("user_id") Long userId, Pageable pageable);
-
 
     @Query(" select new FeedPublication (" +
             " fd.id, fd.content, fd.tags, " +
@@ -68,7 +69,24 @@ public interface FeedPublicationRepository extends JpaRepository<FeedPublication
     FeedPublication find(@Param("id") Long feedId, @Param("user_id") Long senderId);
 
 
-    @Query(" delete from FeedPublication fp " +
-            " where fp.reposted.id =:user_id and fp.id =:id ")
-    void deleteRepost(@Param("id") Long feedId, @Param("user_id") Long userRepostedId);
+    @Query(" select new FeedPublication (" +
+            " fd.id, fd.content, fd.tags, " +
+            " fp.id, fp.date, " +
+            " sender.id, sender.firstName, sender.lastName) " +
+            " from FeedPublication fp " +
+            " join FeedData fd on fd.id = fp.feedData.id and fp.reposted is null " +
+            " join fp.sender as sender " +
+            " where fp.feedData.tags like lower (concat('%', :tag, '%')) " +
+            " order by fp.id desc ")
+    List<FeedPublication> findByTags(@Param("tag") String tag);
+
+
+
+
+
+//    @Transactional
+//    @Modifying
+//    @Query(" delete from FeedPublication fp " +
+//            " where fp.reposted.id =:user_id and fp.id =:id ")
+//    void deleteRepost(@Param("id") Long feedId, @Param("user_id") Long userRepostedId);
 }

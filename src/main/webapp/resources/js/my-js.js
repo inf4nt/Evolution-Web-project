@@ -6,7 +6,7 @@ var defaultTweetLength = 10000;
 
 function showHidePassword(href, divPass, divConfirm) {
     var type = $("#"+divPass+" input").attr("type");
-    if (type == 'password') {
+    if (type === 'password') {
         $("#"+href).html('Hide password and confirm password');
         $("#"+divPass+" input, #"+divConfirm+" input").attr("type", "text");
     } else {
@@ -28,8 +28,6 @@ $(document).ready(function () {
         $("body").fadeToggle("slow");
     })
 
-
-
     $("#head-navbar").slideDown("slow");
 
     $("#side").show("slow");
@@ -37,8 +35,6 @@ $(document).ready(function () {
     $("#inputMessage").val("");
 
     $("#inputMessage").attr("maxlength", defaultTweetLength);
-
-
 })
 
 function adminPanel() {
@@ -49,5 +45,16 @@ function adminPanel() {
         $("#adminPanel").slideUp(500);
     }
 }
+
+function actionBtn(idBtn, disabled) {
+    if (disabled) {
+        $("#" + idBtn).addClass("disabled");
+        $("#" + idBtn).prop('disabled', true);
+    } else {
+        $("#" + idBtn).removeClass("disabled");
+        $("#" + idBtn).prop('disabled', false);
+    }
+}
+
 
 

@@ -6,7 +6,7 @@
 <script src="<c:url value="/resources/JQuery/jquery-3.2.1.min.js" />"></script>
 <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
 <script src="<c:url value="/resources/js/validators.js" />"></script>
-<script src="<c:url value="/resources/js/js.js" />"></script>
+<script src="<c:url value="/resources/js/my-js.js" />"></script>
 <script src="<c:url value="/resources/js/country.js" />"></script>
 <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/css.css" />" rel="stylesheet">
@@ -48,7 +48,7 @@
 						</a>
 					</li>
 					<li>
-						<a href="/user/profile/${authUser.id}">
+						<a href="/user/${authUser.id}/put/view">
 							<span class="glyphicon glyphicon-cog"> Profile</span>
 						</a>
 					</li>
@@ -76,45 +76,17 @@
 
 					<hr/>
 					<li>
-						<a id="publication-btn" class="curs">
-							<span class="glyphicon glyphicon-list-alt"></span> Publication
-						</a>
-					</li>
-
-					<div id="publication-all" style="display: none;">
-						<hr/>
-						<li>
-							<a href="/publication/post/view">
-								<span class="glyphicon glyphicon-pencil"></span> Create publication
-							</a>
-						</li>
-						<hr/>
-						<li>
-							<a href="/publication/user/${authUser.id}/get/view">
-								<span class="glyphicon glyphicon-send"></span> My publication
-							</a>
-						</li>
-						<hr/>
-						<li>
-							<a class="curs">
-								<span class="glyphicon glyphicon-list-alt"></span> Publication
-							</a>
-						</li>
-					</div>
-
-					<hr/>
-					<li>
-						<a href="/feed/news">
+						<a href="/feed/${authUser.id}/get/view">
 							<span class="glyphicon glyphicon-list-alt"></span> News
 						</a>
 					</li>
-					<hr/>
-					<li>
-						<a href="/user/list">
-							<span class="glyphicon glyphicon-pawn"></span>
-							Users
-						</a>
-					</li>
+					<%--<hr/>--%>
+					<%--<li>--%>
+						<%--<a href="/user/get/view">--%>
+							<%--<span class="glyphicon glyphicon-pawn"></span>--%>
+							<%--Users--%>
+						<%--</a>--%>
+					<%--</li>--%>
 					<hr/>
 					<li>
 						<a href="/user/search">
