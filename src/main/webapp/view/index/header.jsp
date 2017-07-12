@@ -9,7 +9,7 @@
 <script src="<c:url value="/resources/js/my-js.js" />"></script>
 <script src="<c:url value="/resources/js/country.js" />"></script>
 <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/css/css.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/my-css.css" />" rel="stylesheet">
 
 <script>
     $(document).ready(function () {
