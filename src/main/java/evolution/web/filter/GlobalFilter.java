@@ -26,17 +26,17 @@ public class GlobalFilter implements Filter {
 
 //        LOGGER.info(this.getClass().getSimpleName());
 
-//        try {
-//            filterChain.doFilter(request, response);
-//        } catch (Exception e) {
-//            if (request.isUserInRole("ROLE_ADMIN")) {
-//                LOGGER.info("Admin catch exception! Return stack trace");
-//                filterChain.doFilter(request, response);
-//            } else {
-//                LOGGER.info("Not admin catch exception. Redirect home page");
-//                request.getRequestDispatcher("/view/error/500.jsp").forward(request, response);
-//            }
-//        }
+        try {
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            if (request.isUserInRole("ROLE_ADMIN")) {
+                LOGGER.info("Admin catch exception! Return stack trace");
+                filterChain.doFilter(request, response);
+            } else {
+                LOGGER.info("Not admin catch exception. Redirect home page");
+                request.getRequestDispatcher("/view/error/500.jsp").forward(request, response);
+            }
+        }
 
         filterChain.doFilter(request, response);
 

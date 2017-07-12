@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anonymous();
 
         httpSecurity.authorizeRequests()
-                .antMatchers("/user/**", "/im/**", "/friend/**")
+                .antMatchers("/user/**", "/im/**", "/friend/**", "/feed/")
                 .authenticated();
 
         httpSecurity
