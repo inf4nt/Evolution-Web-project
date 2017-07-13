@@ -1,4 +1,4 @@
-package evolution.repository;
+package evolution.dao;
 
 import evolution.model.user.StandardUser;
 import evolution.model.user.User;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Infant on 05.07.2017.
  */
-public interface StandardUserRepository extends JpaRepository<StandardUser, Long> {
+interface StandardUserRepository extends JpaRepository<StandardUser, Long> {
 
     @Query(" select u from StandardUser u where u.id = :id")
     StandardUser selectIdFirstLastName(@Param("id") Long id);
@@ -28,4 +28,6 @@ public interface StandardUserRepository extends JpaRepository<StandardUser, Long
 
     @Query(" select u from StandardUser u ")
     List<StandardUser> findUsers(Pageable pageable);
+
+
 }

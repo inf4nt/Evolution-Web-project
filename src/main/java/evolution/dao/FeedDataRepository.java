@@ -1,4 +1,4 @@
-package evolution.repository;
+package evolution.dao;
 
 import evolution.model.feed.FeedData;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by Admin on 29.06.2017.
  */
-public interface FeedDataRepository extends JpaRepository<FeedData, Long> {
+interface FeedDataRepository extends JpaRepository<FeedData, Long> {
 
     @Transactional
     @Modifying

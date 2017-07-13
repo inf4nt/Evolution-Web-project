@@ -6,8 +6,6 @@ import evolution.dao.FeedDaoService;
 import evolution.model.feed.FeedData;
 import evolution.model.feed.FeedPublication;
 import evolution.model.user.StandardUser;
-import evolution.repository.FeedDataRepository;
-import evolution.repository.FeedPublicationRepository;
 import evolution.service.MyJacksonService;
 import evolution.service.security.UserDetailsServiceImpl;
 import evolution.service.validation.Validator;
@@ -18,11 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.print.attribute.standard.Media;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -34,13 +30,7 @@ public class FeedController {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private FeedPublicationRepository feedPublicationRepository;
-
-    @Autowired
     private MyJacksonService jacksonService;
-
-    @Autowired
-    private FeedDataRepository feedDataRepository;
 
     @Autowired
     private FeedDaoService feedDaoService;
@@ -52,7 +42,7 @@ public class FeedController {
     public ModelAndView getPageNews(@PathVariable Long id) {
         ModelAndView model = new ModelAndView("feed/my-news");
         LOGGER.warn("feed by user id " + id);
-        model.addObject("list", feedPublicationRepository.findAllNews(id, new PageRequest(0, 100)));
+        model.addObject("list", feedDaoService.findAllNews(id, new PageRequest(0, 100)));
         return model;
     }
 
@@ -76,7 +66,7 @@ public class FeedController {
     @GetMapping(value = "/{id}/delete/view")
     public String saveFeed (@PathVariable Long id,
                             @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws IOException {
-        feedDataRepository.deletePost(id, customUser.getUser().getId());
+        feedDaoService.deletePost(id, customUser.getUser().getId());
         return "redirect:/feed/" + customUser.getUser().getId() + "/get/view";
     }
 
@@ -86,7 +76,7 @@ public class FeedController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<FeedPublication> findByTag(@PathVariable(required = false) String tag) {
         if (tag != null) {
-            return feedPublicationRepository.findByTags(tag.toLowerCase());
+            return feedDaoService.findByTag(tag.toLowerCase());
         }
         return null;
     }
@@ -126,14 +116,14 @@ public class FeedController {
     @RequestMapping(value = "/", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List getAllFeed() throws JsonProcessingException {
-        return feedPublicationRepository.findAll();
+        return feedDaoService.findAllFeedPublication();
     }
 
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public FeedPublication getFeed(@PathVariable Long id) throws JsonProcessingException {
-        return feedPublicationRepository.findOne(id);
+        return feedDaoService.findOneFeedPublication(id);
     }
 
 //    @ResponseBody
@@ -160,8 +150,8 @@ public class FeedController {
                               @RequestParam(required = false) Integer size,
                               @RequestParam(required = false) Integer page) throws JsonProcessingException {
         if (page == null || size == null)
-            return feedPublicationRepository.findAll(id);
-        return feedPublicationRepository.findAll(id, new PageRequest(page, size));
+            return feedDaoService.findAll(id);
+        return feedDaoService.findAll(id, new PageRequest(page, size));
     }
 
 

@@ -1,4 +1,4 @@
-package evolution.repository;
+package evolution.dao;
 
 import evolution.model.Publication;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Infant on 05.07.2017.
  */
-public interface PublicationRepository extends JpaRepository<Publication, Long> {
+interface PublicationRepository extends JpaRepository<Publication, Long> {
 
     @Query("select p from Publication p " +
             " where p.sender.id = :id " +

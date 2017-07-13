@@ -3,10 +3,9 @@ package evolution.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.common.UserRoleEnum;
 import evolution.dao.FriendsDaoService;
+import evolution.dao.UserDaoService;
 import evolution.model.friend.Friends;
 import evolution.model.user.User;
-import evolution.repository.StandardUserRepository;
-import evolution.repository.UserRepository;
 import evolution.service.MyJacksonService;
 import evolution.service.SearchService;
 import evolution.service.security.UserDetailsServiceImpl;
@@ -45,10 +44,11 @@ public class UserController {
     private Validator validator;
     @Autowired
     private SearchService searchService;
+
+
+
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private StandardUserRepository standardUserRepository;
+    private UserDaoService userDaoService;
 
     private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
@@ -84,9 +84,9 @@ public class UserController {
                         @RequestParam(required = false) Integer size) throws JsonProcessingException {
         LOGGER.info("page=" + page + " size=" + size);
         if (size == null || page == null) {
-            return standardUserRepository.findAll();
+            return userDaoService.findAll();
         }
-        return standardUserRepository.findUsers(new PageRequest(page, size));
+        return userDaoService.findStandardUsers(new PageRequest(page, size));
     }
 
     // EDIT
@@ -116,8 +116,7 @@ public class UserController {
         }
 
         if (validator.userValidator(userRequest)) {
-//            userDao.repository().update(userRequest);
-            userRepository.save(userRequest);
+            userDaoService.save(userRequest);
             if (customUser.getUser().getId().equals(id))
                 customUser.getUser().updateFields(userRequest);
             return true;
@@ -132,7 +131,7 @@ public class UserController {
         User user = (User) jacksonService.jsonToObject(json, User.class);
         user.setRoleId(UserRoleEnum.USER.getId());
         if (validator.userValidator(user)) {
-            return userRepository.save(user);
+            return userDaoService.save(user);
         }
         return null;
     }
@@ -142,7 +141,7 @@ public class UserController {
     @ResponseBody
     @DeleteMapping(value = "/{id}")
     public void deleteUser(@PathVariable Long id) {
-        userRepository.delete(id);
+        userDaoService.delete(new User(id));
     }
 
     // GET FORM PROFILE
@@ -158,7 +157,7 @@ public class UserController {
             model.addAttribute("user", customUser.getUser());
             return "user/form-my-profile";
         } else if (request.isUserInRole("ROLE_ADMIN")) {
-            model.addAttribute("user", userRepository.findOne(id));
+            model.addAttribute("user", userDaoService.findOne(id));
             return "admin/admin-form-profile";
         }
 
@@ -171,7 +170,7 @@ public class UserController {
         LOGGER.info("session status set complete");
         int size = 5;
         model.addAttribute("limit", size);
-        model.addAttribute("list", standardUserRepository.findUsers(new PageRequest(0, size)));
+        model.addAttribute("list", userDaoService.findStandardUsers(new PageRequest(0, size)));
         return "user/new-search";
     }
 
@@ -194,7 +193,7 @@ public class UserController {
         int pageSize = 5;
         ModelAndView modelAndView = new ModelAndView("user/all-user");
         modelAndView.addObject("role", role);
-        modelAndView.addObject("list", userRepository.findAllByRole(UserRoleEnum.valueOf(role.toUpperCase()).getId()));
+        modelAndView.addObject("list", userDaoService.findUserByRoleId(UserRoleEnum.valueOf(role.toUpperCase()).getId()));
         modelAndView.addObject("pageSize", pageSize);
         return modelAndView;
     }
@@ -204,7 +203,7 @@ public class UserController {
         int pageSize = 5;
         ModelAndView modelAndView = new ModelAndView("user/all-user");
         modelAndView.addObject("role", "user");
-        modelAndView.addObject("list", standardUserRepository.findAll());
+        modelAndView.addObject("list", userDaoService.findAll());
         modelAndView.addObject("pageSize", pageSize);
         return modelAndView;
     }

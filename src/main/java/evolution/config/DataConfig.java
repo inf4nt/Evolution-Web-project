@@ -14,10 +14,10 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "evolution.repository",
+@EnableJpaRepositories(basePackages = "evolution.dao",
         entityManagerFactoryRef = "entityManagerFactoryBean",
         transactionManagerRef = "jpaTransactionManager")
-@EnableTransactionManagement
+@EnableTransactionManagement(proxyTargetClass = true)
 public class DataConfig {
 
     @Bean

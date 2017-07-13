@@ -1,4 +1,4 @@
-package evolution.repository;
+package evolution.dao;
 
 
 import evolution.model.message.Message;
@@ -11,19 +11,10 @@ import java.util.List;
 
 
 
-public interface MessageRepository extends JpaRepository<Message, Long> {
+interface MessageRepository extends JpaRepository<Message, Long> {
 
-//    @Query(" select new Message (m.id, m.message, m.dateDispatch, " +
-//            " sender.id, sender.firstName, sender.lastName, d.id) " +
-//            " from Message m " +
-//            " join m.dialog as d " +
-//            " join m.sender as sender " +
-//            " where (d.first.id =:id1 and d.second.id =:id2 ) " +
-//            " or (d.first.id =:id2 and d.second.id =:id1 ) order by m.id desc ")
-//    List<Message> findMessage(@Param("id1") Long id1, @Param("id2") Long id2, Pageable pageable);
-
-
-    @Query(" select m " +
+    @Query(" select new Message (m.id, m.message, m.dateDispatch, " +
+            " sender.id, sender.firstName, sender.lastName, d.id) " +
             " from Message m " +
             " join m.dialog as d " +
             " join m.sender as sender " +
@@ -31,7 +22,14 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             " or (d.first.id =:id2 and d.second.id =:id1 ) order by m.id desc ")
     List<Message> findMessage(@Param("id1") Long id1, @Param("id2") Long id2, Pageable pageable);
 
-
+    @Query(" select new Message (m.id, m.message, m.dateDispatch, " +
+            " sender.id, sender.firstName, sender.lastName) " +
+            " from Message m " +
+            " join m.dialog as d " +
+            " join m.sender as sender " +
+            " where (d.first.id =:id1 and d.second.id =:id2 ) " +
+            " or (d.first.id =:id2 and d.second.id =:id1 ) order by m.id desc ")
+    List<Message> findMessageIgnoreDialog(@Param("id1") Long id1, @Param("id2") Long id2, Pageable pageable);
 
     @Query("select new Message (d.id, m.id, substring(m.message, 0, 40), m.dateDispatch," +
             " sender.id, sender.firstName, sender.lastName, " +
@@ -52,5 +50,4 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             " group by m.dialog.id ) " +
             " order by m.id desc ")
     List<Message> findLastMessageForDialog(@Param("id1") Long authUserId);
-
 }

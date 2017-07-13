@@ -55,6 +55,14 @@ public class Message {
         this.dateDispatch = dateDispatch;
     }
 
+    public Message(Long messageId, String message, Date dateDispatch,
+                   Long senderId, String senderFirstName, String senderLastName) {
+        this.sender = new StandardUser(senderId, senderFirstName, senderLastName);
+        this.id = messageId;
+        this.message = message;
+        this.dateDispatch = dateDispatch;
+    }
+
     public Message(Long dialogId, Long messageId, String message, Date dateDispatch,
                    Long senderId, String senderFirstName, String senderLastName,
                    Long imId, String imFirstName, String imLastName) {
@@ -80,6 +88,13 @@ public class Message {
 
     public Message(Long dialogId, StandardUser sender, String message, Date dateDispatch) {
         this.dialog = new Dialog(dialogId);
+        this.sender = sender;
+        this.message = message;
+        this.dateDispatch = dateDispatch;
+
+    }
+
+    public Message(StandardUser sender, String message, Date dateDispatch) {
         this.sender = sender;
         this.message = message;
         this.dateDispatch = dateDispatch;

@@ -1,13 +1,6 @@
 package evolution.web.controller;
 
 
-import evolution.common.UserRoleEnum;
-import evolution.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
 /**
  * Created by Admin on 05.03.2017.
  */

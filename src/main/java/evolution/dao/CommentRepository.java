@@ -1,4 +1,4 @@
-package evolution.repository;
+package evolution.dao;
 
 import evolution.model.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Infant on 05.07.2017.
  */
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query("select c from Comment c" +
             " join fetch c.sender" +

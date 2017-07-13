@@ -1,4 +1,4 @@
-package evolution.repository;
+package evolution.dao;
 
 import evolution.model.user.User;
 import org.springframework.data.domain.Pageable;
@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 
-public interface UserRepository extends JpaRepository<User, Long> {
+interface UserRepository extends JpaRepository<User, Long> {
 
     User findUserByLogin(String login);
 

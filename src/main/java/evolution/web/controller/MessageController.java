@@ -1,14 +1,9 @@
 package evolution.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import evolution.model.dialog.Dialog;
+import evolution.dao.MessageDaoService;
+import evolution.dao.UserDaoService;
 import evolution.model.message.Message;
-import evolution.model.user.StandardUser;
-import evolution.model.user.User;
-import evolution.repository.DialogRepository;
-import evolution.repository.MessageRepository;
-import evolution.repository.StandardUserRepository;
-import evolution.repository.UserRepository;
 import evolution.service.MyJacksonService;
 import evolution.service.security.UserDetailsServiceImpl;
 import org.slf4j.Logger;
@@ -35,19 +30,10 @@ import java.util.List;
 public class MessageController {
 
     @Autowired
-    private MyJacksonService jacksonService;
+    private MessageDaoService messageDaoService;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private MessageRepository messageRepository;
-
-    @Autowired
-    private DialogRepository dialogRepository;
-
-    @Autowired
-    private StandardUserRepository standardUserRepository;
+    private UserDaoService userDaoServiceImpl;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageController.class);
 
@@ -58,7 +44,7 @@ public class MessageController {
             SessionStatus sessionStatus) {
 
         sessionStatus.setComplete();
-        List list = messageRepository.findLastMessageForDialog(customUser.getUser().getId());
+        List<Message> list = messageDaoService.findLastMessageForDialog(customUser.getUser().getId());
         model.addAttribute("list", list);
         return "message/form-dialog";
     }
@@ -68,8 +54,9 @@ public class MessageController {
                          @PathVariable Long sel,
                          Model model) {
 
-        if (dialogRepository.checkDialog(customUser.getUser().getId(), sel) != null) {
-            List<Message> list = messageRepository.findMessage(customUser.getUser().getId(), sel, new PageRequest(0, 7));
+        if (messageDaoService.existDialog(customUser.getUser().getId(), sel)) {
+
+            List<Message> list = messageDaoService.findMessage(customUser.getUser().getId(), sel, new PageRequest(0, 7));
 
             Long dialogId = list.get(0).getDialog().getId();
             model.addAttribute("dialogId", dialogId);
@@ -84,7 +71,7 @@ public class MessageController {
         }
 
         model.addAttribute("sel", sel);
-        model.addAttribute("im", standardUserRepository.selectIdFirstLastName(sel));
+        model.addAttribute("im", userDaoServiceImpl.selectIdFirstLastNameStandardUser(sel));
         return "message/form-message";
     }
 
@@ -98,36 +85,42 @@ public class MessageController {
 
         Message m;
 
-        LOGGER.info("dialog id = " + dialogId);
-
         if (dialogId == -1) {
             LOGGER.info("create new dialog");
-            Dialog dialog = new Dialog(new StandardUser(customUser.getUser().getId()), new StandardUser(sel));
-            LOGGER.info(dialog.toString());
-
-            Dialog d = dialogRepository.saveAndFlush(dialog);
-
-            LOGGER.info("dialog id= " + d.getId());
-            m = new Message(d.getId(), new StandardUser(customUser.getUser().getId()), message, new Date());
-            messageRepository.saveAndFlush(m);
+            messageDaoService.saveDialogAndMessage(customUser.getUser().getId(), sel, message, new Date());
             response.sendRedirect("/im/" + sel);
         } else {
             LOGGER.info("Dialog exist. Run save message");
             m = new Message(customUser.getUser().getId(), message, new Date(), dialogId);
-            messageRepository.save(m);
+            messageDaoService.save(m);
             LOGGER.info("Message saved\n" + m);
         }
+//        if (dialogId == -1) {
+//            LOGGER.info("create new dialog");
+//            Dialog dialog = new Dialog(new StandardUser(customUser.getUser().getId()), new StandardUser(sel));
+//            LOGGER.info(dialog.toString());
+//
+//            Dialog d = dialogRepository.saveAndFlush(dialog);
+//
+//            LOGGER.info("dialog id= " + d.getId());
+//            m = new Message(d.getId(), new StandardUser(customUser.getUser().getId()), message, new Date());
+//            messageRepository.saveAndFlush(m);
+//            response.sendRedirect("/im/" + sel);
+//        } else {
+//            LOGGER.info("Dialog exist. Run save message");
+//            m = new Message(customUser.getUser().getId(), message, new Date(), dialogId);
+//            messageRepository.save(m);
+//            LOGGER.info("Message saved\n" + m);
+//        }
     }
 
     @ResponseBody
     @GetMapping(value = "/getMessage",
             produces={"application/json; charset=UTF-8"})
-    public String getMessage(
+    public List<Message> getMessage(
             @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
             @RequestParam Long sel) throws JsonProcessingException {
-        LOGGER.info("interval message start");
-        List result = messageRepository.findMessage(customUser.getUser().getId(), sel, new PageRequest(0, 7));
-        LOGGER.info("interval message end");
-        return jacksonService.objectToJson(result);
+        LOGGER.info("interval message");
+        return messageDaoService.findMessageIgnoreDialog(customUser.getUser().getId(), sel, new PageRequest(0, 7));
     }
 }

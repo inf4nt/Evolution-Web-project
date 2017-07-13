@@ -1,10 +1,10 @@
 package evolution.web.controller;
 
 import evolution.common.UserRoleEnum;
+import evolution.dao.UserDaoService;
 import evolution.model.user.User;
 import evolution.model.userToken.AbstractToken;
 import evolution.model.userToken.UserToken;
-import evolution.repository.UserRepository;
 import evolution.service.MyJacksonService;
 import evolution.service.builder.JsonInformationBuilder;
 import evolution.service.notification.NotificationUser;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import javax.persistence.NoResultException;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
@@ -40,9 +40,11 @@ public class ServiceController {
     @Autowired
     private Validator validator;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private MyJacksonService jacksonService;
+
+
+    @Autowired
+    private UserDaoService userDaoService;
 
     private final Logger LOGGER = LoggerFactory.getLogger(ServiceController.class);
 
@@ -60,7 +62,7 @@ public class ServiceController {
             LOGGER.info("update user");
             ((UserToken)entityToken).getUser().setPassword(newPassword);
 
-            userRepository.save(((UserToken) entityToken).getUser());
+            userDaoService.save(((UserToken) entityToken).getUser());
 
             LOGGER.info("send notification");
             notificationUser.successUserForgot((UserToken) entityToken);
@@ -87,7 +89,7 @@ public class ServiceController {
 
 
             User user = ((UserToken)entityToken).getUser();
-            userRepository.save(user);
+            userDaoService.save(user);
             notificationUser.successUserRegistration((UserToken) entityToken);
 
             LOGGER.info("User is valid, success registration");
@@ -104,7 +106,7 @@ public class ServiceController {
     public String userCreateForgotToken(@RequestBody String json,
                                         Model model) throws IOException {
         User user = (User) jacksonService.jsonToObject(json, User.class);
-        User u = userRepository.findUserByLogin(user.getLogin());
+        User u = userDaoService.findUserByUsername(user.getLogin());
 
 
         if (u == null)
@@ -149,7 +151,7 @@ public class ServiceController {
     @RequestMapping(value = "/user/is-exist", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public boolean checkExistUser(@RequestParam String username) {
-        User user = userRepository.findUserByLogin(username);
+        User user = userDaoService.findUserByUsername(username);
         LOGGER.info("check user = " + user);
         return user != null;
     }
@@ -158,7 +160,7 @@ public class ServiceController {
     @RequestMapping(value = "/user/is-exist/{username}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public boolean checkExistUse2r(@PathVariable String username) {
-        User user = userRepository.findUserByLogin(username);
+        User user = userDaoService.findUserByUsername(username);
         LOGGER.info("check user = " + user);
         return user != null;
     }

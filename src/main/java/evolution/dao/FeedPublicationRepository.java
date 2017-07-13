@@ -1,4 +1,4 @@
-package evolution.repository;
+package evolution.dao;
 
 import evolution.model.feed.FeedPublication;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by Admin on 29.06.2017.
  */
-public interface FeedPublicationRepository extends JpaRepository<FeedPublication, Long> {
+interface FeedPublicationRepository extends JpaRepository<FeedPublication, Long> {
 
     @Query("select new FeedPublication ( " +
             " fd.id, fd.content, fd.tags, " +
@@ -80,7 +80,7 @@ public interface FeedPublicationRepository extends JpaRepository<FeedPublication
             " join fp.sender as sender " +
             " where fp.feedData.tags like lower (concat('%', :tag, '%')) " +
             " order by fp.id desc ")
-    List<FeedPublication> findByTags(@Param("tag") String tag);
+    List<FeedPublication> findByTag(@Param("tag") String tag);
 
 //    @Transactional
 //    @Modifying

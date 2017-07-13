@@ -1,8 +1,8 @@
 package evolution.service.security;
 
 
+import evolution.dao.UserDaoService;
 import evolution.model.user.User;
-import evolution.repository.UserRepository;
 import lombok.Getter;
 import lombok.ToString;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl
     private Logger LOGGER = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     @Autowired
-    private UserRepository userRepository;
+    private UserDaoService userDaoService;
 
     @Override
     @Transactional
@@ -40,7 +40,7 @@ public class UserDetailsServiceImpl
         User user;
 
         try {
-            user = userRepository.findUserByLogin(s);
+            user = userDaoService.findUserByUsername(s);
         } catch (NoResultException e) {
             LOGGER.info(e + "\nuser y username = " + s + ", not found");
             throw new UsernameNotFoundException("user " + s + " not found");
