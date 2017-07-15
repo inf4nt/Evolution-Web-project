@@ -11,6 +11,7 @@
   <script src="<c:url value="/resources/js/validators.js" />"></script>
   <script src="<c:url value="/resources/js/my-js.js" />"></script>
   <script src="<c:url value="/resources/js/country.js" />"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     html { height: 100%; }
     body {

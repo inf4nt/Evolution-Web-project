@@ -173,11 +173,23 @@
         $(".tweet-tags").css("color", "#84cbff");
 
         $(".btn-repost-info").click(function () {
+            var div = $("#modal-id-repost-content");
             $.ajax({
                 url:"/feed/" + this.name + "/info-post",
                 type:"GET",
                 success:function (data) {
-                    $("#modal-id-repost-content").html(data);
+                    if (data === 1) {
+
+                    } if (data === 2){
+
+                    } if (data === 3) {
+
+                    } if (data === 4) {
+
+                    } if (data === 5) {
+
+                    }
+                    div.html(data);
                 },
                 timeout:30000
             })

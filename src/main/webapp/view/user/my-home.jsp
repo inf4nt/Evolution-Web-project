@@ -11,6 +11,7 @@
 <html>
 <head>
     <title>${user.firstName} ${user.lastName}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <%@include file="../index/header.jsp" %>
