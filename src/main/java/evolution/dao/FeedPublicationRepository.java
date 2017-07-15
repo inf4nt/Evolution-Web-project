@@ -39,11 +39,12 @@ interface FeedPublicationRepository extends JpaRepository<FeedPublication, Long>
             " order by fp.date desc ")
     List<FeedPublication> findAll(@Param("user_id") Long userId);
 
-    @Query("  select new FeedPublication ( " +
-            " fd.id, fd.content, fd.tags, " +
-            " fp.id, fp.date, " +
-            " sender.id, sender.firstName, sender.lastName, " +
-            " reposted.id, reposted.firstName, reposted.lastName ) " +
+    @Query("  select fp " +
+//            "select new FeedPublication ( " +
+//            " fd.id, fd.content, fd.tags, " +
+//            " fp.id, fp.date, " +
+//            " sender.id, sender.firstName, sender.lastName, " +
+//            " reposted.id, reposted.firstName, reposted.lastName ) " +
             " from FeedPublication fp " +
             " join fp.feedData as fd" +
             " join fp.sender as sender" +
@@ -82,9 +83,9 @@ interface FeedPublicationRepository extends JpaRepository<FeedPublication, Long>
             " order by fp.id desc ")
     List<FeedPublication> findByTag(@Param("tag") String tag);
 
-//    @Transactional
-//    @Modifying
-//    @Query(" delete from FeedPublication fp " +
-//            " where fp.reposted.id =:user_id and fp.id =:id ")
-//    void deleteRepost(@Param("id") Long feedId, @Param("user_id") Long userRepostedId);
+    @Transactional
+    @Modifying
+    @Query(" delete from FeedPublication fp " +
+            " where fp.reposted.id =:user_id and fp.id =:id ")
+    void deleteRepost(@Param("id") Long feedId, @Param("user_id") Long userRepostedId);
 }

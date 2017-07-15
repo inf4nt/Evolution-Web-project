@@ -1,5 +1,4 @@
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -111,7 +110,10 @@
                             <br/>
                             <div class="btn-group">
                                 <button class="btn btn-default"><span class="glyphicon glyphicon-heart text-danger"></span> Like</button>
-                                <button class="btn btn-default"><span class="glyphicon glyphicon-retweet"></span> Repost</button>
+                                <button name="${a.id}" type="submit" data-toggle="modal" data-target="#modal-id-repost" class="btn btn-default btn-repost-info"><span class="glyphicon glyphicon-retweet"></span>
+                                        ${a.countRepost}
+                                    Repost
+                                </button>
                             </div>
 
                         </div>
@@ -122,6 +124,26 @@
             </tbody>
         </table>
     </div>
+
+
+    <div class="modal fade" id="modal-id-repost">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div id="modal-id-repost-content" class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 
     <div class="modal fade" id="modal-id">
         <div class="modal-dialog">
@@ -148,10 +170,18 @@
 
 
     $(document).ready(function () {
-//        $("#content").delay(500).fadeToggle("slow");
-//        $("#content").delay(500).show("slow");
         $(".tweet-tags").css("color", "#84cbff");
 
+        $(".btn-repost-info").click(function () {
+            $.ajax({
+                url:"/feed/" + this.name + "/info-post",
+                type:"GET",
+                success:function (data) {
+                    $("#modal-id-repost-content").html(data);
+                },
+                timeout:30000
+            })
+        })
 //        $("#btn-tweet-post").click(function postTweet() {
 //            var content = $("#input-tweet").val();
 //            var maxTweetLength = 10000;
@@ -183,6 +213,16 @@
 //            return false;
 //        });
     })
+
+
+
+
+
+
+
+
+
+
 
     function ajaxTweetModal(a) {
         setTimeout(function () {

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import evolution.model.Comment;
 import evolution.model.Publication;
 import evolution.model.user.StandardUser;
+import evolution.service.utils.CollectionUtils;
 import org.hibernate.*;
 
 import org.hibernate.cfg.Configuration;
@@ -31,51 +32,61 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
 
-        SessionFactory sessionFactory = null;
-        Session session = null;
-        try {
-            sessionFactory = getSessionFactory();
-            session = sessionFactory.getCurrentSession();
-            session.beginTransaction();
+
+        List<String> stringList = new ArrayList<>();
 
 
-            System.out.println("===============");
-            System.out.println("===============");
-            List list;
-            org.hibernate.query.Query query;
-            Map map;
-
-//            Publication publication = new Publication();
-//            publication.setCategory(1L);
-//            publication.setContent("СОДЕРЖАНИЕ");
-//            publication.setStandardUser(new StandardUser(226L));
-//            publication.setDate(new Date());
-//            publication.setTheme("Theme");
-//
-//            session.save(publication);
-
-
-//            Comment comment = new Comment();
-//            comment.setContent("comment content2");
-//            comment.setDate(new Date());
-//            comment.setSender(new StandardUser(216L));
-//            comment.setPublication(new Publication(2L));
-//
-//            session.save(comment);
-
-
-
-            session.getTransaction().commit();
-            sessionFactory.close();
-        } catch (Exception e){
-            e.printStackTrace();
-            if (session != null && session.getTransaction() != null)
-            session.getTransaction().rollback();
-            if (sessionFactory != null)
-                sessionFactory.close();
+        for (int i = 1; i <= 51; i++) {
+            stringList.add("" + i);
         }
 
 
+
+
+
+
+        List<List<String>> lists = CollectionUtils.split(stringList, 10);
+
+
+        lists.forEach(System.out::println);
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        SessionFactory sessionFactory = null;
+//        Session session = null;
+//        try {
+//            sessionFactory = getSessionFactory();
+//            session = sessionFactory.getCurrentSession();
+//            session.beginTransaction();
+//
+//
+//            System.out.println("===============");
+//            System.out.println("===============");
+//            List list;
+//            org.hibernate.query.Query query;
+//            Map map;
+//
+//
+//
+//            session.getTransaction().commit();
+//            sessionFactory.close();
+//        } catch (Exception e){
+//            e.printStackTrace();
+//            if (session != null && session.getTransaction() != null)
+//            session.getTransaction().rollback();
+//            if (sessionFactory != null)
+//                sessionFactory.close();
+//        }
 
 
     }

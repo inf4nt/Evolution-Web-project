@@ -5,9 +5,11 @@ import evolution.model.feed.FeedPublication;
 import evolution.model.user.StandardUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
 import java.util.List;
 
 /**
@@ -74,5 +76,10 @@ public class FeedDaoService {
     @Transactional
     public FeedPublication findOneFeedPublication(Long id) {
         return feedPublicationRepository.findOne(id);
+    }
+
+    @Transactional
+    public void deleteRepost(Long feedId, Long userRepostedId){
+        feedPublicationRepository.deleteRepost(feedId, userRepostedId);
     }
 }

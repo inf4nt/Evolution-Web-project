@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.dao.FeedDaoService;
 import evolution.model.feed.FeedData;
 import evolution.model.feed.FeedPublication;
+import evolution.model.jsonModel.JsonInformation;
 import evolution.model.user.StandardUser;
 import evolution.service.MyJacksonService;
 import evolution.service.security.UserDetailsServiceImpl;
@@ -50,7 +51,6 @@ public class FeedController {
     public String saveFeed (@RequestParam String tweetContent,
                             @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws IOException {
 
-
         FeedPublication feedPublication = new FeedPublication();
         feedPublication.setFeedData(new FeedData(tweetContent, null));
         feedPublication.setDate(new Date());
@@ -80,6 +80,91 @@ public class FeedController {
         }
         return null;
     }
+
+    @GetMapping(value = "/{feedPublicationId}/repost/post/view")
+    public String repostPost(@PathVariable Long feedPublicationId,
+                             @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) {
+        FeedPublication feedPublication = feedDaoService.findOneFeedPublication(feedPublicationId);
+        feedPublication.setReposted(new StandardUser(customUser.getUser().getId()));
+        feedPublication.setId(null);
+        feedPublication.setDate(new Date());
+        feedDaoService.save(feedPublication);
+        return "redirect:/feed/" + customUser.getUser().getId() + "/get/view";
+    }
+
+    @GetMapping(value = "/{feedPublicationId}/repost/delete/view")
+    public String repostDelete(@PathVariable Long feedPublicationId,
+                               @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) {
+        feedDaoService.deleteRepost(feedPublicationId, customUser.getUser().getId());
+        return "redirect:/feed/" + customUser.getUser().getId() + "/get/view";
+    }
+
+
+
+
+
+    @ResponseBody
+    @GetMapping(value = "/{id}/info-post",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public int postInfoForRepost(@PathVariable Long id,
+                                    @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) {
+
+//        1 можно репостить
+//        2. это мой репост, можно удалить репост
+//        3. не мой репост. Но я могу сделать тоже репост этой записи
+//        4. это мой пост.
+//        5. это мой пост который репостнули
+
+        FeedPublication feedPublication = feedDaoService.findOneFeedPublication(id);
+
+        if (feedPublication.getReposted() == null && !feedPublication.getSender().getId().equals(customUser.getUser().getId())){
+            return 1;
+        }
+        if (feedPublication.getReposted() != null && feedPublication.getReposted().getId().equals(customUser.getUser().getId())) {
+            return 2;
+        }
+        if (feedPublication.getReposted() != null
+                && !feedPublication.getSender().getId().equals(customUser.getUser().getId())
+                && !feedPublication.getReposted().getId().equals(customUser.getUser().getId())) {
+            return 3;
+        }
+        if (feedPublication.getSender().getId().equals(customUser.getUser().getId())
+                && feedPublication.getReposted() == null) {
+            return 4;
+        }
+        if (feedPublication.getSender().getId().equals(customUser.getUser().getId())
+                && feedPublication.getReposted() != null) {
+            return 5;
+        }
+
+        return 0;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

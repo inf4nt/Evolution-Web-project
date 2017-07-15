@@ -1,6 +1,7 @@
 package evolution.config;
 
 //import evolution.web.filter.GlobalFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.Filter;
@@ -24,10 +25,15 @@ public class WebAppInitializer
         return new String[] { "/" };
     }
 
-//    @Override
-//    protected Filter[] getServletFilters() {
-//        return new Filter[]{
+    @Override
+    protected Filter[] getServletFilters() {
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding("UTF-8");
+
+        return new Filter[]{
+                characterEncodingFilter
 //                new GlobalFilter()
-//        };
-//    }
+        };
+    }
+
 }
