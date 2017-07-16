@@ -53,6 +53,7 @@ public class FeedDaoService {
         return feedPublicationRepository.findByTag(tag);
     }
 
+    @Deprecated
     @Transactional
     public List<FeedPublication> findAllNews(Long userId, Pageable pageable) {
         return feedPublicationRepository.findAllNews(userId, pageable);
@@ -78,8 +79,41 @@ public class FeedDaoService {
         return feedPublicationRepository.findOne(id);
     }
 
+    @Deprecated
+    @Transactional
+    public FeedPublication findBySenderAndFeedPublicationId(Long feedId, Long senderId) {
+        return feedPublicationRepository.findBySenderAndFeedPublicationId(feedId, senderId);
+    }
+
+    @Transactional
+    public FeedPublication findFeedPublicationByFeedDataAndReposted(Long feedId, Long repostedId) {
+        return feedPublicationRepository.findFeedPublicationByFeedDataAndReposted(feedId, repostedId);
+    }
+
     @Transactional
     public void deleteRepost(Long feedId, Long userRepostedId){
         feedPublicationRepository.deleteRepost(feedId, userRepostedId);
+    }
+
+    /**
+     * find post and repost of my friends
+     * @param userId my id(auth user id)
+     * @param pageable pagination param
+     * @return
+     */
+    @Transactional
+    public List<FeedPublication> findNews(Long userId, Pageable pageable) {
+        return feedPublicationRepository.findNews(userId, pageable);
+    }
+
+    /**
+     * find my post and repost
+     * @param userId my id(auth user id)
+     * @param pageable pagination param
+     * @return
+     */
+    @Transactional
+    public List<FeedPublication> findMyPostRepost(@Param("user_id") Long userId, Pageable pageable) {
+        return feedPublicationRepository.findMyPostRepost(userId, pageable);
     }
 }

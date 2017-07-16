@@ -27,17 +27,17 @@
             <p class="text-center">
                 <a href="/user/id${user.id}" >${user.firstName} ${user.lastName}</a>
                 <br/><br/>
-                <span class="glyphicon glyphicon-user"></span><a id="open-friend" href="#" > Friends</a>
+                <span class="glyphicon glyphicon-user"></span><a id="open-friend" class="curs" > Friends</a>
                 <br/>
-                <span class="glyphicon glyphicon-share-alt"></span><a id="open-follower" href="#" > Followers</a>
+                <span class="glyphicon glyphicon-share-alt"></span><a id="open-follower" class="curs" > Followers</a>
                 <br/>
                 <sec:authorize access="hasRole('ROLE_USER')">
                     <c:if test="${authUser.id == user.id}">
-                        <span class="glyphicon glyphicon-question-sign"></span><a id="open-request" href="#" > Friend request</a>
+                        <span class="glyphicon glyphicon-question-sign"></span><a id="open-request" class="curs" > Friend request</a>
                     </c:if>
                 </sec:authorize>
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
-                    <span class="glyphicon glyphicon-question-sign"></span><a id="open-request" href="#" > Friend request</a>
+                    <span class="glyphicon glyphicon-question-sign"></span><a id="open-request" class="curs" > Friend request</a>
                 </sec:authorize>
             </p>
         </div>

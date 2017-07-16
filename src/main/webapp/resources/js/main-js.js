@@ -35,6 +35,8 @@ $(document).ready(function () {
     $("#inputMessage").val("");
 
     $("#inputMessage").attr("maxlength", defaultTweetLength);
+
+    $(".div-white a, .div-white p, .div-white h4").css("color", "white");
 })
 
 function adminPanel() {

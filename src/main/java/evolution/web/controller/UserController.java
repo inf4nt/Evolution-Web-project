@@ -2,6 +2,7 @@ package evolution.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.common.UserRoleEnum;
+import evolution.dao.FeedDaoService;
 import evolution.dao.FriendsDaoService;
 import evolution.dao.UserDaoService;
 import evolution.model.friend.Friends;
@@ -44,8 +45,8 @@ public class UserController {
     private Validator validator;
     @Autowired
     private SearchService searchService;
-
-
+    @Autowired
+    private FeedDaoService feedDaoService;
 
     @Autowired
     private UserDaoService userDaoService;
@@ -75,8 +76,11 @@ public class UserController {
             }
         }
 
+        model.addAttribute("feeds", feedDaoService.findMyPostRepost(id, new PageRequest(0, 100)));
+
         return "user/my-home";
     }
+
 
     @ResponseBody
     @GetMapping(value = "/", produces={"application/json; charset=UTF-8"})

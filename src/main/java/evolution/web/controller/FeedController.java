@@ -42,8 +42,7 @@ public class FeedController {
     @GetMapping(value = "/{id}/get/view")
     public ModelAndView getPageNews(@PathVariable Long id) {
         ModelAndView model = new ModelAndView("feed/my-news");
-        LOGGER.warn("feed by user id " + id);
-        model.addObject("list", feedDaoService.findAllNews(id, new PageRequest(0, 100)));
+        model.addObject("list", feedDaoService.findNews(id, new PageRequest(0, 100)));
         return model;
     }
 
@@ -60,14 +59,14 @@ public class FeedController {
         if (validator.feedPublicationValid(feedPublication)) {
             feedDaoService.save(feedPublication);
         }
-        return "redirect:/feed/" + customUser.getUser().getId() + "/get/view";
+        return "redirect:/user/id" + customUser.getUser().getId();
     }
 
     @GetMapping(value = "/{id}/delete/view")
     public String saveFeed (@PathVariable Long id,
                             @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) throws IOException {
         feedDaoService.deletePost(id, customUser.getUser().getId());
-        return "redirect:/feed/" + customUser.getUser().getId() + "/get/view";
+        return "redirect:/user/id" + customUser.getUser().getId();
     }
 
 
@@ -96,8 +95,11 @@ public class FeedController {
     public String repostDelete(@PathVariable Long feedPublicationId,
                                @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) {
         feedDaoService.deleteRepost(feedPublicationId, customUser.getUser().getId());
-        return "redirect:/feed/" + customUser.getUser().getId() + "/get/view";
+        return "redirect:/user/id" + customUser.getUser().getId();
     }
+
+
+
 
 
 
@@ -107,17 +109,24 @@ public class FeedController {
     @GetMapping(value = "/{id}/info-post",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public int postInfoForRepost(@PathVariable Long id,
-                                    @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) {
+                                 @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser) {
 
-//        1 можно репостить
+//        1 можно репостить .. этот пост нужно проверить мб я его уже репостнул
 //        2. это мой репост, можно удалить репост
-//        3. не мой репост. Но я могу сделать тоже репост этой записи
+//        3. не мой репост. Но я могу сделать тоже репост этой записи  .. этот пост нужно проверить мб я его уже репостнул
 //        4. это мой пост.
 //        5. это мой пост который репостнули
+//        6. Этот пост можно репостить, но после проверки оказалось что я его уже репостил. Можно удалить репост
+//        7. не мой репост. Но я могу сделать тоже репост этой записи, после проверки оказалось что я уже его репостил. можно удалить
+
 
         FeedPublication feedPublication = feedDaoService.findOneFeedPublication(id);
 
         if (feedPublication.getReposted() == null && !feedPublication.getSender().getId().equals(customUser.getUser().getId())){
+            FeedPublication fp = feedDaoService.findFeedPublicationByFeedDataAndReposted(feedPublication.getFeedData().getId(), customUser.getUser().getId());
+            if (fp != null && fp.getReposted().getId().equals(customUser.getUser().getId())) {
+                return 6;
+            }
             return 1;
         }
         if (feedPublication.getReposted() != null && feedPublication.getReposted().getId().equals(customUser.getUser().getId())) {
@@ -126,6 +135,10 @@ public class FeedController {
         if (feedPublication.getReposted() != null
                 && !feedPublication.getSender().getId().equals(customUser.getUser().getId())
                 && !feedPublication.getReposted().getId().equals(customUser.getUser().getId())) {
+            FeedPublication fp = feedDaoService.findFeedPublicationByFeedDataAndReposted(feedPublication.getFeedData().getId(), customUser.getUser().getId());
+            if (fp != null && fp.getReposted().getId().equals(customUser.getUser().getId())) {
+                return 7;
+            }
             return 3;
         }
         if (feedPublication.getSender().getId().equals(customUser.getUser().getId())

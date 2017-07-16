@@ -9,7 +9,7 @@
   <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
   <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
   <script src="<c:url value="/resources/js/validators.js" />"></script>
-  <script src="<c:url value="/resources/js/my-js.js" />"></script>
+  <script src="<c:url value="/resources/js/main-js.js" />"></script>
   <script src="<c:url value="/resources/js/country.js" />"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>

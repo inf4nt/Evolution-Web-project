@@ -10,51 +10,25 @@
 <%@include file="../index/header.jsp" %>
 
 <style>
-    .curs {
-        cursor: pointer;
-    }
-    .feed-link a {
-        text-align: left;
-        display: block; /* Ссылка как блочный элемент */
-        height: 100%; /* Высота на весь слой */
-        /*color: #666; !* Цвет ссылки *!*/
-    }
-    .block-sms {
-        height: 500px;
-        /*width: 700px;*/
-        overflow: scroll;
-        word-break:break-all;
-        overflow-x:hidden;
-    }
-    .preloader-modal-tweet {
-        position: absolute; /* Абсолютное позиционирование */
-        width: 150px; /* Ширина слоя в пикселах */
-        height: 150px; /* Высота слоя в пикселах */
-        left: 70%; /* Положение слоя от левого края */
-        top: 70%; /* Положение слоя от верхнего края */
-        margin-left: -190px; /* Отступ слева */
-        margin-top: -190px;	/* Отступ сверху */
-        padding: 10px; /* Поля вокруг текста */
-        overflow: auto; /* Добавление полосы прокрутки */
-    }
+
 </style>
 
 <div id="content" class="col-lg-8 col-lg-offset-2">
 
-    <div>
-        <form action="/feed/post/view" method="POST">
-            <div class="form-group">
-                <textarea id="input-tweet" placeholder="What's new ?" name="tweetContent" class="form-control" style="height: 100px " rows="5" ></textarea>
-            </div>
-            <div class="col-lg-12 " id="tweet-post">
-                <button type="submit" id="btn-tweet-post" style="width: 20%" class="btn btn-info pull-right">
-                    Post <span class="glyphicon glyphicon-ok"/>
-                </button>
-            </div>
-        </form>
-    </div>
+    <%--<div>--%>
+        <%--<form action="/feed/post/view" method="POST">--%>
+            <%--<div class="form-group">--%>
+                <%--<textarea id="input-tweet" placeholder="What's new ?" name="tweetContent" class="form-control" style="height: 100px " rows="5" ></textarea>--%>
+            <%--</div>--%>
+            <%--<div class="col-lg-12 " id="tweet-post">--%>
+                <%--<button type="submit" id="btn-tweet-post" style="width: 20%" class="btn btn-info pull-right">--%>
+                    <%--Post <span class="glyphicon glyphicon-ok"/>--%>
+                <%--</button>--%>
+            <%--</div>--%>
+        <%--</form>--%>
+    <%--</div>--%>
 
-    <br/><br/><br/>
+    <%--<br/><br/><br/>--%>
 
     <div id="table-tweet-content">
         <table style="width: 100%">
@@ -65,7 +39,7 @@
             </thead>
             <tbody>
             <c:forEach var="a" items="${list}">
-                <tr>
+                <tr id="tr-${a.id}">
                     <td>
                         <div class="block-background div-white">
                             <c:if test="${a.sender.id == authUser.id && a.reposted.id == null}">
@@ -137,8 +111,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -167,7 +141,13 @@
 
 <script>
 
-
+    //        1 можно репостить .. этот пост нужно проверить мб я его уже репостнул
+    //        2. это мой репост, можно удалить репост
+    //        3. не мой репост. Но я могу сделать тоже репост этой записи  .. этот пост нужно проверить мб я его уже репостнул
+    //        4. это мой пост.
+    //        5. это мой пост который репостнули
+    //        6. Этот пост можно репостить, но после проверки оказалось что я его уже репостил. Можно удалить репост
+    //        7. не мой репост. Но я могу сделать тоже репост этой записи, после проверки оказалось что я уже его репостил. можно удалить
 
     $(document).ready(function () {
         $(".tweet-tags").css("color", "#84cbff");
@@ -188,7 +168,12 @@
 
                     } if (data === 5) {
 
+                    } if (data === 6) {
+
+                    } if (data === 7) {
+
                     }
+
                     div.html(data);
                 },
                 timeout:30000

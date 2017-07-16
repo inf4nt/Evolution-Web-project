@@ -36,8 +36,6 @@ body {
 li {
     list-style-type: none;
 }
-
-
 .white {
     color: white;
 }
@@ -59,4 +57,36 @@ li {
     display: block; /* Ссылка как блочный элемент */
     height: 100%; /* Высота на весь слой */
     /*color: #666; !* Цвет ссылки *!*/
+}
+.block-background {
+    background: rgba(177, 175, 168, 0.5); /* Цвет фона */
+    /*background: rgba(126, 124, 119, 0.5); !* Цвет фона *!*/
+    color: #fff; /* Цвет текста */
+    padding: 5px; /* Поля вокруг текста */
+    border-radius: 10px;
+}
+
+.feed-link a {
+    text-align: left;
+    display: block; /* Ссылка как блочный элемент */
+    height: 100%; /* Высота на весь слой */
+    /*color: #666; !* Цвет ссылки *!*/
+}
+.block-sms {
+    height: 500px;
+    /*width: 700px;*/
+    overflow: scroll;
+    word-break:break-all;
+    overflow-x:hidden;
+}
+.preloader-modal-tweet {
+    position: absolute; /* Абсолютное позиционирование */
+    width: 150px; /* Ширина слоя в пикселах */
+    height: 150px; /* Высота слоя в пикселах */
+    left: 70%; /* Положение слоя от левого края */
+    top: 70%; /* Положение слоя от верхнего края */
+    margin-left: -190px; /* Отступ слева */
+    margin-top: -190px;	/* Отступ сверху */
+    padding: 10px; /* Поля вокруг текста */
+    overflow: auto; /* Добавление полосы прокрутки */
 }

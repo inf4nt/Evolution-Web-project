@@ -8,27 +8,10 @@
 <script src="<c:url value="/resources/JQuery/jquery-3.2.1.min.js" />"></script>
 <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
 <script src="<c:url value="/resources/js/validators.js" />"></script>
-<script src="<c:url value="/resources/js/my-js.js" />"></script>
+<script src="<c:url value="/resources/js/main-js.js" />"></script>
 <script src="<c:url value="/resources/js/country.js" />"></script>
 <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/css/my-css.css" />" rel="stylesheet">
-
-<script>
-    $(document).ready(function () {
-        $(".div-white a, .div-white p, .div-white h4").css("color", "white");
-    })
-</script>
-
-<style>
-	.block-background {
-		background: rgba(177, 175, 168, 0.5); /* Цвет фона */
-		/*background: rgba(126, 124, 119, 0.5); !* Цвет фона *!*/
-		color: #fff; /* Цвет текста */
-		padding: 5px; /* Поля вокруг текста */
-		border-radius: 10px;
-	}
-</style>
-
+<link href="<c:url value="/resources/css/main-css.css" />" rel="stylesheet">
 
 
 <div id="header">
@@ -126,7 +109,6 @@
 								Users
 							</a>
 						</li>
-						<hr/>
 					</div>
 					<hr/>
 				</sec:authorize>
@@ -135,15 +117,15 @@
 	</div>
 </div>
 
+
 <script>
-//	$(document).ready(function () {
-//		$(".navbar-inverse").css("background", "#000");
-//    })
+
 
 	$(document).ready(function () {
 		$("#publication-btn").click(function () {
 			$("#publication-all").slideDown("slow");
         })
+		$("button").css("outline", "0");
     })
 
 </script>

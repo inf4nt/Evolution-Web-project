@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import evolution.common.UserRoleEnum;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.WhereJoinTable;
 
 
