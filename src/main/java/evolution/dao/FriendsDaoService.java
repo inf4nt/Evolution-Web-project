@@ -53,8 +53,14 @@ public class FriendsDaoService {
 
     private static final String FIND_REQUEST = FIND_ALL_FRIENDS + " and ff.status = " + FriendStatusEnum.REQUEST.getId();
 
-    private static final String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status) from StandardUser u " +
-            " left join Friends f on u.id = f.friend.id and f.user.id = :authUserId " +
+//    private static final String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status) from StandardUser u " +
+//            " left join Friends f on u.id = f.friend.id and f.user.id = :authUserId " +
+//            " where u.id = :id";
+
+    private static final String FIND_USER_AND_FRIEND_STATUS = "select f from StandardUser u " +
+            " left join fetch Friends f on u.id = f.friend.id and f.user.id = :authUserId " +
+            " left join fetch f.user " +
+            " left join fetch f.friend " +
             " where u.id = :id";
 
     @PersistenceContext

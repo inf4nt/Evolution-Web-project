@@ -9,9 +9,7 @@
 <body>
 <%@include file="../index/header.jsp" %>
 
-<style>
 
-</style>
 
 <div id="content" class="col-lg-8 col-lg-offset-2">
 

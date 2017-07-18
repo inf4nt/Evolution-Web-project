@@ -50,13 +50,6 @@ public class FeedPublication {
     @Formula("(SELECT count(1) from feed_data fd join feed_publication fp on fd.id = fp.feed_id WHERE fd.id = feed_id and fp.reposted_id is not null)")
     private Long countRepost;
 
-
-
-
-
-
-
-
     public FeedPublication(Long id) {
         this.id = id;
     }

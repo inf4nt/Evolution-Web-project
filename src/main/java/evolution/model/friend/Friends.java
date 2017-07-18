@@ -12,6 +12,7 @@ import java.io.Serializable;
  * Created by Admin on 15.04.2017.
  */
 
+
 @Entity
 @Table(name = "friends")
 @ToString @NoArgsConstructor @AllArgsConstructor @Getter @Setter
@@ -19,6 +20,11 @@ import java.io.Serializable;
 public class Friends implements Serializable{
 
     @Id
+    @Column
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_friends")
+    @SequenceGenerator(name = "seq_friends", sequenceName = "seq_friends_id", allocationSize = 1)
+    private Long id;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private StandardUser user;
@@ -29,6 +35,12 @@ public class Friends implements Serializable{
 
     @Column(name = "status")
     private Long status;
+
+    public Friends(StandardUser user, StandardUser friend, Long status) {
+        this.user = user;
+        this.friend = friend;
+        this.status = status;
+    }
 
     public Friends(Long id, String firstName, String lastName, Long friendStatus) {
         this.user = new StandardUser(id, firstName, lastName);

@@ -66,10 +66,9 @@ public class UserController {
         } else {
             try {
                 Friends friends = friendsDaoService.findUserAndFriendStatus(authUser.getId(), id);
-                model.addAttribute("user", friends.getUser());
-                LOGGER.info("session user\n" + friends.getUser());
+                model.addAttribute("user", friends.getFriend());
+                LOGGER.info("session user\n" + friends.getFriend());
                 model.addAttribute("status", friends.getStatus());
-                LOGGER.info("Other user id = " + friends.getUser().getId());
             } catch (NoResultException e) {
                 LOGGER.error("User by id " + id +", is not exist\n" + e);
                 return "redirect:/user/id" + authUser.getId();

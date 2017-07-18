@@ -37,12 +37,12 @@ public abstract class UserDefaultData extends AbstractUser {
     @JsonProperty
     protected Date registrationDate;
 
-//    @Formula("(SELECT count(1) from friends f join user_data u on f.user_id = u.id WHERE f.user_id = id and f.status = 1)")
-//    private Long countFriends;
-//
-//    @Formula("(SELECT count(1) from friends f join user_data u on f.user_id = u.id WHERE f.user_id = id and f.status = 2)")
-//    private Long countFollower;
-//
-//    @Formula("(SELECT count(1) from friends f join user_data u on f.user_id = u.id WHERE f.user_id = id and f.status = 3)")
-//    private Long countRequest;
+    @Formula("(SELECT count(1) from friends f join user_data u on f.user_id = u.id WHERE f.user_id = id and f.status = 1)")
+    private Long countFriends;
+
+    @Formula("(SELECT count(1) from friends f join user_data u on f.user_id = u.id WHERE f.user_id = id and f.status = 2)")
+    private Long countFollower;
+
+    @Formula("(SELECT count(1) from friends f join user_data u on f.user_id = u.id WHERE f.user_id = id and f.status = 3)")
+    private Long countRequest;
 }

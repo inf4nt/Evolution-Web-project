@@ -15,16 +15,22 @@
 </head>
 <body>
 <%@include file="../index/header.jsp" %>
-<%--<style >--%>
-    <%--#footer {--%>
-        <%--position: fixed;--%>
-        <%--/*right: 0; bottom: 30px;*/--%>
-        <%--left: 0; bottom:0;--%>
-        <%--width: 100%;--%>
-    <%--}--%>
-<%--</style>--%>
 
-<div id="content">
+
+<style>
+
+    .user-data-link {
+        font-size: x-large;
+
+    }
+    .user-data-link:visited {
+        color: white;
+    }
+</style>
+
+
+<div id="content" >
+
     <div id="default-user-data" style="display: none">
         <div class="col-md-3 col-md-offset-2">
             <div class="profile-sidebar">
@@ -315,21 +321,109 @@
 
     </div>
 
-    <%--<a class="btn btn-primary" data-toggle="modal" href="#modal-id">Trigger modal</a>--%>
-    <div class="modal fade" id="modal-id">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <div class="text-muted">Are you sure ?</div>
-                </div>
-                <div class="modal-footer">
-                    <button id="delete-user" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    <sec:authorize access="hasRole('ROLE_ADMIN')">
+        <div class="modal fade" id="modal-id">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <div class="text-muted">Are you sure ?</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="delete-user" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </sec:authorize>
+
 </div>
+
+
+
+
+<div id="new content" style="display: none">
+
+    <div class="col-lg-10 col-lg-offset-2">
+
+        <div class="col-lg-4">
+            <h1>тут фотка и тд</h1>
+        </div>
+        <div class="col-lg-8">
+
+            <div>
+                <a class="user-data-link" href="/user/id${user.id}">
+                    ${user.firstName} ${user.lastName}
+                </a>
+                <hr/>
+            </div>
+
+            <div>
+
+
+
+
+
+
+                <%--<table style="width: 100%; color: white">--%>
+                    <%--<thead>--%>
+                        <%--<tr>--%>
+                            <%--<td class="text-center">--%>
+                                <%--Friends--%>
+                            <%--</td>--%>
+                            <%--<td class="text-center">--%>
+                                <%--Followers--%>
+                            <%--</td>--%>
+                            <%--<td class="text-center">--%>
+                                <%--Requests--%>
+                            <%--</td>--%>
+                        <%--</tr>--%>
+                    <%--</thead>--%>
+                    <%--<tbody>--%>
+                        <%--<tr>--%>
+                            <%--<td class="text-center">--%>
+                                <%--${user.countFriends}--%>
+                            <%--</td>--%>
+                            <%--<td class="text-center">--%>
+                                <%--${user.countFollower}--%>
+                            <%--</td>--%>
+                            <%--<td class="text-center">--%>
+                                <%--${user.countRequest}--%>
+                            <%--</td>--%>
+                        <%--</tr>--%>
+                    <%--</tbody>--%>
+                <%--</table>--%>
+
+
+
+
+
+
+                <a href="/friend/${user.id}">
+                    Friends ${user.countFriends}
+                </a>
+                <a href="/friend/${user.id}">
+                    Followers ${user.countFollower}
+                </a>
+                <a href="/friend/${user.id}">
+                    Request${user.countRequest}
+                </a>
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+
 
 
 
