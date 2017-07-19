@@ -18,12 +18,9 @@
 	<div id="head-navbar" style="display: none"  class="navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<div class="div-white">
-				<%--<a id="brand" href="#/" class="navbar-brand">Evolution--%>
-					<%--<span class="glyphicon glyphicon-globe"></span>--%>
-				<%--</a>--%>
-					<a id="brand" class="navbar-brand curs">Evolution
-						<span><img style="width: 20px; height: 20px" src="/resources/brand.gif"></span>
-					</a>
+				<a id="brand" class="navbar-brand curs">Evolution
+					<span><img style="width: 20px; height: 20px" src="/resources/brand.gif"></span>
+				</a>
 			</div>
 			<div class="callapse navbar-collapse div-white">
 				<ul class="nav navbar-nav">
@@ -111,7 +108,12 @@
 </div>
 
 
+
+
+
 <script>
+
+
 
 
 	$(document).ready(function () {

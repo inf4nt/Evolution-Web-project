@@ -175,6 +175,20 @@
 
 </div>
 
+<footer class="footer">
+    <div class="container">
+		<span class="text-muted">
+			<p class="text-center text-muted">
+				Evolution <span class="glyphicon glyphicon-globe"></span> <br/>
+				<a href="/user/id226" style="color: white">
+					Maksim Lukaretskiy
+				</a>
+			</p>
+		</span>
+    </div>
+</footer>
+
+
 </body>
 <script>
 

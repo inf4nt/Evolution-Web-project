@@ -57,35 +57,35 @@ public class UserController {
 
     @RequestMapping (value = "/id{id}", method = RequestMethod.GET)
     public String home (@PathVariable Long id,
-                        @SessionAttribute(required = false) User authUser,
+                        @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
                         Model model) {
 
-        if (authUser.getId().equals(id)) {
-            model.addAttribute("user", authUser);
-            Map map = friendsDaoService.countForFriends(id);
+        Map map = friendsDaoService.countForFriends(id);
+        Friends friends = null;
 
-            model.addAttribute("countFriends", map.get(FriendStatusEnum.PROGRESS.toString()));
-            model.addAttribute("countFollowers",  map.get(FriendStatusEnum.FOLLOWER.toString()));
-            model.addAttribute("countRequests",  map.get(FriendStatusEnum.REQUEST.toString()));
-
+        if (customUser.getUser().getId().equals(id)) {
+            model.addAttribute("user", customUser.getUser());
         } else {
             try {
-                Friends friends = friendsDaoService.findUserAndFriendStatus(authUser.getId(), id);
-                LOGGER.info(friends + "");
-                if (friends != null) {
-                    model.addAttribute("user", friends.getFriend());
-                    model.addAttribute("status", friends.getStatus());
-                    model.addAttribute("countFriends", friends.getCountFriends());
-                    model.addAttribute("countFollowers", friends.getCountFollowers());
-                    model.addAttribute("countRequests", friends.getCountRequests());
-                }
+                friends = friendsDaoService.findUserAndFriendStatus(customUser.getUser().getId(), id);
+                LOGGER.info("friends = " + friends);
+                model.addAttribute("user", friends.getUser());
+                model.addAttribute("status", friends.getStatus());
             } catch (NoResultException e) {
                 LOGGER.warn("User by id " + id +", is not exist\n" + e);
-                return "redirect:/user/id" + authUser.getId();
+                return "redirect:/user/id" + customUser.getUser().getId();
             }
         }
 
+        if (customUser.getUser().getId().equals(id) || friends != null) {
+            model.addAttribute("countFriends", map.get(FriendStatusEnum.PROGRESS.toString()));
+            model.addAttribute("countFollowers",  map.get(FriendStatusEnum.FOLLOWER.toString()));
+            model.addAttribute("countRequests",  map.get(FriendStatusEnum.REQUEST.toString()));
+        }
+
+
         model.addAttribute("randomFriends", friendsDaoService.randomFriends(id, 6));
+
 
 //        model.addAttribute("feeds", feedDaoService.findMyPostRepost(id, new PageRequest(0, 100)));
 

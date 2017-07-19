@@ -60,12 +60,6 @@ public class FriendsDaoService {
 
     private static final String FIND_REQUEST = FIND_ALL_FRIENDS + " and ff.status = " + FriendStatusEnum.REQUEST.getId();
 
-    private static final String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status, f.countFriends, f.countFollowers, f.countRequests) " +
-            " from StandardUser u " +
-            " left join fetch Friends f on u.id = f.friend.id and f.user.id = :authUserId " +
-            " where u.id = :id";
-
-
     private static final String RANDOM_FRIENDS = "select f from" +
             " Friends f " +
             " join fetch f.user " +
@@ -74,10 +68,9 @@ public class FriendsDaoService {
             " and f.status = " + FriendStatusEnum.PROGRESS.getId() +
             " order by rand() ";
 
-
-//    private static final String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status) from StandardUser u " +
-//            " left join Friends f on u.id = f.friend.id and f.user.id = :authUserId " +
-//            " where u.id = :id";
+    private static final String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status) from StandardUser u " +
+            " left join Friends f on u.id = f.friend.id and f.user.id = :authUserId " +
+            " where u.id = :id";
 
 //    private static final String FIND_USER_AND_FRIEND_STATUS = "select f from StandardUser u " +
 //            " left join fetch Friends f on u.id = f.friend.id and f.user.id = :authUserId " +
