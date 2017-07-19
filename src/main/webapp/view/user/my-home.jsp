@@ -107,7 +107,7 @@
                             <hr/>
                             <div class="btn-group" style="width: 100%">
                                 <p class="text-center">
-                                    <a href="/user/profile/${user.id}/put/view" class="btn btn-md btn-primary">
+                                    <a href="/user/${user.id}/put/view" class="btn btn-md btn-primary">
                                         <span class="glyphicon glyphicon-edit"></span>
                                         Profile
                                     </a>
