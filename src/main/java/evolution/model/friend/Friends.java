@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import evolution.model.user.StandardUser;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -36,6 +37,15 @@ public class Friends implements Serializable{
     @Column(name = "status")
     private Long status;
 
+    @Formula("(SELECT count(1) from friends f join user_data u on f.user_id = u.id WHERE f.user_id = friend_id and f.status = 1)")
+    private Long countFriends;
+
+    @Formula("(SELECT count(1) from friends f join user_data u on f.user_id = u.id WHERE f.user_id = friend_id and f.status = 2)")
+    private Long countFollowers;
+
+    @Formula("(SELECT count(1) from friends f join user_data u on f.user_id = u.id WHERE f.user_id = friend_id and f.status = 3)")
+    private Long countRequests;
+
     public Friends(StandardUser user, StandardUser friend, Long status) {
         this.user = user;
         this.friend = friend;
@@ -45,6 +55,14 @@ public class Friends implements Serializable{
     public Friends(Long id, String firstName, String lastName, Long friendStatus) {
         this.user = new StandardUser(id, firstName, lastName);
         this.status = friendStatus;
+    }
+
+    public Friends(Long id, String firstName, String lastName, Long friendStatus, Long countFriends, Long countFollowers, Long countRequests) {
+        this.friend = new StandardUser(id, firstName, lastName);
+        this.status = friendStatus;
+        this.countFollowers = countFollowers;
+        this.countFriends = countFriends;
+        this.countRequests = countRequests;
     }
 
     public Friends(Long id, String firstName, String lastName) {

@@ -1,6 +1,7 @@
 package evolution.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import evolution.common.FriendStatusEnum;
 import evolution.common.UserRoleEnum;
 import evolution.dao.FeedDaoService;
 import evolution.dao.FriendsDaoService;
@@ -28,6 +29,7 @@ import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Admin on 05.03.2017.
@@ -54,28 +56,38 @@ public class UserController {
     private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @RequestMapping (value = "/id{id}", method = RequestMethod.GET)
-    public String home (
-            @PathVariable Long id,
-            Model model,
-            @SessionAttribute(required = false) User authUser) {
+    public String home (@PathVariable Long id,
+                        @SessionAttribute(required = false) User authUser,
+                        Model model) {
 
         if (authUser.getId().equals(id)) {
             model.addAttribute("user", authUser);
-            LOGGER.info("session user\n" + authUser);
-            LOGGER.info("My home. User id = " + id);
+            Map map = friendsDaoService.countForFriends(id);
+
+            model.addAttribute("countFriends", map.get(FriendStatusEnum.PROGRESS.toString()));
+            model.addAttribute("countFollowers",  map.get(FriendStatusEnum.FOLLOWER.toString()));
+            model.addAttribute("countRequests",  map.get(FriendStatusEnum.REQUEST.toString()));
+
         } else {
             try {
                 Friends friends = friendsDaoService.findUserAndFriendStatus(authUser.getId(), id);
-                model.addAttribute("user", friends.getFriend());
-                LOGGER.info("session user\n" + friends.getFriend());
-                model.addAttribute("status", friends.getStatus());
+                LOGGER.info(friends + "");
+                if (friends != null) {
+                    model.addAttribute("user", friends.getFriend());
+                    model.addAttribute("status", friends.getStatus());
+                    model.addAttribute("countFriends", friends.getCountFriends());
+                    model.addAttribute("countFollowers", friends.getCountFollowers());
+                    model.addAttribute("countRequests", friends.getCountRequests());
+                }
             } catch (NoResultException e) {
-                LOGGER.error("User by id " + id +", is not exist\n" + e);
+                LOGGER.warn("User by id " + id +", is not exist\n" + e);
                 return "redirect:/user/id" + authUser.getId();
             }
         }
 
-        model.addAttribute("feeds", feedDaoService.findMyPostRepost(id, new PageRequest(0, 100)));
+        model.addAttribute("randomFriends", friendsDaoService.randomFriends(id, 6));
+
+//        model.addAttribute("feeds", feedDaoService.findMyPostRepost(id, new PageRequest(0, 100)));
 
         return "user/my-home";
     }

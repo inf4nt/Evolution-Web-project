@@ -59,17 +59,10 @@
 			<ul class="nav nav-sidebar">
 				<div id="userPanel" class="div-white">
 
-					<hr/>
-					<li>
-						<a href="/feed/${authUser.id}/get/view">
-							<span class="glyphicon glyphicon-list-alt"></span> News
-						</a>
-					</li>
 					<%--<hr/>--%>
 					<%--<li>--%>
-						<%--<a href="/user/get/view">--%>
-							<%--<span class="glyphicon glyphicon-pawn"></span>--%>
-							<%--Users--%>
+						<%--<a href="/feed/${authUser.id}/get/view">--%>
+							<%--<span class="glyphicon glyphicon-list-alt"></span> News--%>
 						<%--</a>--%>
 					<%--</li>--%>
 					<hr/>

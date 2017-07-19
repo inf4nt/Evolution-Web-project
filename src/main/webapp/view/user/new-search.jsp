@@ -136,7 +136,7 @@
                     <span class="glyphicon glyphicon-download"></span> more
                 </button>
                 <span style="display: none" id="span-more-users-loader" class="glyphicon glyphicon-download">
-                 <img style="width: 35px; height: 35px;" src="/resources/preloader.gif"/></span>
+                 <img style="width: 35px; height: 35px;" src="/resources/page-preloader.gif"/></span>
                 <br/><br/><br/>
             </div>
         </div>

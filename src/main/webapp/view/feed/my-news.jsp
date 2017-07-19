@@ -125,7 +125,7 @@
                     <h4 style="color: black" id="tweet-modal-title" class="modal-title"></h4>
                 </div>
                 <div id="modal-tweet-content" class="modal-body block-sms">
-                    <h1 class="text-center"><img class="preloader-modal-tweet" src="/resources/preloader.gif"></h1>
+                    <h1 class="text-center"><img class="preloader-modal-tweet" src="/resources/page-preloader.gif"></h1>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" onclick="clearModal()" data-dismiss="modal">Close</button>
@@ -234,7 +234,7 @@
     }
 
     function clearModal() {
-        $("#modal-tweet-content").html('<h1 class="text-center"><img class="preloader-modal-tweet" src="/resources/preloader.gif"></h1>');
+        $("#modal-tweet-content").html('<h1 class="text-center"><img class="preloader-modal-tweet" src="/resources/page-preloader.gif"></h1>');
         $("#tweet-modal-title").html("");
     }
 

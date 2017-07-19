@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,12 @@ import java.util.Map;
  */
 @Service
 public class FriendsDaoService {
+
+    private static final String COUNT_FRIENDS = "select count(1) from Friends f where f.user.id = :user_id and f.status = " + FriendStatusEnum.PROGRESS.getId();
+
+    private static final String COUNT_FOLLOWERS = "select count(1) from Friends f where f.user.id = :user_id and f.status = " + FriendStatusEnum.FOLLOWER.getId();
+
+    private static final String COUNT_REQUESTS = "select count(1) from Friends f where f.user.id = :user_id and f.status = " + FriendStatusEnum.REQUEST.getId();
 
     private static final String CHECK_FRIENDS = "select 1 from Friends f where (f.user.id =:id1 and f.friend.id =:id2 and f.status =:status) " +
             "or (f.user.id =:id2 and f.friend.id =:id1 and f.status =:status )";
@@ -53,18 +60,64 @@ public class FriendsDaoService {
 
     private static final String FIND_REQUEST = FIND_ALL_FRIENDS + " and ff.status = " + FriendStatusEnum.REQUEST.getId();
 
+    private static final String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status, f.countFriends, f.countFollowers, f.countRequests) " +
+            " from StandardUser u " +
+            " left join fetch Friends f on u.id = f.friend.id and f.user.id = :authUserId " +
+            " where u.id = :id";
+
+
+    private static final String RANDOM_FRIENDS = "select f from" +
+            " Friends f " +
+            " join fetch f.user " +
+            " join fetch f.friend " +
+            " where f.user.id = :user_id " +
+            " and f.status = " + FriendStatusEnum.PROGRESS.getId() +
+            " order by rand() ";
+
+
 //    private static final String FIND_USER_AND_FRIEND_STATUS = "select new Friends(u.id, u.firstName, u.lastName, f.status) from StandardUser u " +
 //            " left join Friends f on u.id = f.friend.id and f.user.id = :authUserId " +
 //            " where u.id = :id";
 
-    private static final String FIND_USER_AND_FRIEND_STATUS = "select f from StandardUser u " +
-            " left join fetch Friends f on u.id = f.friend.id and f.user.id = :authUserId " +
-            " left join fetch f.user " +
-            " left join fetch f.friend " +
-            " where u.id = :id";
+//    private static final String FIND_USER_AND_FRIEND_STATUS = "select f from StandardUser u " +
+//            " left join fetch Friends f on u.id = f.friend.id and f.user.id = :authUserId " +
+//            " left join fetch f.user " +
+//            " left join fetch f.friend " +
+//            " where u.id = :id";
+
+
+
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Transactional
+    public List<User> randomFriends(Long userId, int limit) {
+        Query query = entityManager.createQuery(RANDOM_FRIENDS);
+        query.setParameter("user_id", userId);
+        query.setMaxResults(limit);
+        return query.getResultList();
+    }
+
+    @Transactional
+    public Map<String, Long> countForFriends(Long userId) {
+        Map<String, Long> map = new HashMap<>();
+        Query query;
+
+        query = entityManager.createQuery(COUNT_FRIENDS);
+        query.setParameter("user_id", userId);
+        map.put(FriendStatusEnum.PROGRESS.toString(), (Long) query.getSingleResult());
+
+        query = entityManager.createQuery(COUNT_FOLLOWERS);
+        query.setParameter("user_id", userId);
+        map.put(FriendStatusEnum.FOLLOWER.toString(), (Long) query.getSingleResult());
+
+        query = entityManager.createQuery(COUNT_REQUESTS);
+        query.setParameter("user_id", userId);
+        map.put(FriendStatusEnum.REQUEST.toString(), (Long) query.getSingleResult());
+
+        return map;
+    }
 
     @Transactional
     public void friendRequest(long authUserId, long id2) {
