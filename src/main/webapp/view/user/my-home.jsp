@@ -115,7 +115,7 @@
                 <br/><br/>
                 <c:forEach var="a" items="${randomFriends}">
                     <div class="col-lg-4">
-                        <a href="/user/id${a.friend.id}" class="block-link white-and-visited">
+                        <a href="/user/id${a.friend.id}" class="block-link" style="color: white">
                             <img data-src="holder.js/140x140" class="img-circle center-block" style="width: 100%;"
                                  src="http://www.isu.edu.tw/upload/276e/9/coming-soon.jpg" data-holder-rendered="true">
                             <p class="text-center" style="width: 100%">${a.friend.firstName}</p>
