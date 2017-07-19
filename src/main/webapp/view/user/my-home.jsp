@@ -42,6 +42,7 @@
         <div class="col-lg-4">
 
             <div class="col-lg-12 block-background">
+
                 <div class="profile-userpic">
                     <img data-src="holder.js/140x140" class="img-circle center-block" style="width: 250px; height: 300px;"
                          src="https://avatars1.githubusercontent.com/u/15056371?v=3&s=400" data-holder-rendered="true">
@@ -98,6 +99,27 @@
                             </p>
                         </div>
                     </c:if>
+                </div>
+
+                <div id="admin-panel">
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
+                        <c:if test="${authUser != user}">
+                            <hr/>
+                            <div class="btn-group" style="width: 100%">
+                                <p class="text-center">
+                                    <a href="/user/profile/${user.id}/put/view" class="btn btn-md btn-primary">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                        Profile
+                                    </a>
+                                    <button data-toggle="modal" data-target="#modal-id" class="btn btn-md btn-danger">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                        Delete
+                                    </button>
+                                </p>
+                            </div>
+                            <hr/>
+                        </c:if>
+                    </sec:authorize>
                 </div>
 
 
@@ -188,6 +210,20 @@
     </div>
 </footer>
 
+
+<div class="modal fade" id="modal-id">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <div class="text-muted">Are you sure ?</div>
+            </div>
+            <div class="modal-footer">
+                <button id="delete-user" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 </body>
 <script>
