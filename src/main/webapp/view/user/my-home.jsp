@@ -237,7 +237,7 @@
                 url:"/user/${user.id}",
                 type:"DELETE",
                 success:function () {
-                    $("#user-data").html("");
+                    $("#content").html("");
                 },
                 error:function () {
                     alert('Sorry ( server is not responded')

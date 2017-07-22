@@ -110,4 +110,53 @@ interface FeedPublicationRepository extends JpaRepository<FeedPublication, Long>
             " where fp.sender.id =:user_id and fp.reposted is null or fp.reposted.id =:user_id " +
             " order by fp.date desc ")
     List<FeedPublication> findMyPostRepost(@Param("user_id") Long userId, Pageable pageable);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    private static final String GET_TWEETS_AND_REPOSTS_FROM_USER = "SELECT" +
+//            " * " +
+//            "FROM (SELECT t.tweet_id, t.body, t.date, t.user_id AS author_id, t.user_id,\n" +
+//            "(SELECT COUNT(*) FROM likes WHERE tweet_id = t.tweet_id) AS like_count,\n" +
+//            "(SELECT COUNT(*) FROM reposts WHERE tweet_id = t.tweet_id) AS repost_count,\n" +
+//
+//            "( SELECT login " +
+//            " FROM users au " +
+//            " JOIN tweets at ON au.user_id = at.user_id" +
+//            " WHERE at.tweet_id = t.tweet_id) AS author_login, false AS reposted\n" +
+//
+//            "FROM tweets t WHERE t.user_id = ?\n" +
+//
+//            "UNION ALL" +
+//
+//            " SELECT tr.tweet_id, tr.body, r.date, tr.user_id AS author_id, r.user_id,\n" +
+//            "(SELECT COUNT(*) FROM likes WHERE tweet_id = tr.tweet_id) AS like_count,\n" +
+//            "(SELECT COUNT(*) FROM reposts WHERE tweet_id = tr.tweet_id) AS repost_count,\n" +
+//            "(SELECT login FROM users au JOIN tweets at ON au.user_id = at.user_id WHERE at.tweet_id = tr.tweet_id) AS author_login, true AS reposted\n" +
+//            "FROM tweets tr JOIN reposts r ON tr.tweet_id = r.tweet_id WHERE r.user_id = ? LIMIT ?, ?) x ORDER BY x.date DESC, x.tweet_id DESC;";
+//
+//
+//    private static final String GET_TWEETS_AND_REPOSTS_FROM_FOLLOWING = "SELECT * FROM (SELECT f_t.tweet_id, f_t.body, f_t.date, f_t.user_id AS author_id, f_t.user_id,\n" +
+//            "(SELECT COUNT(*) FROM likes WHERE tweet_id = f_t.tweet_id) AS like_count,\n" +
+//            "(SELECT COUNT(*) FROM reposts WHERE tweet_id = f_t.tweet_id) AS repost_count,\n" +
+//            "(SELECT login FROM users au JOIN tweets at ON au.user_id = at.user_id WHERE at.tweet_id = f_t.tweet_id) AS author_login, false AS reposted\n" +
+//            "FROM tweets f_t JOIN followers f_f ON f_f.following_id = f_t.user_id WHERE f_f.user_id = ?\n" +
+//            "UNION ALL SELECT f_tr.tweet_id, f_tr.body, f_rr.date, f_tr.user_id AS author_id, f_rr.user_id,\n" +
+//            "(SELECT COUNT(*) FROM likes WHERE tweet_id = f_tr.tweet_id) AS like_count,\n" +
+//            "(SELECT COUNT(*) FROM reposts WHERE tweet_id = f_tr.tweet_id) AS repost_count,\n" +
+//            "(SELECT login FROM users au JOIN tweets at ON au.user_id = at.user_id WHERE at.tweet_id = f_tr.tweet_id) AS author_login, true AS reposted\n" +
+//            "FROM reposts f_rr JOIN tweets f_tr ON f_tr.tweet_id = f_rr.tweet_id JOIN followers f_fr ON f_rr.user_id = f_fr.following_id WHERE f_fr.user_id = ? LIMIT ?, ?) x ORDER BY x.date DESC, x.tweet_id DESC;";
 }

@@ -97,7 +97,7 @@ public class UserController {
     @GetMapping(value = "/", produces={"application/json; charset=UTF-8"})
     public List allUser(@RequestParam(required = false) Integer page,
                         @RequestParam(required = false) Integer size) throws JsonProcessingException {
-        LOGGER.info("page=" + page + " size=" + size);
+        LOGGER.info("page = " + page + ", size = " + size);
         if (size == null || page == null) {
             return userDaoService.findAll();
         }
