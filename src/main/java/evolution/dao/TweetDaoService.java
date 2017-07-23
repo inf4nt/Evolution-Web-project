@@ -37,12 +37,12 @@ public class TweetDaoService {
     private static final String FIND_TWEETS_BY_USER_ID = " SELECT\n" +
             "  t.id, t.content, t.tags, t.tweet_date, t.repost_date,\n" +
             "  sender.id AS sid, sender.first_name sfn, sender.last_name AS sln,\n" +
-            "  reposted.id rid, reposted.first_name AS rfn, reposted.last_name AS rln,\n" +
-            "  rt.id AS if_i_am_repost_this,\n" +
             "  (SELECT\n" +
             "     count(1) AS count_repost\n" +
             "   FROM repost rt\n" +
-            "   WHERE rt.tweet_id = t.id)\n" +
+            "   WHERE rt.tweet_id = t.id),\n" +
+            "  reposted.id rid, reposted.first_name AS rfn, reposted.last_name AS rln,\n" +
+            "  rt.id AS if_i_am_repost_this\n" +
             "   FROM (\n" +
             "       -- найти посты моих друзей\n" +
             "       SELECT\n" +
@@ -67,6 +67,27 @@ public class TweetDaoService {
             "  LEFT JOIN repost rt ON rt.tweet_id = t.id AND rt.reposted_user_id = :user_id\n" +
             "  ORDER BY t.order_date DESC ";
 
+    private static final String FIND_MY_TWEETS_AND_REPOST = "SELECT\n" +
+            "  t.id as tweet_id, t.content, t.tags, t.tweet_date, t.repost_date,\n" +
+            "  sender.id, sender.first_name, sender.last_name,\n" +
+            "  (SELECT\n" +
+            "     count(1) as count_repost\n" +
+            "   from repost rt\n" +
+            "   WHERE rt.tweet_id = t.id)\n" +
+            "from (\n" +
+            "  SELECT\n" +
+            "    t.id, t.content, t.tags, t.date as order_date, t.sender_id, null as reposted, t.date as tweet_date, null as repost_date\n" +
+            "  from tweet t\n" +
+            "  WHERE t.sender_id = :user_id\n" +
+            "  UNION\n" +
+            "  SELECT\n" +
+            "    t.id, t.content, t.tags, rt.date as order_date, t.sender_id, null as reposted, t.date as tweet_date, rt.date as repost_date\n" +
+            "  from repost rt\n" +
+            "  join tweet t on rt.tweet_id = t.id\n" +
+            "  WHERE rt.reposted_user_id = :user_id\n" +
+            ") as t\n" +
+            "join user_data sender on t.sender_id = sender.id\n" +
+            "ORDER BY t.order_date desc";
 
     @Transactional
     public List<TweetTransient> findTweetsOfMyFriends(Long userId, int limit, int offset) {
@@ -118,20 +139,39 @@ public class TweetDaoService {
         return page.getContent();
     }
 
+    @Transactional
+    public List<TweetTransient> findMyTweets(Long userId) {
+        Query query = entityManager.createNativeQuery(FIND_MY_TWEETS_AND_REPOST);
+        query.setParameter("user_id", userId);
+        return convert(query.getResultList());
+    }
+
+    @Transactional
+    public List<TweetTransient> findMyTweets(Long userId, int limit, int offset) {
+        Query query = entityManager.createNativeQuery(FIND_MY_TWEETS_AND_REPOST);
+        query.setParameter("user_id", userId);
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
+        return convert(query.getResultList());
+    }
+
     private TweetTransient convert(Object[] arr) {
         TweetTransient result = new TweetTransient();
-        result.setId(Long.valueOf((Integer)arr[0]));
-        result.setContent((String) arr[1]);
-        result.setTags((String) arr[2]);
-        result.setTweetDate(new Date(((Timestamp)arr[3]).getTime()));
-        if (arr[4] != null)
-            result.setRepostDate(new Date(((Timestamp)arr[4]).getTime()));
-        if (arr[5] != null)
-            result.setSender(new StandardUser(((Integer)arr[5]).longValue(), (String) arr[6], (String) arr[7]));
-        if (arr[8] != null)
-            result.setReposted(new StandardUser(((Integer)arr[8]).longValue(), (String) arr[9], (String) arr[10]));
-        result.setCheckRepost(arr[11] != null);
-        result.setCountRepost(((BigInteger) arr[12]).longValue());
+        try {
+            result.setId(Long.valueOf((Integer)arr[0]));
+            result.setContent((String) arr[1]);
+            result.setTags((String) arr[2]);
+            result.setTweetDate(new Date(((Timestamp)arr[3]).getTime()));
+            if (arr[4] != null)
+                result.setRepostDate(new Date(((Timestamp)arr[4]).getTime()));
+            if (arr[5] != null)
+                result.setSender(new StandardUser(((Integer)arr[5]).longValue(), (String) arr[6], (String) arr[7]));
+            result.setCountRepost(((BigInteger) arr[8]).longValue());
+            if (arr[9] != null)
+                result.setReposted(new StandardUser(((Integer)arr[9]).longValue(), (String) arr[10], (String) arr[11]));
+            result.setCheckRepost(arr[12] != null);
+        } catch (ArrayIndexOutOfBoundsException a) {}
+
         return result;
     }
 

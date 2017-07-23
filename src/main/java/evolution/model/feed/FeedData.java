@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Admin on 24.06.2017.
@@ -45,9 +46,12 @@ public class FeedData implements Serializable {
         if (tags == null)
             return null;
         String arr[] = tags.split("#");
-        List<String> list = new ArrayList<>(Arrays.asList(arr));
-        list.remove(0);
-        return list;
+//        List<String> list = new ArrayList<>(Arrays.asList(arr));
+//        list.remove(0);
+//        return list;
+
+        return Arrays.asList(arr).stream().skip(1).collect(Collectors.toList());
+
     }
 
 }

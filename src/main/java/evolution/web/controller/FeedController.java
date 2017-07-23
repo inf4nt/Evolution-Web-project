@@ -41,7 +41,7 @@ public class FeedController {
 
     @GetMapping(value = "/{id}/get/view")
     public ModelAndView getPageNews(@PathVariable Long id) {
-        ModelAndView model = new ModelAndView("feed/my-news");
+        ModelAndView model = new ModelAndView("bucket/feed/my-news");
         model.addObject("list", feedDaoService.findNews(id, new PageRequest(0, 100)));
         return model;
     }

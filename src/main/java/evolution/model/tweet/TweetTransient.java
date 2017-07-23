@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Infant on 22.07.2017.
@@ -41,9 +42,6 @@ public class TweetTransient {
         if (tags == null)
             return null;
         String arr[] = tags.split("#");
-        List<String> list = new ArrayList<>(Arrays.asList(arr));
-        list.remove(0);
-        return list;
+        return Arrays.asList(arr).stream().skip(1).collect(Collectors.toList());
     }
-
 }

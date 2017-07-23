@@ -9,15 +9,13 @@
 <html>
 <head>
     <title>Feed ${user.firstName} ${user.lastName}</title>
-
-
 </head>
 <body>
 <%@include file="../index/header.jsp" %>
 
 
 <div id="content">
-    <div class="col-lg-8 col-lg-offset-2" style="top:60px">
+    <div class="col-lg-8 col-lg-offset-2">
 
         <div id="table-tweet-content">
             <table style="width: 100%">
@@ -49,17 +47,16 @@
                                 <a href="/user/id${a.sender.id}">
                                         ${a.sender.firstName} ${a.sender.lastName}
                                 </a>
-
                                 <div class="feed-link">
                                     <br/>
                                     <c:if test="${a.content.length() > 1000}">
-                                        <p onclick="ajaxTweetModal(this)" class="curs" id="${a.id}" href="#modal-id" data-toggle="modal">
+                                        <p class="curs" id="${a.id}" href="#modal-id" data-toggle="modal">
                                                 ${fn:substring(a.content, 0, 1000)}...
                                         </p>
                                     </c:if>
                                     <c:if test="${a.content.length() <= 1000}">
                                         <p>
-                                                ${a.content}
+                                            ${a.content}
                                         </p>
                                     </c:if>
                                 </div>
@@ -73,7 +70,14 @@
                                 <br/>
                                 <div class="btn-group">
                                     <button class="btn btn-default"><span class="glyphicon glyphicon-heart text-danger"></span> Like</button>
-                                    <button name="${a.id}" type="submit" data-toggle="modal" data-target="#modal-id-repost" class="btn btn-default btn-repost-info"><span class="glyphicon glyphicon-retweet"></span>
+                                    <button name="${a.id}" type="submit" data-toggle="modal" data-target="#modal-id-repost" class="btn
+                                    <c:if test="${a.checkRepost}">
+                                        btn-primary
+                                    </c:if>
+                                    <c:if test="${!a.checkRepost}">
+                                       btn-default
+                                    </c:if>
+                                     btn-repost-info"><span class="glyphicon glyphicon-retweet"></span>
                                             ${a.countRepost}
                                         Repost
                                     </button>

@@ -26,7 +26,7 @@ public class TweetController {
     @Autowired
     private UserDaoService userDaoService;
 
-    @GetMapping(value = "/user/{user_id}/get/view")
+    @GetMapping(value = "/{user_id}/get/view")
     public ModelAndView getFriendsTweetForUser(@PathVariable(value = "user_id") Long userId) {
         ModelAndView modelAndView = new ModelAndView("tweet/friends-tweet");
         modelAndView.addObject("tweets", tweetDaoService.findTweetsOfMyFriends(userId));
@@ -34,6 +34,11 @@ public class TweetController {
         return modelAndView;
     }
 
+    @ResponseBody
+    @GetMapping(value = "/user/{user_id}/get/view", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Object findTweetsByUserId(@PathVariable(value = "user_id") Long userId) {
+        return tweetDaoService.findMyTweets(userId);
+    }
 
     @ResponseBody
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
