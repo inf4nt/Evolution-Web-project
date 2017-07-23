@@ -6,7 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Infant on 22.07.2017.
@@ -32,5 +36,14 @@ public class TweetTransient {
     private boolean checkRepost;
 
     private Long countRepost;
+
+    public List<String> listTags() {
+        if (tags == null)
+            return null;
+        String arr[] = tags.split("#");
+        List<String> list = new ArrayList<>(Arrays.asList(arr));
+        list.remove(0);
+        return list;
+    }
 
 }
