@@ -8,30 +8,8 @@
 <html>
 <head>
     <title>${user.firstName} ${user.lastName}</title>
-    <%--<meta name="viewport" content="width=device-width, initial-scale=1">--%>
-    <style>
-
-        .user-data-link {
-            font-size: x-large;
-
-        }
-        .user-data-link:visited {
-            color: white;
-        }
-
-
-        .white-and-visited {
-            color: white;
-        }
-        .white-and-visited:visited {
-            color: white;
-        }
-
-
-    </style>
 </head>
 <body>
-
 <%@include file="../index/header.jsp" %>
 
 
@@ -230,6 +208,10 @@
 
     $(document).ready(function () {
 
+        $(".white-and-visited").css("color", "white");
+
+        $(".user-data-link").css("font-size", "x-large").css("color", "white");
+
         $(".tweet-tags").css("color", "#84cbff");
 
         $("#delete-user").click(function () {
@@ -275,35 +257,6 @@
         }, function (data) {
             $("#div-friend-panel-loader").hide();
         })
-
-
-//        setTimeout(function () {
-//            actionFriendAJAX(actionType, function (data) {
-//                if (data.info === true) {
-//                    var span;
-//                    if (data.message === 'ACCEPT_REQUEST') {
-//                        span = '<span class="glyphicon glyphicon-ok"></span> Accept request';
-//                    } else if (data.message === 'DELETE_FRIEND'){
-//                        span = '<span class="glyphicon glyphicon-remove "></span> Delete friend';
-//                    } else if (data.message === 'DELETE_REQUEST') {
-//                        span = '<span class="glyphicon glyphicon-trash"></span> Delete request';
-//                    } else if (data.message === 'ADD_FRIEND') {
-//                        span = '<span class="glyphicon glyphicon-plus"></span> Add friend';
-//                    }
-//
-//                    var html = '<h4 class="text-center"><button class="btn btn-md btn-info" onclick="actionFriend(\''+ data.message + '\')"> ' +
-//                        span +
-//                        '</button></h4>';
-//                    $("#div-friend-panel").html(html);
-//                    $("#div-friend-panel-loader").hide();
-//                    $("#div-friend-panel").fadeToggle("slow");
-//                }
-//
-//            }, function (data) {
-//                $("#div-friend-panel-loader").hide();
-//            })
-//        }, 1000)
-
 
 
 

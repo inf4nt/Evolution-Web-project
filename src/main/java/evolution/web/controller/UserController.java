@@ -92,7 +92,6 @@ public class UserController {
         return "user/my-home";
     }
 
-
     @ResponseBody
     @GetMapping(value = "/", produces={"application/json; charset=UTF-8"})
     public List allUser(@RequestParam(required = false) Integer page,

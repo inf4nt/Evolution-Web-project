@@ -155,13 +155,4 @@ public class ServiceController {
         LOGGER.info("check user = " + user);
         return user != null;
     }
-
-    @ResponseBody
-    @RequestMapping(value = "/user/is-exist/{username}", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public boolean checkExistUse2r(@PathVariable String username) {
-        User user = userDaoService.findUserByUsername(username);
-        LOGGER.info("check user = " + user);
-        return user != null;
-    }
 }

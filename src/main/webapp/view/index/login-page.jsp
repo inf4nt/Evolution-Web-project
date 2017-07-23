@@ -9,7 +9,7 @@
   <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
   <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
   <script src="<c:url value="/resources/js/validators.js" />"></script>
-  <script src="<c:url value="/resources/js/main-js.js" />"></script>
+  <script src="<c:url value="/resources/js/my-js.js" />"></script>
   <script src="<c:url value="/resources/js/country.js" />"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
@@ -78,10 +78,12 @@
                 <span class="span-validator glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true" style="display: none"></span>
               </div>
               <div class="form-group text-center">
-                <td><a onclick="getForgotPage()" style="color: #fbfff9" href="#">Forgot password</a></td>
+                <%--<td><a onclick="getForgotPage()" style="color: #fbfff9" href="#">Forgot password</a></td>--%>
+                  <td><a style="color: #fbfff9" href="/restore-password/view">Forgot password</a></td>
               </div>
               <div class="form-group text-center">
-                <td><a onclick="getRegistrationPage()" style="color: #fbfff9" href="#">Registration</a></td>
+                <%--<td><a onclick="getRegistrationPage()" style="color: #fbfff9" href="#">Registration</a></td>--%>
+                  <td><a style="color: #fbfff9" href="/registration/view">Registration</a></td>
               </div>
               <div id="div_button_formLogin" class="text-center">
                 <button class="btn btn-info" id="btn-login" form="formLogin"
@@ -123,7 +125,7 @@
           <div class="text-center">
             <button id="submit-form-forgot" name="submit-form-forgot" class="btn btn-success"
                     style="width: 100%">
-              Next step <span class="glyphicon glyphicon-check"/>
+              Next step <span class="glyphicon glyphicon-check"></span>
             </button>
           </div>
         </div>

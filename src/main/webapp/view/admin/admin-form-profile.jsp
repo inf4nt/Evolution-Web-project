@@ -11,7 +11,7 @@
 <html>
 <head>
     <title>Profile</title>
-    <script src="<c:url value="/resources/js/main-js.js" />"></script>
+    <script src="<c:url value="/resources/js/my-js.js" />"></script>
     <script src="<c:url value="/resources/js/validators.js" />"></script>
 </head>
 <body>

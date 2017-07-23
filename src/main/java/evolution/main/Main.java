@@ -21,6 +21,7 @@ import org.hibernate.cfg.Configuration;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -30,36 +31,6 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-
-
-
-        List<String> stringList = new ArrayList<>();
-
-
-        for (int i = 1; i <= 51; i++) {
-            stringList.add("" + i);
-        }
-
-
-
-
-
-
-        List<List<String>> lists = CollectionUtils.split(stringList, 10);
-
-
-        lists.forEach(System.out::println);
-
-
-
-
-
-
-
-
-
-
-
 
 
 //        SessionFactory sessionFactory = null;
