@@ -10,18 +10,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
 
-import evolution.model.Comment;
-import evolution.model.Publication;
-import evolution.model.user.StandardUser;
-import evolution.service.utils.CollectionUtils;
 import org.hibernate.*;
 
 import org.hibernate.cfg.Configuration;
 
 
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
 
 
 /**

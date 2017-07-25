@@ -1,4 +1,4 @@
-package evolution.model;
+package evolution.bucket;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,4 +1,4 @@
-package evolution.model.tweet;
+package evolution.bucket.tweet;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

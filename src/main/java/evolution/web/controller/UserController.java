@@ -3,7 +3,6 @@ package evolution.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.common.FriendStatusEnum;
 import evolution.common.UserRoleEnum;
-import evolution.dao.FeedDaoService;
 import evolution.dao.FriendsDaoService;
 import evolution.dao.UserDaoService;
 import evolution.model.friend.Friends;
@@ -47,8 +46,6 @@ public class UserController {
     private Validator validator;
     @Autowired
     private SearchService searchService;
-    @Autowired
-    private FeedDaoService feedDaoService;
 
     @Autowired
     private UserDaoService userDaoService;

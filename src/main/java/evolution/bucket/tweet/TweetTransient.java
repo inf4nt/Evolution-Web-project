@@ -1,4 +1,4 @@
-package evolution.model.tweet;
+package evolution.bucket.tweet;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import evolution.model.user.StandardUser;
@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;

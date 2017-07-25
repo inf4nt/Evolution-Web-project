@@ -1,8 +1,8 @@
 //package evolution.web.controller;
 //
 //import evolution.common.PublicationCategoryEnum;
-//import evolution.model.Comment;
-//import evolution.model.Publication;
+//import evolution.bucket.Comment;
+//import evolution.bucket.Publication;
 //import evolution.model.user.StandardUser;
 //import evolution.repository.CommentRepository;
 //import evolution.repository.PublicationRepository;

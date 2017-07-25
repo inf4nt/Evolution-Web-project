@@ -1,12 +1,8 @@
-package evolution.model;
+package evolution.bucket;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import evolution.model.user.StandardUser;
 import lombok.*;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -40,7 +36,7 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "publication_id")
-    private evolution.model.Comment.Publication publication;
+    private Comment.Publication publication;
 
     public Comment(String content, StandardUser sender, Date date, Publication publication){
         this.content = content;

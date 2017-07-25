@@ -1,7 +1,7 @@
 package evolution.service.validation;
 
 import evolution.common.UserRoleEnum;
-import evolution.model.feed.FeedPublication;
+import evolution.bucket.feed.FeedPublication;
 import evolution.model.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,14 +1,12 @@
-package evolution.model.feed;
+package evolution.bucket.feed;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import evolution.model.user.StandardUser;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.WhereJoinTable;
 
 import javax.persistence.*;
 import java.util.Date;

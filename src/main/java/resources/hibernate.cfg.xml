@@ -72,11 +72,11 @@
 
     <mapping class="evolution.model.message.Message"/>
 
-    <mapping class="evolution.model.Comment"/>
-    <mapping class="evolution.model.Publication"/>
+    <mapping class="evolution.bucket.Comment"/>
+    <mapping class="evolution.bucket.Publication"/>
     <mapping class="evolution.model.user.StandardUser"/>
 
-    <mapping class="evolution.model.SubscriptionPublication"/>
+    <mapping class="evolution.bucket.SubscriptionPublication"/>
 
 
 
