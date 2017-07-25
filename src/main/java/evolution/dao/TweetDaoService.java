@@ -50,7 +50,6 @@ public class TweetDaoService {
             "         t.sender_id, NULL AS repost_column, f.friend_id, t.date AS tweet_date, NULL AS repost_date\n" +
             "       FROM friends f\n" +
             "         JOIN tweet t ON t.sender_id = f.friend_id\n" +
-            "         LEFT JOIN repost rr ON rr.tweet_id = t.id AND rr.reposted_user_id = :user_id\n" +
             "       WHERE f.user_id = :user_id\n" +
             "       UNION ALL\n" +
             "       -- найти репосты моих друзей\n" +

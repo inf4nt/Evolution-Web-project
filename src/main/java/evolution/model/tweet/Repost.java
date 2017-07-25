@@ -6,6 +6,7 @@ import evolution.model.user.StandardUser;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -40,4 +41,9 @@ public class Repost {
     @JsonProperty
     private Date date;
 
+    @Transient
+    private boolean checkRepost;
+
+    @Formula("(SELECT count(1) from feed_data fd join feed_publication fp on fd.id = fp.feed_id WHERE fd.id = feed_id and fp.reposted_id is not null)")
+    private Long countRepost;
 }

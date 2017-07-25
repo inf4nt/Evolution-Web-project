@@ -6,6 +6,7 @@ import evolution.model.user.StandardUser;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -41,5 +42,25 @@ public class Tweet implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonProperty
     private Date date;
+
+    @Transient
+    private boolean checkRepost;
+
+    @Formula("(select count(1) from repost rt WHERE rt.tweet_id = id GROUP BY rt.tweet_id)")
+    private Long countRepost;
+
+
+    public Tweet(Long id, String content, String tags, Long senderId, String senderFirstName, String senderLastName, Date date, Object checkRepost) {
+        this.id = id;
+        this.content = content;
+        this.tags = tags;
+        this.sender = new StandardUser(senderId, senderFirstName, senderLastName);
+        this.date = date;
+        this.checkRepost = checkRepost != null;
+    }
+
+
+
+
 }
 
