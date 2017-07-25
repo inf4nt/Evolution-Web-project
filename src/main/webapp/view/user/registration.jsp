@@ -106,45 +106,46 @@
         <div id="support-block" class="col-lg-5 ">
             <div class="support-block" data-toggle="login" id="support-login" style="display: block">
                 <p class="xx-large text-center support-text">
-                    Пожалуйста введите электронную почту, после нажмите "next step".
-                    Вы должны иметь доступ этой почте, так как на нее придет письмо с подтверждением.
+                    Please enter your email. Then press "next step" button.
+                    You must have access to this mail, because it will receive a confirmation letter.
                 </p>
             </div>
             <div class="support-block" data-toggle="password" id="support-password">
                 <p class="xx-large text-center">
-                    Введите пароль. Пароль может содежать только английский алфавит и цирфы. Пароль должен быть от 4 до 32 символов.
+                    Enter your password. Password should include latin letters and numbers only. 4-32 symbols in length
                 </p>
             </div>
             <div class="support-block" data-toggle="confirm-password" id="support-confirm-password">
                 <p class="xx-large text-center support-text">
-                    Подтвердите ваш пароль. Пароли должны совпадать.
-                    Пароль может содежать только английский алфавит и цирфы. Пароль должен быть от 4 до 32 символов.
+                    Confirm your password. Password must match
+                    Password should include Latin letters and numbers only. 4-32 symbols in length
                 </p>
             </div>
             <div class="support-block" data-toggle="first-name" id="support-first-name">
                 <p class="xx-large text-center support-text">
-                    Введите ваше имя. Имя может содержать только английский алфавит. Длина имени от 4 до 32 символов.
+                    Enter your first name. First name should include latin letters only. 4-32 symbols in length
                 </p>
             </div>
             <div class="support-block" data-toggle="last-name" id="support-last-name">
                 <p class="xx-large text-center support-text">
-                    Введите вашу фамилию. Фамилия может содержать только английский алфавит. Длина фамилии от 4 до 32 символов.
+                    Enter your last name. Last name should include latin letters only. 4-32 symbols in length
                 </p>
             </div>
             <br/>
             <div data-toggle="valid" class="block-background">
                 <p class="text-center" style="font-size: larger">
-                    Зеленая галочка в поле ввода означает, что все впорядке можно продолжать.
-                    Красный крестик означает, что допущена ошибка, или вы еще не ввели данные.
+                    Red Cross means an error, green checkmarks- your input is valid, you can continue
                 </p>
             </div>
             <br/>
             <div data-toggle="success" class="block-background" style="display: none;">
                 <p class="text-center" style="font-size: larger">
-                    Если вы желаете подтвердить, то нажмите на "Registration". После чего на вашу электронную почту придет письмо с дальнейшими инструкциями
+                    If you would like to accept, press "Registration". You will receive an email with further instructions
                 </p>
             </div>
         </div>
+
+
 
     </div>
 
