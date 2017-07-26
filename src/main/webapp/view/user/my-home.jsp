@@ -1,17 +1,9 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 10.04.2017
-  Time: 17:27
-  To change this template use File | Settings | File Templates.
---%>
 <html>
 <head>
     <title>${user.firstName} ${user.lastName}</title>
 </head>
 <body>
 <%@include file="../index/header.jsp" %>
-
 
 <div id="content">
 
@@ -169,25 +161,71 @@
                 <hr/>
             </div>
 
+            <c:if test="${user.id == authUser.id}">
+                <div class="col-lg-12 block-background" style="top:15px">
+                    <form action="/feed/post/view" method="POST">
+                        <div class="form-group">
+                            <textarea id="input-tweet" placeholder="What's new ?" name="tweet-content" class="form-control" style="height: 100px " rows="5" ></textarea>
+                        </div>
+                        <div class="col-lg-12 " id="tweet-post">
+                            <button type="submit" id="btn-tweet-post" style="width: 20%" class="btn btn-info pull-right">
+                                Post <span class="glyphicon glyphicon-ok"></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </c:if>
+
+            <div id="content-tweet" class="col-lg-12 block-background" style="top:35px">
+                <table style="width: 100%;">
+                    <thead>
+                    <tr>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="a" items="${tweets}">
+                        <tr id="tr-${a.id}">
+                            <td>
+                                <div class="block-background div-white">
+                                    <c:if test="${a.sender.id == authUser.id}">
+                                    <form action="/feed/${a.id}/delete/view" method="GET">
+                                        <button type="submit" class="btn btn-default btn-md pull-right">
+                                            <span class="glyphicon glyphicon-remove text-danger"></span>
+                                        </button>
+                                    </form>
+                                    </c:if>
+                                    <a href="/user/id${a.sender.id}">
+                                            ${a.sender.firstName} ${a.sender.lastName}
+                                    </a>
+                                    <div class="feed-link">
+                                        <br/>
+                                        <p>
+                                            ${a.content}
+                                        </p>
+                                    </div>
+                                    <p>
+                                        <c:forEach var="t" items="${a.listTags()}">
+                                            <a class="tweet-tags" href="/feed/tag/${t}">
+                                                #${t}
+                                            </a>
+                                        </c:forEach>
+                                    </p>
+                                    <br/>
+                                </div>
+                                <br/>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
     </div>
 
 </div>
-
-<footer class="footer">
-    <div class="container">
-		<span class="text-muted">
-			<p class="text-center text-muted">
-				Evolution <span class="glyphicon glyphicon-globe"></span> <br/>
-				<a href="/user/id226" style="color: white">
-					Maksim Lukaretskiy
-				</a>
-			</p>
-		</span>
-    </div>
-</footer>
-
 
 <div class="modal fade" id="modal-id">
     <div class="modal-dialog">
@@ -201,9 +239,10 @@
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div>
 
 </body>
+
 <script>
 
     $(document).ready(function () {

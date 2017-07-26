@@ -3,16 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" isELIgnored="false" %>
-
-<script src="<c:url value="/resources/JQuery/jquery-3.2.1.min.js" />"></script>
-<script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
-<script src="<c:url value="/resources/js/validators.js" />"></script>
-<script src="<c:url value="/resources/js/my-js.js" />"></script>
-<script src="<c:url value="/resources/js/country.js" />"></script>
 <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/main-css.css" />" rel="stylesheet">
-
-
 <div id="header">
 	<div id="head-navbar" style="display: none"  class="navbar-inverse navbar-fixed-top">
 		<div class="container">
@@ -122,3 +114,8 @@
 		</div>
 	</sec:authorize>
 </div>
+<script src="<c:url value="/resources/JQuery/jquery-3.2.1.min.js" />"></script>
+<script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
+<script src="<c:url value="/resources/js/validators.js" />"></script>
+<script src="<c:url value="/resources/js/my-js.js" />"></script>
+<script src="<c:url value="/resources/js/country.js" />"></script>

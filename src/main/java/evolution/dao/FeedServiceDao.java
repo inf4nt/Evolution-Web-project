@@ -17,8 +17,28 @@ public class FeedServiceDao {
     private FeedRepository feedRepository;
 
     @Transactional
-    public List<Feed> findFeedOfMyFriends(Long userId) {
-        return feedRepository.findFeedOfMyFriends(userId);
+    public List<Feed> findFeedsOfMyFriends(Long userId) {
+        return feedRepository.findFeedsOfMyFriends(userId);
+    }
+
+    @Transactional
+    public List<Feed> findMyFeeds(Long userId) {
+        return feedRepository.findMyFeeds(userId);
+    }
+
+    @Transactional
+    public Feed save(Feed feed) {
+        return feedRepository.save(feed);
+    }
+
+    @Transactional
+    public void deleve(Long feedId, Long senderId) {
+        feedRepository.delete(feedId, senderId);
+    }
+
+    @Transactional
+    public Feed update(Feed feed) {
+        return feedRepository.save(feed);
     }
 
 }

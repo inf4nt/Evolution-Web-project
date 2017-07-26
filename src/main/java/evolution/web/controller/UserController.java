@@ -3,6 +3,7 @@ package evolution.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.common.FriendStatusEnum;
 import evolution.common.UserRoleEnum;
+import evolution.dao.FeedServiceDao;
 import evolution.dao.FriendsDaoService;
 import evolution.dao.UserDaoService;
 import evolution.model.friend.Friends;
@@ -46,9 +47,11 @@ public class UserController {
     private Validator validator;
     @Autowired
     private SearchService searchService;
-
     @Autowired
     private UserDaoService userDaoService;
+    @Autowired
+    private FeedServiceDao feedServiceDao;
+
 
     private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
@@ -80,11 +83,8 @@ public class UserController {
             model.addAttribute("countRequests",  map.get(FriendStatusEnum.REQUEST.toString()));
         }
 
-
         model.addAttribute("randomFriends", friendsDaoService.randomFriends(id, 6));
-
-
-//        model.addAttribute("feeds", feedDaoService.findMyPostRepost(id, new PageRequest(0, 100)));
+        model.addAttribute("tweets", feedServiceDao.findMyFeeds(id));
 
         return "user/my-home";
     }
