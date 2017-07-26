@@ -37,6 +37,10 @@ public class Feed implements Serializable {
     @JoinColumn(name = "sender_id")
     private StandardUser sender;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "to_user_id")
+    private StandardUser toUser;
+
     @Column
     private String tags;
 

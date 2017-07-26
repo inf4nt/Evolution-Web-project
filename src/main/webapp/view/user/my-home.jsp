@@ -177,7 +177,7 @@
             </c:if>
 
             <div id="content-tweet" class="col-lg-12 block-background" style="top:35px">
-                <table style="width: 100%;">
+                <table style="width: 100%;top: 100px">
                     <thead>
                     <tr>
                         <td></td>

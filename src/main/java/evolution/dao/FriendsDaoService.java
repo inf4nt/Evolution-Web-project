@@ -93,6 +93,27 @@ public class FriendsDaoService {
     }
 
     @Transactional
+    public Long countFriends(Long userId) {
+        Query query = entityManager.createQuery(COUNT_FRIENDS);
+        query.setParameter("user_id", userId);
+        return (Long) query.getSingleResult();
+    }
+
+    @Transactional
+    public Long countFollowers(Long userId) {
+        Query query = entityManager.createQuery(COUNT_FOLLOWERS);
+        query.setParameter("user_id", userId);
+        return (Long) query.getSingleResult();
+    }
+
+    @Transactional
+    public Long countRequests(Long userId) {
+        Query query = entityManager.createQuery(COUNT_REQUESTS);
+        query.setParameter("user_id", userId);
+        return (Long) query.getSingleResult();
+    }
+
+    @Transactional
     public Map<String, Long> countForFriends(Long userId) {
         Map<String, Long> map = new HashMap<>();
         Query query;
