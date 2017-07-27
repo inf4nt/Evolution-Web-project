@@ -11,7 +11,7 @@
     <title>Feed ${user.firstName} ${user.lastName}</title>
 </head>
 <body>
-<%@include file="../index/header.jsp" %>
+<%@include file="../../index/header.jsp" %>
 
 
 <div id="content">

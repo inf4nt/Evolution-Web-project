@@ -7,6 +7,7 @@ import evolution.dao.FeedServiceDao;
 import evolution.dao.FriendsDaoService;
 import evolution.dao.UserDaoService;
 import evolution.model.friend.Friends;
+import evolution.model.user.StandardUser;
 import evolution.model.user.User;
 import evolution.service.MyJacksonService;
 import evolution.service.SearchService;

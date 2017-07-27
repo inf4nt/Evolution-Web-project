@@ -1,11 +1,13 @@
 package evolution.model.feed;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import evolution.model.user.StandardUser;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +45,18 @@ public class Feed implements Serializable {
 
     @Column
     private String tags;
+
+    public Feed(String content, Date date, StandardUser sender, StandardUser toUser, String tags) {
+        this.content = content;
+        this.date = date;
+        this.sender = sender;
+        this.toUser = toUser;
+        this.tags = tags;
+    }
+
+    public String dateFormat() {
+        return DateFormat.getInstance().format(date);
+    }
 
     public List<String> listTags() {
         if (tags == null)

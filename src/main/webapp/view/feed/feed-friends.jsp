@@ -28,6 +28,9 @@
                             <a href="/user/id${a.sender.id}">
                                     ${a.sender.firstName} ${a.sender.lastName}
                             </a>
+                            <span class="date-tweet">
+                                    ${a.dateFormat()}
+                            </span>
                             <div class="feed-link">
                                 <br/>
                                 <p>
