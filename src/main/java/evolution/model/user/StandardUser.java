@@ -3,13 +3,10 @@ package evolution.model.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import evolution.common.FriendStatusEnum;
 import lombok.*;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by Admin on 24.06.2017.
@@ -18,7 +15,7 @@ import java.util.List;
 @Table(name = "user_data")
 @NoArgsConstructor @AllArgsConstructor @ToString @Getter @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class StandardUser implements Serializable{
+public class StandardUser implements Serializable, StockUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user")
@@ -34,5 +31,10 @@ public class StandardUser implements Serializable{
 
     public StandardUser(Long id) {
         this.id = id;
+    }
+
+    public StandardUser(Long id, String firstName) {
+        this.id = id;
+        this.firstName = firstName;
     }
 }

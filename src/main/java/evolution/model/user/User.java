@@ -23,7 +23,7 @@ import java.util.List;
 @Table (name = "user_data")
 @NoArgsConstructor @ToString(callSuper = true) @Getter @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class User extends UserDefaultData{
+public class User extends UserDefaultData {
 
     @Column
     private String country;

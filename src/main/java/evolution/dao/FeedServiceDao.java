@@ -47,5 +47,8 @@ public class FeedServiceDao {
         return feedRepository.save(feed);
     }
 
-
+    @Transactional
+    public List<Feed> findAll() {
+        return feedRepository.findAll();
+    }
 }

@@ -10,6 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
 
+import evolution.model.user.StockUser;
+import evolution.model.user.StandardUser;
+import evolution.model.user.User;
 import org.hibernate.*;
 
 import org.hibernate.cfg.Configuration;
@@ -25,6 +28,16 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
+
+
+//        User user = new User(226L, "Maksim", "Lukaretskiy");
+//
+//        StandardUser standardUser = new StandardUser(226L, "Maksim", "Lukaretskiy");
+//        StockUser stockUser1 = standardUser;
+//        StockUser stockUser2 = user;
+//        System.out.println(stockUser1.getId());
+//        System.out.println(stockUser2.getId());
+
 
 
 //        SessionFactory sessionFactory = null;

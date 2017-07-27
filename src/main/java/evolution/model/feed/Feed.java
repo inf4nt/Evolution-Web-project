@@ -3,6 +3,7 @@ package evolution.model.feed;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import evolution.model.user.StandardUser;
+import evolution.model.user.StockUser;
 import evolution.model.user.User;
 import lombok.*;
 
@@ -38,35 +39,14 @@ public class Feed implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "sender_id")
-    private User sender;
+    private StandardUser sender;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "to_user_id")
-    private User toUser;
+    private StandardUser toUser;
 
     @Column
     private String tags;
-
-    public Feed(String content, Date date, User sender, User toUser, String tags) {
-        this.content = content;
-        this.date = date;
-        this.sender = sender;
-        this.toUser = toUser;
-        this.tags = tags;
-    }
-
-
-    public Feed(Long id, String content, Date date, String tags ,
-                Long senderId, String senderFirstName, String senderLastName,
-                Long toUserId, String toUserFirstName, String toUserLastName ) {
-        this.id = id;
-        this.content = content;
-        this.date = date;
-        this.sender = new User(senderId, senderFirstName, senderLastName);
-        this.toUser = new User(toUserId, toUserFirstName, toUserLastName);
-        this.tags = tags;
-    }
-
 
     public String dateFormat() {
         return DateFormat.getInstance().format(date);

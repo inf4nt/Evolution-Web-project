@@ -61,9 +61,9 @@ public class MessageDaoService {
 
     @Transactional
     public Message saveDialogAndMessage(Long senderUserId, Long secondUserId, String message, Date dateMessage) {
-        Dialog dialog = new Dialog(new User(senderUserId), new User(secondUserId));
+        Dialog dialog = new Dialog(new StandardUser(senderUserId), new StandardUser(secondUserId));
         dialogRepository.save(dialog);
-        Message m = new Message(new User(senderUserId), message, dateMessage);
+        Message m = new Message(new StandardUser(senderUserId), message, dateMessage);
         m.setDialog(dialog);
         return messageRepository.save(m);
     }

@@ -29,44 +29,44 @@ public class Friends implements Serializable{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private User user;
+    private StandardUser user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "friend_id")
-    private User friend;
+    private StandardUser friend;
 
     @Column(name = "status")
     private Long status;
 
-    public Friends(User user, User friend, Long status) {
+    public Friends(StandardUser user, StandardUser friend, Long status) {
         this.user = user;
         this.friend = friend;
         this.status = status;
     }
 
     public Friends(Long id, String firstName, String lastName, Long friendStatus) {
-        this.user = new User(id, firstName, lastName);
+        this.user = new StandardUser(id, firstName, lastName);
         this.status = friendStatus;
     }
 
     public Friends(Long id, String firstName, String lastName) {
-        this.user = new User(id, firstName, lastName);
+        this.user = new StandardUser(id, firstName, lastName);
     }
 
     public Friends(Long friendsId, String friendsFirstName) {
-        this.user = new User(friendsId, friendsFirstName);
+        this.user = new StandardUser(friendsId, friendsFirstName);
     }
 
     public Friends(Long friendId, String friendFirstName, String friendLastName,
                    Long userId, String userFirstName, String userLastName) {
         this(userId, userFirstName, userLastName, null);
-        this.friend = new User(friendId, friendFirstName, friendLastName);
+        this.friend = new StandardUser(friendId, friendFirstName, friendLastName);
     }
 
     public Friends(Long friendId, String friendFirstName, String friendLastName,
                    Long userId, String userFirstName, String userLastName, Long status) {
         this(userId, userFirstName, userLastName, status);
-        this.friend = new User(friendId, friendFirstName, friendLastName);
+        this.friend = new StandardUser(friendId, friendFirstName, friendLastName);
     }
 
 }

@@ -34,10 +34,3 @@ public class Like {
     @JoinColumn(name = "sender_id")
     private User sender;
 }
-
-
-//
-//    id INTEGER PRIMARY KEY,
-//    feed_id INTEGER,
-//    date TIMESTAMP,
-//    sender_id INTEGER,

@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.FetchType;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
@@ -17,7 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter @ToString(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public abstract class AbstractUser implements Serializable {
+public abstract class AbstractUser implements Serializable, StockUser {
 
     @Column(name = "login", unique = true, nullable = false)
     @JsonProperty(value = "login")

@@ -134,8 +134,8 @@ public class FriendsDaoService {
 
     @Transactional
     public void friendRequest(long authUserId, long id2) {
-        User authUser = new User(authUserId);
-        User user2 = new User(id2);
+        StandardUser authUser = new StandardUser(authUserId);
+        StandardUser user2 = new StandardUser(id2);
         Friends request = new Friends(authUser, user2, FriendStatusEnum.REQUEST.getId());
         Friends follower = new Friends(user2, authUser, FriendStatusEnum.FOLLOWER.getId());
         entityManager.persist(follower);

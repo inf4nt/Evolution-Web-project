@@ -12,14 +12,10 @@ import java.util.List;
 /**
  * Created by Infant on 26.07.2017.
  */
-
-//public Feed(Long id, String content, Date date, String tags ,
-//        Long senderId, String senderFirstName, String senderLastName,
-//        Long toUserId, String toUserFirstName, String toUserLastName )
-
 public interface FeedRepository extends JpaRepository<Feed, Long> {
 
-    @Query(value = "select new Feed (f.id, f.content, f.date, f.tags, s.id, s.firstName, s.lastName, tu.id, tu.firstName, tu.lastName ) " +
+    @Query(value = " select f " +
+//            "new Feed (f.id, f.content, f.date, f.tags, s.id, s.firstName, s.lastName, tu.id, tu.firstName, tu.lastName ) " +
             " from Friends fr " +
             " join Feed f on f.sender.id = fr.friend.id and (f.toUser.id != :user_id or f.toUser.id is null)" +
             " join f.sender as s " +
@@ -28,7 +24,8 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
             " order by f.date desc ")
     List<Feed> findFeedsOfMyFriends(@Param("user_id") Long userId);
 
-    @Query(" select new Feed (f.id, f.content, f.date, f.tags, s.id, s.firstName, s.lastName, tu.id, tu.firstName, tu.lastName ) " +
+    @Query(" select f " +
+//            " new Feed (f.id, f.content, f.date, f.tags, s.id, s.firstName, s.lastName, tu.id, tu.firstName, tu.lastName ) " +
             " from Feed f" +
             " join f.sender as s " +
             " left join f.toUser as tu " +

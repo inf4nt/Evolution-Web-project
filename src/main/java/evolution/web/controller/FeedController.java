@@ -3,6 +3,7 @@ package evolution.web.controller;
 import evolution.dao.FeedServiceDao;
 import evolution.model.feed.Feed;
 import evolution.model.user.StandardUser;
+import evolution.model.user.StockUser;
 import evolution.model.user.User;
 import evolution.service.MyJacksonService;
 import evolution.service.security.UserDetailsServiceImpl;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Infant on 26.07.2017.
@@ -27,6 +29,12 @@ public class FeedController {
 
     @Autowired
     private MyJacksonService jacksonService;
+
+    @ResponseBody
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<Feed> allFeeds() {
+        return feedServiceDao.findAll();
+    }
 
     @GetMapping(value = "/user/{user_id}/get/view")
     public ModelAndView getNewsView(@PathVariable(value = "user_id") Long userId) {
@@ -44,14 +52,14 @@ public class FeedController {
     @PostMapping(value = "/post/view")
     public String postFeed(@RequestParam(name = "tweet-content") String tweetContent,
                            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-                           @SessionAttribute User user) throws IOException {
+                           @SessionAttribute StockUser user) throws IOException {
         Feed feed = new Feed();
         feed.setContent(tweetContent);
-        feed.setSender(customUser.getUser());
+        feed.setSender(new StandardUser(customUser.getUser().getId()));
         feed.setDate(new Date());
 
         if (!user.getId().equals(customUser.getUser().getId())) {
-           feed.setToUser(user);
+            feed.setToUser(new StandardUser(user.getId(), user.getFirstName(), user.getFirstName()));
         }
 
         if (!feed.getContent().isEmpty()) {
@@ -63,7 +71,7 @@ public class FeedController {
     @GetMapping(value = "/{id}/delete/view")
     public String deleteFeed(@PathVariable(value = "id") Long feedId,
                              @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-                             @SessionAttribute User user) {
+                             @SessionAttribute StockUser user) {
         feedServiceDao.delete(feedId, customUser.getUser().getId());
         return "redirect:/user/id" + user.getId();
     }
@@ -71,7 +79,7 @@ public class FeedController {
     @GetMapping(value = "/feed-message/{id}/delete/view")
     public String deleteFeedMessage(@PathVariable(value = "id") Long feedId,
                                     @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-                                    @SessionAttribute User user) {
+                                    @SessionAttribute StockUser user) {
         feedServiceDao.deleteFeedMessage(feedId, customUser.getUser().getId());
         return "redirect:/user/id" + user.getId();
     }

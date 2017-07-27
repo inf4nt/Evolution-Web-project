@@ -26,32 +26,30 @@ public class Dialog {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "first")
-    private User first;
+    private StandardUser first;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "second")
-    private User second;
+    private StandardUser second;
 
     public Dialog(Long id) {
         this.id = id;
     }
 
-    public Dialog(Long id, User second) {
+    public Dialog(Long id, StandardUser second) {
         this.id = id;
         this.second = second;
     }
 
-    public Dialog(User first, User second) {
+    public Dialog(StandardUser first, StandardUser second) {
         this.first = first;
         this.second = second;
     }
 
-    public Dialog (Long dialogId, Long firstId, String firstFirstName, String firstLastName,
-                   Long secondId,String secondFirstName ,String secondLastName) {
-        this.id = dialogId;
-        this.first = new User(firstId, firstFirstName, firstLastName);
-        this.second = new User(secondId, secondFirstName, secondLastName);
-    }
-
-
+//    public Dialog (Long dialogId, Long firstId, String firstFirstName, String firstLastName,
+//                   Long secondId,String secondFirstName ,String secondLastName) {
+//        this.id = dialogId;
+//        this.first = new User(firstId, firstFirstName, firstLastName);
+//        this.second = new User(secondId, secondFirstName, secondLastName);
+//    }0
 }
