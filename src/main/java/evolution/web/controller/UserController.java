@@ -70,7 +70,7 @@ public class UserController {
             try {
                 friends = friendsDaoService.findUserAndFriendStatus(customUser.getUser().getId(), id);
                 LOGGER.info("friends = " + friends);
-                model.addAttribute("user", friends.getUser());
+                model.addAttribute("user", new User(friends.getUser().getId(), friends.getUser().getFirstName(), friends.getUser().getLastName()));
                 model.addAttribute("status", friends.getStatus());
             } catch (NoResultException e) {
                 LOGGER.warn("User by id " + id +", is not exist\n" + e);

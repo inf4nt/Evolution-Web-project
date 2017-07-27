@@ -3,6 +3,7 @@ package evolution.web.controller;
 import evolution.dao.FeedServiceDao;
 import evolution.model.feed.Feed;
 import evolution.model.user.StandardUser;
+import evolution.model.user.User;
 import evolution.service.MyJacksonService;
 import evolution.service.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,15 +44,14 @@ public class FeedController {
     @PostMapping(value = "/post/view")
     public String postFeed(@RequestParam(name = "tweet-content") String tweetContent,
                            @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-                           @SessionAttribute StandardUser user) throws IOException {
+                           @SessionAttribute User user) throws IOException {
         Feed feed = new Feed();
         feed.setContent(tweetContent);
         feed.setSender(new StandardUser(customUser.getUser().getId()));
         feed.setDate(new Date());
 
-
         if (!user.getId().equals(customUser.getUser().getId())) {
-           feed.setToUser(user);
+           feed.setToUser(new StandardUser(user.getId(), user.getFirstName(), user.getLastName()));
         }
 
         if (!feed.getContent().isEmpty()) {
@@ -63,7 +63,7 @@ public class FeedController {
     @GetMapping(value = "/{id}/delete/view")
     public String deleteFeed(@PathVariable(value = "id") Long feedId,
                              @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-                             @SessionAttribute StandardUser user) {
+                             @SessionAttribute User user) {
         feedServiceDao.delete(feedId, customUser.getUser().getId());
         return "redirect:/user/id" + user.getId();
     }
@@ -71,7 +71,7 @@ public class FeedController {
     @GetMapping(value = "/feed-message/{id}/delete/view")
     public String deleteFeedMessage(@PathVariable(value = "id") Long feedId,
                                     @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
-                                    @SessionAttribute StandardUser user) {
+                                    @SessionAttribute User user) {
         feedServiceDao.deleteFeedMessage(feedId, customUser.getUser().getId());
         return "redirect:/user/id" + user.getId();
     }
