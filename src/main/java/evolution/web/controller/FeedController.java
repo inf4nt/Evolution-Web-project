@@ -47,11 +47,11 @@ public class FeedController {
                            @SessionAttribute User user) throws IOException {
         Feed feed = new Feed();
         feed.setContent(tweetContent);
-        feed.setSender(new StandardUser(customUser.getUser().getId()));
+        feed.setSender(customUser.getUser());
         feed.setDate(new Date());
 
         if (!user.getId().equals(customUser.getUser().getId())) {
-           feed.setToUser(new StandardUser(user.getId(), user.getFirstName(), user.getLastName()));
+           feed.setToUser(user);
         }
 
         if (!feed.getContent().isEmpty()) {

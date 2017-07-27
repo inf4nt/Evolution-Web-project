@@ -70,17 +70,7 @@ public class MessageController {
             @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
             HttpServletResponse response) throws IOException {
 
-        Dialog dialog = null;
-
-//        try {
-            dialog = messageDaoService.selectDialogIdByFirstAndSecond(customUser.getUser().getId(), sel);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-
-        System.out.println("post message dialog = " + dialog);
-
+        Dialog dialog = messageDaoService.selectDialogIdByFirstAndSecond(customUser.getUser().getId(), sel);
         if (dialog != null) {
             LOGGER.info("Dialog exist. Run save message");
             messageDaoService.save(new Message(customUser.getUser().getId(), message, new Date(), dialog.getId()));
