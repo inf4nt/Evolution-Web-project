@@ -3,10 +3,13 @@ package evolution.dao;
 import evolution.model.dialog.Dialog;
 import evolution.model.message.Message;
 import evolution.model.user.StandardUser;
+import evolution.model.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +33,7 @@ public class MessageDaoService {
 
     @Transactional
     public boolean existDialog(Long userId1, Long userId2) {
-        return dialogRepository.checkDialog(userId1, userId2) != null ? true : false;
+        return dialogRepository.checkDialog(userId1, userId2) != null;
     }
 
     @Transactional
@@ -58,9 +61,9 @@ public class MessageDaoService {
 
     @Transactional
     public Message saveDialogAndMessage(Long senderUserId, Long secondUserId, String message, Date dateMessage) {
-        Dialog dialog = new Dialog(new StandardUser(senderUserId), new StandardUser(secondUserId));
+        Dialog dialog = new Dialog(new User(senderUserId), new User(secondUserId));
         dialogRepository.save(dialog);
-        Message m = new Message(new StandardUser(senderUserId), message, dateMessage);
+        Message m = new Message(new User(senderUserId), message, dateMessage);
         m.setDialog(dialog);
         return messageRepository.save(m);
     }
@@ -69,4 +72,15 @@ public class MessageDaoService {
     public Message save(Message message) {
         return messageRepository.save(message);
     }
+
+    @Transactional
+    public Dialog findDialogByFirstAndSecond(@Param("first") Long firstUserId, @Param("second") Long secondUserId){
+        return dialogRepository.findDialogByFirstAndSecond(firstUserId, secondUserId);
+    }
+
+    @Transactional
+    public Dialog selectDialogIdByFirstAndSecond(@Param("first") Long firstUserId, @Param("second") Long secondUserId){
+        return dialogRepository.selectDialogIdByFirstAndSecond(firstUserId, secondUserId);
+    }
+
 }

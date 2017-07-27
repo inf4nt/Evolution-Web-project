@@ -41,8 +41,8 @@
         <div id="restore-password-support" class="col-lg-5">
             <div class="support-block" id="support-login" style="display: block">
                 <p class="xx-large text-center support-text">
-                    Пожалуйста введите электронную почту, после нажмите "Next step".
-                    Вы должны иметь доступ этой почте, так как на него придет письмо с подтверждением.
+                    Please enter your email. Then press "next step" button.
+                    You must have access to this mail, because it will receive a confirmation letter.
                 </p>
             </div>
         </div>

@@ -41,6 +41,11 @@ public class User extends UserDefaultData{
         this.lastName = lastName;
     }
 
+    public User(Long id, String firstName){
+        this.id = id;
+        this.firstName = firstName;
+    }
+
     public User (String login, String password, String firstName, String lastName) {
         this.login = login;
         this.password = password;

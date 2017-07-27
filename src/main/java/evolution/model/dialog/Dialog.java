@@ -22,30 +22,36 @@ public class Dialog {
     @Column(name = "id")
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "seq_dialog")
     @SequenceGenerator(name = "seq_dialog", sequenceName = "seq_dialog_id", allocationSize = 1)
-    @JsonProperty
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "first")
-    @JsonProperty
-    private StandardUser first;
+    private User first;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "second")
-    @JsonProperty
-    private StandardUser second;
+    private User second;
 
     public Dialog(Long id) {
         this.id = id;
     }
 
-    public Dialog(Long id, StandardUser second) {
+    public Dialog(Long id, User second) {
         this.id = id;
         this.second = second;
     }
 
-    public Dialog(StandardUser first, StandardUser second) {
+    public Dialog(User first, User second) {
         this.first = first;
         this.second = second;
     }
+
+    public Dialog (Long dialogId, Long firstId, String firstFirstName, String firstLastName,
+                   Long secondId,String secondFirstName ,String secondLastName) {
+        this.id = dialogId;
+        this.first = new User(firstId, firstFirstName, firstLastName);
+        this.second = new User(secondId, secondFirstName, secondLastName);
+    }
+
+
 }

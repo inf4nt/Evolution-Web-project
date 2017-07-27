@@ -60,10 +60,9 @@ public class FriendsDaoService {
 
     private static final String FIND_REQUEST = FIND_ALL_FRIENDS + " and ff.status = " + FriendStatusEnum.REQUEST.getId();
 
-    private static final String RANDOM_FRIENDS = "select f from" +
+    private static final String RANDOM_FRIENDS = "select new Friends(uf.id, uf.firstName) from " +
             " Friends f " +
-            " join fetch f.user " +
-            " join fetch f.friend " +
+            " join f.friend as uf " +
             " where f.user.id = :user_id " +
             " and f.status = " + FriendStatusEnum.PROGRESS.getId() +
             " order by rand() ";
@@ -135,8 +134,8 @@ public class FriendsDaoService {
 
     @Transactional
     public void friendRequest(long authUserId, long id2) {
-        StandardUser authUser = new StandardUser(authUserId);
-        StandardUser user2 = new StandardUser(id2);
+        User authUser = new User(authUserId);
+        User user2 = new User(id2);
         Friends request = new Friends(authUser, user2, FriendStatusEnum.REQUEST.getId());
         Friends follower = new Friends(user2, authUser, FriendStatusEnum.FOLLOWER.getId());
         entityManager.persist(follower);

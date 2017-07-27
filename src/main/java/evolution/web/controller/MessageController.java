@@ -3,6 +3,7 @@ package evolution.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import evolution.dao.MessageDaoService;
 import evolution.dao.UserDaoService;
+import evolution.model.dialog.Dialog;
 import evolution.model.message.Message;
 import evolution.service.MyJacksonService;
 import evolution.service.security.UserDetailsServiceImpl;
@@ -26,7 +27,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/im")
-@SessionAttributes({"dialogId", "sel"})
+@SessionAttributes({"sel"})
 public class MessageController {
 
     @Autowired
@@ -54,64 +55,40 @@ public class MessageController {
                          @PathVariable Long sel,
                          Model model) {
 
-        if (messageDaoService.existDialog(customUser.getUser().getId(), sel)) {
-
-            List<Message> list = messageDaoService.findMessage(customUser.getUser().getId(), sel, new PageRequest(0, 7));
-
-            Long dialogId = list.get(0).getDialog().getId();
-            model.addAttribute("dialogId", dialogId);
-            model.addAttribute("list", list);
-            LOGGER.info("dialog id  = " + dialogId);
-            LOGGER.info("dialog with user by id " + sel + " is EXIST");
-
-        } else {
-            LOGGER.info("dialog with user by id " + sel + " is not exist");
-            model.addAttribute("dialogId", -1);
-            LOGGER.info("session add attribute dialogId = -1");
-        }
-
+        List<Message> list = messageDaoService.findMessage(customUser.getUser().getId(), sel, new PageRequest(0, 7));
+        model.addAttribute("list", list);
         model.addAttribute("sel", sel);
         model.addAttribute("im", userDaoServiceImpl.selectIdFirstLastNameStandardUser(sel));
         return "message/form-message";
     }
 
-    @ResponseBody @RequestMapping(value = "/", method = RequestMethod.POST)
+    @ResponseBody
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     public void saveMessage(
             @RequestParam String message,
-            @SessionAttribute Long dialogId,
-            @SessionAttribute Long sel,
+            @RequestParam Long sel,
             @AuthenticationPrincipal UserDetailsServiceImpl.CustomUser customUser,
             HttpServletResponse response) throws IOException {
 
-        Message m;
+        Dialog dialog = null;
 
-        if (dialogId == -1) {
+//        try {
+            dialog = messageDaoService.selectDialogIdByFirstAndSecond(customUser.getUser().getId(), sel);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+
+        System.out.println("post message dialog = " + dialog);
+
+        if (dialog != null) {
+            LOGGER.info("Dialog exist. Run save message");
+            messageDaoService.save(new Message(customUser.getUser().getId(), message, new Date(), dialog.getId()));
+        } else {
             LOGGER.info("create new dialog");
             messageDaoService.saveDialogAndMessage(customUser.getUser().getId(), sel, message, new Date());
             response.sendRedirect("/im/" + sel);
-        } else {
-            LOGGER.info("Dialog exist. Run save message");
-            m = new Message(customUser.getUser().getId(), message, new Date(), dialogId);
-            messageDaoService.save(m);
-            LOGGER.info("Message saved\n" + m);
         }
-//        if (dialogId == -1) {
-//            LOGGER.info("create new dialog");
-//            Dialog dialog = new Dialog(new StandardUser(customUser.getUser().getId()), new StandardUser(sel));
-//            LOGGER.info(dialog.toString());
-//
-//            Dialog d = dialogRepository.saveAndFlush(dialog);
-//
-//            LOGGER.info("dialog id= " + d.getId());
-//            m = new Message(d.getId(), new StandardUser(customUser.getUser().getId()), message, new Date());
-//            messageRepository.saveAndFlush(m);
-//            response.sendRedirect("/im/" + sel);
-//        } else {
-//            LOGGER.info("Dialog exist. Run save message");
-//            m = new Message(customUser.getUser().getId(), message, new Date(), dialogId);
-//            messageRepository.save(m);
-//            LOGGER.info("Message saved\n" + m);
-//        }
     }
 
     @ResponseBody

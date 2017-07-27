@@ -121,13 +121,14 @@
     $(document).ready(function () {
 
         $("#formMessage").submit(function () {
-            var message = $("#formMessage #inputMessage").val();
+            var message = $("#inputMessage").val();
             if (message.length == 0)
                 return false;
             $.ajax({
                 url: "/im/",
                 type: "POST",
-                data: $("#formMessage").serialize(),
+//                data: $("#formMessage").serialize(),
+                data: {"message":message, "sel":${sel}},
                 beforeSend: function () {
                     $("#inputMessage").val("");
                 },
@@ -163,14 +164,12 @@
         div.scrollTop(div.prop('scrollHeight'));
     }
 
-    <c:if test="${dialogId != -1}">
-    window.setInterval(
-        function () {
+
+    window.setInterval(function () {
             message(${im.getId()});
             scrollDown();
-        }, 6000
-    )
-    </c:if>
+    }, 6000)
+
 
 </script>
 
